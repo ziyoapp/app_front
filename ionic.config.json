@@ -1,0 +1,7 @@
+{
+  "name": "ZiyoForum",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue"
+}
