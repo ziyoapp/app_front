@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from "@ionic/vue-router";
 import { RouteRecordRaw } from "vue-router";
-import MainPage from "@/views/MainPage.vue";
 import notFoundPage from "@/views/404.vue";
 import LoginPage from "@/views/LoginPage.vue";
 import ForgotPage from "@/views/ForgotPage.vue";
@@ -8,15 +7,24 @@ import RegisterPage from "@/views/RegisterPage.vue";
 import WelcomePage from "@/views/WelcomePage.vue";
 import AuthPage from "@/views/AuthPage.vue";
 import { TokenService } from "@/services/token.service";
+import tabsPage from "@/views/TabsPage.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
-    component: MainPage,
+    redirect: "/tabs/main",
+  },
+  {
+    path: "/tabs/",
+    component: tabsPage,
     children: [
       {
-        path: "tab1",
-        component: () => import("@/views/Tab1Page.vue"),
+        path: "",
+        redirect: "/tabs/main",
+      },
+      {
+        path: "main",
+        component: () => import("@/views/index.vue"),
       },
       {
         path: "tab2",
@@ -93,13 +101,11 @@ router.beforeEach((to, from, next) => {
       path: "/auth",
       query: { redirect: to.fullPath },
     });
-    console.log(11);
     console.log(TokenService.getToken());
   }
 
   if (loggedIn && onlyWhenLoggedOut) {
-    // return next("/");
-    console.log(22);
+    return next("/");
   }
 
   next();

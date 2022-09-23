@@ -1,42 +1,46 @@
 <template>
   <ion-page class="login-page">
     <go-back />
-    <form @submit.prevent="handleLogin" class="login-page__form">
-      <div class="login-page__title">Войти</div>
-      <ion-item class="login-page__item">
-        <ion-label position="floating">E-mail</ion-label>
-        <ion-input
-          v-model.trim="form.email"
-          id="email"
-          required
-          type="email"
-          placeholder="example@gmail.com"
-        >
-        </ion-input>
-      </ion-item>
-      <ion-item class="login-page__item">
-        <ion-label position="floating">Пароль</ion-label>
-        <ion-input
-          v-model="form.password"
-          type="password"
-          id="password"
-          required
-        ></ion-input>
-      </ion-item>
-      <div class="login-page__actions">
-        <ion-button
-          class="login-page__btn"
-          type="submit"
-          size="default"
-          :disabled="!isCanLogIn"
-        >
-          Войти
-        </ion-button>
-        <span class="login-page__forgot" @click="$router.push('/forgot')"
-          >Забыли пароль?</span
-        >
-      </div>
-    </form>
+    <div class="login-page__content">
+      <ion-content :fullscreen="true">
+        <form @submit.prevent="handleLogin" class="login-page__form">
+          <div class="login-page__title">Войти</div>
+          <ion-item class="login-page__item">
+            <ion-label position="floating">E-mail</ion-label>
+            <ion-input
+              v-model.trim="form.email"
+              id="email"
+              required
+              type="email"
+              placeholder="example@gmail.com"
+            >
+            </ion-input>
+          </ion-item>
+          <ion-item class="login-page__item">
+            <ion-label position="floating">Пароль</ion-label>
+            <ion-input
+              v-model="form.password"
+              type="password"
+              id="password"
+              required
+            ></ion-input>
+          </ion-item>
+          <div class="login-page__actions">
+            <ion-button
+              class="login-page__btn"
+              type="submit"
+              size="default"
+              :disabled="!isCanLogIn"
+            >
+              Войти
+            </ion-button>
+            <span class="login-page__forgot" @click="$router.push('/forgot')"
+              >Забыли пароль?</span
+            >
+          </div>
+        </form>
+      </ion-content>
+    </div>
   </ion-page>
 </template>
 
@@ -49,6 +53,7 @@ import {
   IonInput,
   loadingController,
   alertController,
+  IonContent,
 } from "@ionic/vue";
 
 import { computed, defineComponent, reactive, toRefs } from "vue";
@@ -65,6 +70,7 @@ export default defineComponent({
     IonLabel,
     IonButton,
     IonInput,
+    IonContent,
   },
   setup() {
     const router = useRouter();
@@ -114,6 +120,10 @@ export default defineComponent({
 <style scoped lang="scss">
 .login-page {
   padding: 0;
+  height: 100%;
+  &__content {
+    height: 100%;
+  }
   &__title {
     font-family: "Inter", serif;
     font-style: normal;

@@ -1,11 +1,17 @@
 <template>
-  <h1>404 not found</h1>
+  <ion-page>
+    <h1>404 not found</h1>
+  </ion-page>
 </template>
 
 <script>
-export default {
-  name: "404Page",
-};
+import { defineComponent } from "vue";
+import { IonPage } from "@ionic/vue";
+
+export default defineComponent({
+  name: "NotFoundPage",
+  components: { IonPage },
+});
 </script>
 
 <style scoped></style>
