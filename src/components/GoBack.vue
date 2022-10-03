@@ -2,7 +2,7 @@
   <ion-header :translucent="true" class="header-back">
     <ion-toolbar>
       <ion-buttons>
-        <ion-back-button class="header-back__btn"></ion-back-button>
+        <ion-back-button class="header-back__btn" text=""></ion-back-button>
       </ion-buttons>
     </ion-toolbar>
   </ion-header>
@@ -25,7 +25,7 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .header-back {
-  margin: 0 -15px;
+  margin: 0 -10px;
   &:after {
     display: none;
   }

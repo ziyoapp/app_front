@@ -46,12 +46,19 @@ http://ionicframework.com/docs/theming/ */
 
   /** success **/
   --ion-color-success: #61C000;
-  --ion-color-success2: rgb(70, 187, 12, 1);
   --ion-color-success-rgb: 45, 211, 111;
   --ion-color-success-contrast: #ffffff;
   --ion-color-success-contrast-rgb: 255, 255, 255;
   --ion-color-success-shade: #28ba62;
   --ion-color-success-tint: #42d77d;
+
+  /** success-2 **/
+  --ion-color-success-2: #46BB0C;
+  --ion-color-success-2-rgb: rgba(70, 187, 12, 1);
+  --ion-color-success-2-contrast: #ffffff;
+  --ion-color-success-2-contrast-rgb: 255, 255, 255;
+  --ion-color-success-2-shade: #28ba62;
+  --ion-color-success-2-tint: #42d77d;
 
   /** warning **/
   --ion-color-warning: #ffc409;
@@ -266,7 +273,7 @@ body {
   padding: 13px 15px;
 }
 
-ion-button {
+ion-button:not(.button-clear) {
   --background: #27aae2;
   height: 48px;
   font-style: normal;
@@ -331,4 +338,13 @@ a {
 }
 .tabs-main .tab-selected {
   color: rgb(70, 187, 12, 1);
+}
+
+.ion-color-success-2 {
+  --ion-color-base: var(--ion-color-success-2);
+  --ion-color-base-rgb: var(--ion-color-success-2-rgb);
+  --ion-color-contrast: var(--ion-color-success-2-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-success-2-contrast-rgb);
+  --ion-color-shade: var(--ion-color-success-2-shade);
+  --ion-color-tint: var(--ion-color-success-2-tint);
 }

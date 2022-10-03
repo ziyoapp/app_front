@@ -4,7 +4,15 @@
       {{ text }}
     </div>
     <div class="blocks-title__link">
-      <ion-nav-link router-direction="forward" :component="component">
+      <ion-button
+        v-if="type === BLOCK_TYPES_RECORD.events"
+        fill="clear"
+        to="/tabs/events"
+        router-link="/tabs/events"
+      >
+        {{ linkText }}
+      </ion-button>
+      <ion-nav-link v-else router-direction="forward" :component="component">
         {{ linkText }}
       </ion-nav-link>
     </div>
@@ -15,7 +23,7 @@
 import { computed, defineComponent } from "vue";
 import { BLOCK_TYPES, BLOCK_TYPES_RECORD } from "@/shared/constants";
 
-import { IonNavLink } from "@ionic/vue";
+import { IonNavLink, IonItem, IonLabel, IonButton } from "@ionic/vue";
 import NewsPage from "@/views/news/index.vue";
 import NotFoundPage from "@/views/404.vue";
 
@@ -35,7 +43,7 @@ export default defineComponent({
       required: true,
     },
   },
-  components: { IonNavLink },
+  components: { IonNavLink, IonButton },
   setup(props) {
     const component = computed(() => {
       if (!BLOCK_TYPES.includes(props.type)) {
@@ -48,6 +56,7 @@ export default defineComponent({
 
     return {
       BLOCK_TYPES,
+      BLOCK_TYPES_RECORD,
       component,
     };
   },
@@ -66,12 +75,15 @@ export default defineComponent({
     line-height: 13px;
     color: #000000;
   }
-  &__link {
+  &__link,
+  &__link button,
+  &__link ion-button {
     font-weight: 600;
     font-size: 10px;
     line-height: 13px;
     text-align: right;
     color: #46bb0c;
+    text-transform: none;
   }
 }
 </style>

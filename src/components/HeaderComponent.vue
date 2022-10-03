@@ -1,12 +1,84 @@
 <template>
-  <ion-menu v-if="hasMenu" content-id="main-content">
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>Menu Content</ion-title>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content class="ion-padding">This is the menu content.</ion-content>
-  </ion-menu>
+  <Teleport v-if="hasMenu" to="ion-app">
+    <ion-menu content-id="main-content">
+      <ion-content class="app-menu">
+        <div class="app-menu__user user">
+          <div class="user__logo">
+            <ion-img src="/assets/logo-default.svg" />
+          </div>
+          <div class="user__info">
+            <div class="user__name">
+              {{ user.first_name }} {{ user.last_name }} {{ user.patronymic }}
+            </div>
+            <div class="user__user-name">
+              {{ user.email }}
+            </div>
+            <div class="user__phone">
+              {{ user.phone }}
+            </div>
+          </div>
+        </div>
+        <div class="app-menu__progress">
+          <span> Уровень 4 </span>
+          <span class="app-menu__points"> 700 YC </span>
+        </div>
+        <ion-button
+          class="app-menu__bonus bonus"
+          color="success-2"
+          size="small"
+          expand="block"
+        >
+          <span slot="start" style="margin-right: 10px"
+            >Заполните профиль полностью</span
+          >
+          <span slot="end" style="margin-left: auto"> +100YC </span>
+        </ion-button>
+        <div class="app-menu__list">
+          <ion-button fill="clear" color="dark">
+            <ion-icon
+              :icon="settingsOutline"
+              slot="start"
+              style="margin-right: 15px"
+            ></ion-icon>
+            Настройки
+          </ion-button>
+          <ion-button fill="clear" color="dark">
+            <ion-icon
+              :icon="timeOutline"
+              slot="start"
+              style="margin-right: 15px"
+            ></ion-icon>
+            История событий
+          </ion-button>
+          <ion-button fill="clear" color="dark">
+            <ion-icon
+              :icon="helpCircleOutline"
+              slot="start"
+              style="margin-right: 15px"
+            ></ion-icon>
+            Часто задаваемые вопросы
+          </ion-button>
+          <ion-button fill="clear" color="dark">
+            <ion-icon
+              :icon="shareSocialOutline"
+              slot="start"
+              style="margin-right: 15px"
+            ></ion-icon>
+            Поделиться
+          </ion-button>
+        </div>
+        <div class="app-menu__footer">
+          <div class="app-menu__log-out">
+            <ion-icon :icon="logOutOutline" />
+          </div>
+          <div class="app-menu__copyright">
+            <div class="app-menu__logo">Ziyoapp by <logo-forum /></div>
+            <div class="app-menu__version">Версия 1.1.0</div>
+          </div>
+        </div>
+      </ion-content>
+    </ion-menu>
+  </Teleport>
   <ion-header class="app-header" id="main-content">
     <ion-toolbar>
       <ion-buttons slot="start">
@@ -37,6 +109,9 @@
 </template>
 
 <script lang="ts">
+import { computed, defineComponent } from "vue";
+import { useStore } from "vuex";
+
 import {
   IonToolbar,
   IonButton,
@@ -48,16 +123,21 @@ import {
   IonTitle,
   IonContent,
   IonBackButton,
+  IonImg,
 } from "@ionic/vue";
-import { defineComponent } from "vue";
 
 import {
   search,
   notificationsOutline,
   shareSocialOutline,
+  settingsOutline,
+  helpCircleOutline,
+  timeOutline,
+  logOutOutline,
 } from "ionicons/icons";
 
 import LogoIcon from "@/assets/svg/Logo.vue";
+import LogoForum from "@/assets/svg/LogoForum.vue";
 
 export default defineComponent({
   name: "HeaderComponent",
@@ -99,16 +179,29 @@ export default defineComponent({
     IonIcon,
     IonMenuButton,
     LogoIcon,
+    LogoForum,
     IonHeader,
     IonMenu,
     IonTitle,
     IonContent,
+    IonImg,
   },
   setup() {
+    const store = useStore();
+
+    const user = computed(() => {
+      return store.getters["userModule/getUser"];
+    });
+
     return {
       search,
       notificationsOutline,
       shareSocialOutline,
+      settingsOutline,
+      helpCircleOutline,
+      timeOutline,
+      logOutOutline,
+      user,
     };
   },
 });
@@ -154,6 +247,135 @@ export default defineComponent({
       --padding-start: 0;
       justify-content: flex-start;
     }
+  }
+}
+
+.app-menu {
+  --padding-top: 20px;
+  --padding-bottom: 90px;
+  --padding-start: 15px;
+  --padding-end: 15px;
+  .user {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+
+    &__logo {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin-right: 11px;
+      border: 2px solid #61c000;
+    }
+
+    &__name {
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 17px;
+      color: #001a35;
+    }
+
+    &__user-name {
+      font-weight: 600;
+      font-size: 8px;
+      line-height: 10px;
+      color: #61c000;
+      margin-bottom: 4px;
+    }
+
+    &__phone {
+      font-weight: 600;
+      font-size: 10px;
+      line-height: 12px;
+      color: rgba(0, 26, 53, 0.5);
+    }
+  }
+
+  &__progress {
+    background: #ecffd8;
+    border-radius: 10px;
+    height: 35px;
+    padding: 0 11px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 17px;
+    color: #0a1938;
+    margin-bottom: 16px;
+  }
+
+  &__points {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 17px;
+    color: #46bb0c;
+  }
+
+  ion-button.bonus {
+    font-weight: 600;
+    font-size: 10px;
+    line-height: 12px;
+    color: #ffffff;
+    height: 26px;
+    align-items: center;
+    --padding-top: 7px;
+    --padding-end: 10px;
+    --padding-bottom: 7px;
+    --padding-start: 10px;
+    --border-radius: 10px;
+
+    margin-bottom: 38px;
+  }
+
+  &__list {
+    ion-button {
+      text-transform: capitalize;
+      --padding-start: 6px;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 17px;
+      color: #001a35;
+      margin-bottom: 38px;
+      height: 17px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    top: auto;
+    right: 15px;
+    bottom: 30px;
+    left: 15px;
+  }
+
+  &__logo {
+    display: flex;
+    align-items: center;
+    margin-bottom: 13px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    color: rgba(0, 26, 53, 0.5);
+
+    svg {
+      margin-left: 5px;
+    }
+  }
+
+  &__version {
+    font-weight: 300;
+    font-size: 10px;
+    line-height: 12px;
+    color: rgba(0, 26, 53, 0.5);
+    text-align: right;
   }
 }
 </style>

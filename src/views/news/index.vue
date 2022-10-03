@@ -38,14 +38,12 @@ import {
   IonInfiniteScrollContent,
 } from "@ionic/vue";
 
-import AppHeader from "@/components/HeaderComponent.vue";
 import NewsCardBig from "@/components/NewsCardBig.vue";
 
 export default defineComponent({
   name: "NewsPage",
   components: {
     NewsCardBig,
-    AppHeader,
     IonInfiniteScroll,
     IonInfiniteScrollContent,
     IonContent,

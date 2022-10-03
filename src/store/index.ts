@@ -1,6 +1,8 @@
 import { createStore } from "vuex";
 import { auth } from "./auth.store";
 import { news } from "@/store/news.store";
+import { events } from "@/store/events.store";
+import { userModule } from "@/store/user.store";
 
 export const store = createStore({
   state: {
@@ -36,5 +38,7 @@ export const store = createStore({
   modules: {
     auth,
     news,
+    events,
+    userModule,
   },
 });

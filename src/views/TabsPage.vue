@@ -14,19 +14,19 @@
             <ion-label>Главная</ion-label>
           </ion-tab-button>
 
-          <ion-tab-button tab="tab2" href="/tabs/tab2">
+          <ion-tab-button tab="tab2" href="#">
             <ion-icon :icon="cartOutline" />
             <ion-label>Магазин</ion-label>
           </ion-tab-button>
         </div>
 
         <div class="tabs-main__btns">
-          <ion-tab-button tab="tab3" href="/tabs/tab3">
+          <ion-tab-button tab="tab3" href="/tabs/events">
             <ion-icon :icon="calendarClearOutline" />
             <ion-label>События</ion-label>
           </ion-tab-button>
 
-          <ion-tab-button tab="tab4" href="/tabs/tab4">
+          <ion-tab-button tab="tab4" href="#">
             <ion-icon :icon="schoolOutline" />
             <ion-label>Гранты</ion-label>
           </ion-tab-button>

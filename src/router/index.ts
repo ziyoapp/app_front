@@ -1,12 +1,13 @@
 import { createRouter, createWebHistory } from "@ionic/vue-router";
 import { RouteRecordRaw } from "vue-router";
+import { TokenService } from "@/services/token.service";
+
 import notFoundPage from "@/views/404.vue";
 import LoginPage from "@/views/LoginPage.vue";
 import ForgotPage from "@/views/ForgotPage.vue";
 import RegisterPage from "@/views/RegisterPage.vue";
 import WelcomePage from "@/views/WelcomePage.vue";
 import AuthPage from "@/views/AuthPage.vue";
-import { TokenService } from "@/services/token.service";
 import tabsPage from "@/views/TabsPage.vue";
 
 const routes: Array<RouteRecordRaw> = [
@@ -27,8 +28,8 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/views/index.vue"),
       },
       {
-        path: "tab2",
-        component: () => import("@/views/Tab2Page.vue"),
+        path: "events",
+        component: () => import("@/views/events/index.vue"),
       },
       {
         path: "tab3",

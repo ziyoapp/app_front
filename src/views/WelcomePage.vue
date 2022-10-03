@@ -27,27 +27,11 @@
 </template>
 
 <script lang="ts">
-import {
-  IonButton,
-  IonDatetime,
-  IonInput,
-  IonItem,
-  IonLabel,
-  IonPage,
-  IonImg,
-  IonThumbnail,
-  IonPopover,
-  IonIcon,
-  IonCheckbox,
-  IonText,
-  IonRadioGroup,
-  IonRadio,
-  IonListHeader,
-} from "@ionic/vue";
+import { IonButton, IonPage } from "@ionic/vue";
 
-import LogoIcon from "@/assets/svg/Logo.vue";
+import LogoIcon from "@/assets/svg/LogoForum.vue";
 
-import { defineComponent, nextTick, reactive, toRefs } from "vue";
+import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "WelcomePage",
