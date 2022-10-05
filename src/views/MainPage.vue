@@ -3,6 +3,7 @@
     <div class="main-page__content">
       <ion-content :fullscreen="true">
         <header-component />
+        <stories-slider />
         <events-list class="main-page__events" :list="eventsList" />
         <news-list :list="newsList" />
       </ion-content>
@@ -19,6 +20,7 @@ import { IonPage, IonContent, loadingController } from "@ionic/vue";
 import HeaderComponent from "@/components/HeaderComponent.vue";
 import NewsList from "@/components/main/NewsList.vue";
 import EventsList from "@/components/main/EventsList.vue";
+import StoriesSlider from "@/components/main/StoriesSlider.vue";
 
 export default defineComponent({
   name: "MainPage",
@@ -29,6 +31,7 @@ export default defineComponent({
     HeaderComponent,
     NewsList,
     EventsList,
+    StoriesSlider,
   },
   setup() {
     const userCompositions = useUserCompositions();
