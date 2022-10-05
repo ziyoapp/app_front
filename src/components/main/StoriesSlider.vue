@@ -12,7 +12,7 @@
     </div>
 
     <!-- Stories View -->
-    <ion-modal :is-open="showSlider">
+    <ion-modal :is-open="showSlider" class="full-screen">
       <div class="overlay">
         <div class="stories__wrapper">
           <stories

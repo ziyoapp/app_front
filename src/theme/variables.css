@@ -348,3 +348,8 @@ a {
   --ion-color-shade: var(--ion-color-success-2-shade);
   --ion-color-tint: var(--ion-color-success-2-tint);
 }
+
+.full-screen {
+  --width: 100%;
+  --height: 100%;
+}
