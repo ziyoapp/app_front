@@ -1,19 +1,40 @@
 <template>
   <div class="news-short">
+    <div v-if="loading" class="news-short__title">
+      <ion-skeleton-text animated />
+    </div>
     <blocks-title
+      v-else
       class="news-short__title"
       :type="BLOCK_TYPES_RECORD.news"
       text="Новости"
       link-text="Все новости"
     />
     <div class="news-short__list">
-      <news-card v-for="(news, index) in list" :key="index" :news="news" />
+      <template v-if="loading">
+        <ion-thumbnail class="news-short__item">
+          <ion-skeleton-text />
+        </ion-thumbnail>
+        <ion-thumbnail class="news-short__item">
+          <ion-skeleton-text />
+        </ion-thumbnail>
+        <ion-thumbnail class="news-short__item">
+          <ion-skeleton-text />
+        </ion-thumbnail>
+      </template>
+      <news-card
+        v-else
+        v-for="(news, index) in list"
+        :key="index"
+        :news="news"
+      />
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
+import { IonThumbnail, IonSkeletonText } from "@ionic/vue";
 
 import NewsCard from "@/components/NewsCard.vue";
 import BlocksTitle from "@/components/BlocksTitle.vue";
@@ -28,10 +49,16 @@ export default defineComponent({
       type: Array as PropType<Array<oneNews>>,
       required: true,
     },
+    loading: {
+      type: Boolean,
+      default: false,
+    },
   },
   components: {
     NewsCard,
     BlocksTitle,
+    IonThumbnail,
+    IonSkeletonText,
   },
   setup() {
     return {
@@ -41,7 +68,7 @@ export default defineComponent({
 });
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .news-short {
   &__title {
     margin-bottom: 10px;
@@ -51,6 +78,11 @@ export default defineComponent({
     display: flex;
     align-items: center;
     overflow: auto;
+  }
+  &__item {
+    width: 200px;
+    height: 100px;
+    margin-right: 10px;
   }
 }
 </style>

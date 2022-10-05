@@ -2,40 +2,67 @@
   <ion-page class="main-page">
     <div class="main-page__content">
       <ion-content :fullscreen="true">
+        <ion-refresher
+          slot="fixed"
+          @ionRefresh="doRefresh($event)"
+          pull-factor="0.5"
+          pull-min="100"
+          pull-max="200"
+        >
+          <ion-refresher-content></ion-refresher-content>
+        </ion-refresher>
         <header-component />
         <stories-slider />
-        <events-list class="main-page__events" :list="eventsList" />
-        <news-list :list="newsList" />
+        <events-list
+          class="main-page__events"
+          :list="eventsList"
+          :loading="eventsLoading"
+        />
+        <news-list :list="newsList" :loading="newsLoading" />
       </ion-content>
     </div>
   </ion-page>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from "vue";
+import { computed, defineComponent, reactive, toRefs, watch } from "vue";
 import { useStore } from "vuex";
 import { useUserCompositions } from "@/compositions/useUserCompositions";
 
-import { IonPage, IonContent, loadingController } from "@ionic/vue";
+import {
+  IonPage,
+  IonContent,
+  loadingController,
+  IonRefresher,
+  IonRefresherContent,
+} from "@ionic/vue";
 import HeaderComponent from "@/components/HeaderComponent.vue";
 import NewsList from "@/components/main/NewsList.vue";
 import EventsList from "@/components/main/EventsList.vue";
 import StoriesSlider from "@/components/main/StoriesSlider.vue";
+import { useRoute } from "vue-router";
 
 export default defineComponent({
   name: "MainPage",
   components: {
     IonPage,
     IonContent,
-    // IonButton,
     HeaderComponent,
     NewsList,
     EventsList,
     StoriesSlider,
+    IonRefresher,
+    IonRefresherContent,
   },
   setup() {
     const userCompositions = useUserCompositions();
     const store = useStore();
+    const route = useRoute();
+
+    const localState = reactive({
+      newsLoading: false,
+      eventsLoading: false,
+    });
 
     const newsList = computed(() => {
       return store.getters["news/getShortList"];
@@ -46,6 +73,8 @@ export default defineComponent({
     });
 
     const initData = async () => {
+      localState.newsLoading = true;
+      localState.eventsLoading = true;
       const loading = await loadingController.create({
         message: "Загрузка...",
       });
@@ -53,16 +82,45 @@ export default defineComponent({
       await store.dispatch("userModule/fetchUser").finally(() => {
         loading.dismiss();
       });
-      store.dispatch("events/fetchShortList");
-      store.dispatch("news/fetchShortList");
+      store
+        .dispatch("events/fetchShortList")
+        .finally(() => (localState.eventsLoading = false));
+      store
+        .dispatch("news/fetchShortList")
+        .finally(() => (localState.newsLoading = false));
+    };
+
+    const doRefresh = (event: CustomEvent) => {
+      initData().finally(() => {
+        // @ts-ignore
+        if (event.target?.complete) {
+          // @ts-ignore
+          event.target.complete();
+        }
+      });
     };
 
     initData();
 
+    watch(
+      () => route.path,
+      (val) => {
+        if (
+          val === "/tabs/main" &&
+          (!newsList.value.length || !eventsList.value.length)
+        ) {
+          initData();
+        }
+      }
+    );
+
     return {
+      ...toRefs(localState),
       logOut: userCompositions.logOut,
+      doRefresh,
       newsList,
       eventsList,
+      route,
     };
   },
 });
