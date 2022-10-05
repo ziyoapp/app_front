@@ -34,4 +34,5 @@ export interface eventsState {
   list: Array<event>;
   eventError: string;
   pagination: pagination;
+  event: event;
 }

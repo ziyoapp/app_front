@@ -49,7 +49,13 @@
                 size-xs="6"
                 size-md="4"
               >
-                <event-card-big :event="event" />
+                <ion-item
+                  router-direction="forward"
+                  class="events-page__item"
+                  :router-link="`/tabs/event/${event.id}`"
+                >
+                  <event-card-big :event="event" />
+                </ion-item>
               </ion-col>
             </ion-row>
           </div>
@@ -89,6 +95,7 @@ import {
   IonRow,
   IonCol,
   IonButton,
+  IonItem,
 } from "@ionic/vue";
 import { useStore } from "vuex";
 
@@ -107,6 +114,7 @@ export default defineComponent({
     FreeEvents,
     TalkEvents,
     EventCardBig,
+    IonItem,
   },
   setup() {
     const store = useStore();
@@ -241,6 +249,11 @@ export default defineComponent({
         color: rgba(0, 26, 53, 1) !important;
       }
     }
+  }
+  &__item {
+    --border-width: 0;
+    --border-radius: 0;
+    --border-color: transparent;
   }
 }
 </style>

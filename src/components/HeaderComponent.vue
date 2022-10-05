@@ -18,21 +18,21 @@
             </div>
           </div>
         </div>
-        <div class="app-menu__progress">
-          <span> Уровень 4 </span>
-          <span class="app-menu__points"> 700 YC </span>
-        </div>
-        <ion-button
-          class="app-menu__bonus bonus"
-          color="success-2"
-          size="small"
-          expand="block"
-        >
-          <span slot="start" style="margin-right: 10px"
-            >Заполните профиль полностью</span
-          >
-          <span slot="end" style="margin-left: auto"> +100YC </span>
-        </ion-button>
+        <!--        <div class="app-menu__progress">-->
+        <!--          <span> Уровень 4 </span>-->
+        <!--          <span class="app-menu__points"> 700 YC </span>-->
+        <!--        </div>-->
+        <!--        <ion-button-->
+        <!--          class="app-menu__bonus bonus"-->
+        <!--          color="success-2"-->
+        <!--          size="small"-->
+        <!--          expand="block"-->
+        <!--        >-->
+        <!--          <span slot="start" style="margin-right: 10px"-->
+        <!--            >Заполните профиль полностью</span-->
+        <!--          >-->
+        <!--          <span slot="end" style="margin-left: auto"> +100YC </span>-->
+        <!--        </ion-button>-->
         <div class="app-menu__list">
           <ion-button fill="clear" color="dark">
             <ion-icon
@@ -69,7 +69,7 @@
         </div>
         <div class="app-menu__footer">
           <div class="app-menu__log-out">
-            <ion-icon :icon="logOutOutline" />
+            <ion-icon @click="logOutHandler" :icon="logOutOutline" />
           </div>
           <div class="app-menu__copyright">
             <div class="app-menu__logo">Ziyoapp by <logo-forum /></div>
@@ -138,6 +138,7 @@ import {
 
 import LogoIcon from "@/assets/svg/Logo.vue";
 import LogoForum from "@/assets/svg/LogoForum.vue";
+import { useUserCompositions } from "@/compositions/useUserCompositions";
 
 export default defineComponent({
   name: "HeaderComponent",
@@ -188,6 +189,7 @@ export default defineComponent({
   },
   setup() {
     const store = useStore();
+    const userComposition = useUserCompositions();
 
     const user = computed(() => {
       return store.getters["userModule/getUser"];
@@ -202,6 +204,7 @@ export default defineComponent({
       timeOutline,
       logOutOutline,
       user,
+      logOutHandler: userComposition.logOut,
     };
   },
 });
@@ -338,7 +341,7 @@ export default defineComponent({
       line-height: 17px;
       color: #001a35;
       margin-bottom: 38px;
-      height: 17px;
+      //height: 17px;
 
       &:last-child {
         margin-bottom: 0;

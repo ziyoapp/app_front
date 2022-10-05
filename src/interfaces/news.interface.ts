@@ -20,4 +20,5 @@ export interface newsState {
   list: Array<news>;
   newsError: string;
   pagination: pagination;
+  oneNews: news;
 }

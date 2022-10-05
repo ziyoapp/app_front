@@ -1,7 +1,7 @@
 import ApiService from "./api.service";
 import { AxiosRequestConfig } from "axios";
 import { catchError } from "@/shared/utils";
-import { newsGetRequest } from "@/interfaces/news.interface";
+import { newsGetRequest, news as oneNews } from "@/interfaces/news.interface";
 
 class NewsError extends Error {
   errorCode: any;
@@ -37,6 +37,20 @@ const NewsService = {
       method: "get",
       url: "/news",
       params: data,
+    };
+
+    try {
+      const response = await ApiService.customRequest(requestData);
+
+      return response.data;
+    } catch (error) {
+      this.catchError(error, NewsError);
+    }
+  },
+  getOne: async function (newsId: number) {
+    const requestData: AxiosRequestConfig = {
+      method: "get",
+      url: `/news/${newsId}`,
     };
 
     try {

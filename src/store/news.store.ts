@@ -6,6 +6,8 @@ import {
 import { NewsError, NewsService } from "@/services/news.services";
 import { pagination } from "@/interfaces/common.interface";
 
+import { defaultNews } from "@/models/news.models";
+
 const state: newsState = {
   shortList: [],
   list: [],
@@ -19,11 +21,15 @@ const state: newsState = {
     to: 1,
     total: 1,
   },
+  oneNews: defaultNews,
 };
 
 const getters = {
   error: (state: { newsError: any }) => {
     return state.newsError;
+  },
+  getOne: (state: newsState): oneNews => {
+    return state.oneNews;
   },
   getShortList: (state: newsState) => {
     return state.shortList;
@@ -78,6 +84,22 @@ const actions = {
       return Promise.reject();
     }
   },
+
+  async fetchOne(context: any, news_id: number) {
+    try {
+      const { data } = await NewsService.getOne(news_id);
+      context.commit("setOne", data);
+      return Promise.resolve(data);
+    } catch (e) {
+      if (e instanceof NewsError) {
+        context.commit("dataError", {
+          errorMessage: e.errorMessage || e.message,
+          responseErrorCode: e.errorCode,
+        });
+      }
+      return Promise.reject();
+    }
+  },
 };
 
 const mutations = {
@@ -92,6 +114,9 @@ const mutations = {
   },
   pushToAll(state: newsState, list: Array<oneNews>) {
     state.list.push(...list);
+  },
+  setOne(state: newsState, data: oneNews) {
+    state.oneNews = data;
   },
 };
 

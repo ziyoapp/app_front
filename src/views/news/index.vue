@@ -1,14 +1,17 @@
 <template>
-  <!--  <div class="news-page">-->
   <app-header :has-logo="false" :has-menu="false" has-title title="Новости" />
   <div class="news-page__content">
     <ion-content :fullscreen="true">
       <div class="news-page__list">
-        <news-card-big
+        <ion-item
           v-for="(item, index) in list"
           :key="index"
-          :item="item"
-        />
+          router-direction="forward"
+          class="news-page__item"
+          :router-link="`/tabs/news-detail/${item.id}`"
+        >
+          <news-card-big :item="item" />
+        </ion-item>
       </div>
       <ion-infinite-scroll
         @ionInfinite="infiniteScrollHandler($event)"
@@ -24,21 +27,24 @@
       </ion-infinite-scroll>
     </ion-content>
   </div>
-  <!--  </div>-->
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, reactive, toRefs } from "vue";
 import { useStore } from "vuex";
 
+import { news as oneNews } from "@/interfaces/news.interface";
+
 import {
   IonContent,
   loadingController,
   IonInfiniteScroll,
   IonInfiniteScrollContent,
+  IonItem,
 } from "@ionic/vue";
 
 import NewsCardBig from "@/components/NewsCardBig.vue";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   name: "NewsPage",
@@ -47,9 +53,11 @@ export default defineComponent({
     IonInfiniteScroll,
     IonInfiniteScrollContent,
     IonContent,
+    IonItem,
   },
   setup() {
     const store = useStore();
+    const router = useRouter();
 
     const localState = reactive({
       filterData: {
@@ -103,6 +111,10 @@ export default defineComponent({
         });
     };
 
+    const newsClickHandler = (news: oneNews) => {
+      router.push(`/tabs/news-detail/${news.id}`);
+    };
+
     onMounted(() => {
       getNews(false);
     });
@@ -112,6 +124,7 @@ export default defineComponent({
       infiniteScrollHandler,
       pagination,
       list,
+      newsClickHandler,
     };
   },
 });
@@ -127,6 +140,11 @@ export default defineComponent({
     display: flex;
     flex-direction: column;
     align-items: center;
+  }
+  &__item {
+    --border-width: 0;
+    --border-radius: 0;
+    --border-color: transparent;
   }
 }
 </style>

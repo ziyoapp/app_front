@@ -2,9 +2,11 @@ import {
   eventsGetRequest,
   eventsState,
   event as oneEvent,
+  event,
 } from "@/interfaces/events.interface";
 import { pagination } from "@/interfaces/common.interface";
 import { EventsError, EventsServices } from "@/services/events.services";
+import { defaultEvent } from "@/models/events.models";
 
 const state: eventsState = {
   shortList: [],
@@ -19,11 +21,15 @@ const state: eventsState = {
     to: 1,
     total: 1,
   },
+  event: defaultEvent,
 };
 
 const getters = {
   error: (state: eventsState) => {
     return state.eventError;
+  },
+  getOne: (state: eventsState) => {
+    return state.event;
   },
   getShortList: (state: eventsState) => {
     return state.shortList;
@@ -80,6 +86,21 @@ const actions = {
       return Promise.reject();
     }
   },
+  async fetchOne(context: any, eventId: number) {
+    try {
+      const { data } = await EventsServices.getOne(eventId);
+      context.commit("setOne", data);
+      return Promise.resolve(data);
+    } catch (e) {
+      if (e instanceof EventsError) {
+        context.commit("dataError", {
+          errorMessage: e.errorMessage || e.message,
+          responseErrorCode: e.errorCode,
+        });
+      }
+      return Promise.reject();
+    }
+  },
 };
 
 const mutations = {
@@ -94,6 +115,9 @@ const mutations = {
   },
   pushToAll(state: eventsState, list: Array<oneEvent>) {
     state.list.push(...list);
+  },
+  setOne(state: eventsState, data: event) {
+    state.event = data;
   },
 };
 

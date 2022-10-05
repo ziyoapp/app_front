@@ -47,6 +47,20 @@ const EventsServices = {
       this.catchError(error, EventsError);
     }
   },
+  getOne: async function (eventId: number) {
+    const requestData: AxiosRequestConfig = {
+      method: "get",
+      url: `/events/${eventId}`,
+    };
+
+    try {
+      const response = await ApiService.customRequest(requestData);
+
+      return response.data;
+    } catch (error) {
+      this.catchError(error, EventsError);
+    }
+  },
   catchError: catchError,
 };
 
