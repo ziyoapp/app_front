@@ -15,6 +15,9 @@ const getters = {
   getUser: (state: userState) => {
     return state.user;
   },
+  getCode: (state: userState) => {
+    return state.qrCode;
+  },
 };
 
 const actions = {
@@ -32,11 +35,28 @@ const actions = {
       return Promise.reject();
     }
   },
+  async fetchQrCode(context: any) {
+    try {
+      const { qr_code } = await UserServices.getQrCode();
+      context.commit("setCode", qr_code);
+    } catch (e) {
+      if (e instanceof UserError) {
+        context.commit("dataError", {
+          errorMessage: e.errorMessage || e.message,
+          responseErrorCode: e.errorCode,
+        });
+      }
+      return Promise.reject();
+    }
+  },
 };
 
 const mutations = {
   setUser(state: userState, data: user) {
     state.user = data;
+  },
+  setCode(state: userState, data: string) {
+    state.qrCode = data;
   },
 };
 

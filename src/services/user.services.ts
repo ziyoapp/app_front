@@ -31,6 +31,20 @@ const UserServices = {
       this.catchError(error, EventsError);
     }
   },
+  getQrCode: async function () {
+    const requestData: AxiosRequestConfig = {
+      method: "get",
+      url: "/user/qr-code",
+    };
+
+    try {
+      const response = await ApiService.customRequest(requestData);
+
+      return response.data;
+    } catch (error) {
+      this.catchError(error, EventsError);
+    }
+  },
   catchError: catchError,
 };
 

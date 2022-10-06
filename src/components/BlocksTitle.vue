@@ -7,7 +7,6 @@
       <ion-button
         v-if="type === BLOCK_TYPES_RECORD.events"
         fill="clear"
-        to="/tabs/events"
         router-link="/tabs/events"
       >
         {{ linkText }}

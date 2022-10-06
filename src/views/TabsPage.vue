@@ -3,7 +3,12 @@
     <ion-tabs class="tabs-main">
       <ion-router-outlet></ion-router-outlet>
       <div slot="top" class="qr-btn-wrap">
-        <ion-fab-button class="qr-btn" shape="round">
+        <ion-fab-button
+          class="qr-btn"
+          shape="round"
+          router-direction="forward"
+          router-link="/tabs/qr-code"
+        >
           <ion-icon :icon="qrCodeOutline" />
         </ion-fab-button>
       </div>

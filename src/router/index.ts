@@ -32,10 +32,6 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/views/events/index.vue"),
       },
       {
-        path: "tab3",
-        component: () => import("@/views/Tab3Page.vue"),
-      },
-      {
         path: "news-detail/:news_id",
         component: () => import("@/views/news/detail.vue"),
         name: "newsDetail",
@@ -46,6 +42,11 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/views/events/detail.vue"),
         name: "eventDetail",
         props: true,
+      },
+      {
+        path: "qr-code",
+        component: () => import("@/views/QrCodePage.vue"),
+        name: "QrCode",
       },
     ],
   },
@@ -114,7 +115,6 @@ router.beforeEach((to, from, next) => {
       path: "/auth",
       query: { redirect: to.fullPath },
     });
-    console.log(TokenService.getToken());
   }
 
   if (loggedIn && onlyWhenLoggedOut) {
