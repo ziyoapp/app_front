@@ -7,42 +7,60 @@
           class="qr-btn"
           shape="round"
           router-direction="forward"
-          router-link="/tabs/qr-code"
+          id="open-qr-dialog"
+          @click="getQrCode"
         >
           <ion-icon :icon="qrCodeOutline" />
         </ion-fab-button>
       </div>
       <ion-tab-bar slot="bottom">
         <div class="tabs-main__btns">
-          <ion-tab-button tab="tab1" href="/tabs/main">
+          <ion-tab-button tab="tab1" @click="$router.push('/tabs/main')">
             <ion-icon :icon="homeOutline" />
             <ion-label>Главная</ion-label>
           </ion-tab-button>
 
-          <ion-tab-button tab="tab2" href="#">
+          <ion-tab-button tab="tab2" @click="$router.push('/tabs/development')">
             <ion-icon :icon="cartOutline" />
             <ion-label>Магазин</ion-label>
           </ion-tab-button>
         </div>
 
         <div class="tabs-main__btns">
-          <ion-tab-button tab="tab3" href="/tabs/events">
+          <ion-tab-button tab="tab3" @click="$router.push('/tabs/events')">
             <ion-icon :icon="calendarClearOutline" />
             <ion-label>События</ion-label>
           </ion-tab-button>
 
-          <ion-tab-button tab="tab4" href="#">
+          <ion-tab-button tab="tab4" @click="$router.push('/tabs/development')">
             <ion-icon :icon="schoolOutline" />
             <ion-label>Гранты</ion-label>
           </ion-tab-button>
         </div>
       </ion-tab-bar>
     </ion-tabs>
+    <ion-modal id="qr-modal" ref="modal" trigger="open-qr-dialog">
+      <div v-if="qrLoading" class="qr-loading">
+        <ion-spinner name="crescent"></ion-spinner>
+      </div>
+      <div v-else class="qr-modal">
+        <user-component class="qr-modal__user" />
+        <img :src="qrCode" width="230" />
+      </div>
+      <ion-fab-button
+        size="small"
+        class="qr-modal__close"
+        shape="round"
+        @click="dismiss"
+      >
+        <ion-icon :icon="close" />
+      </ion-fab-button>
+    </ion-modal>
   </ion-page>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref, computed } from "vue";
 import {
   IonTabBar,
   IonTabButton,
@@ -52,6 +70,8 @@ import {
   IonPage,
   IonRouterOutlet,
   IonFabButton,
+  IonModal,
+  IonSpinner,
 } from "@ionic/vue";
 import {
   homeOutline,
@@ -59,7 +79,11 @@ import {
   calendarClearOutline,
   schoolOutline,
   qrCodeOutline,
+  close,
 } from "ionicons/icons";
+import { useStore } from "vuex";
+
+import UserComponent from "@/components/UserComponent.vue";
 
 export default defineComponent({
   name: "TabsPage",
@@ -72,14 +96,46 @@ export default defineComponent({
     IonPage,
     IonRouterOutlet,
     IonFabButton,
+    IonModal,
+    IonSpinner,
+    UserComponent,
   },
   setup() {
+    const store = useStore();
+
+    const qrLoading = ref(false);
+    const modal = ref(null);
+
+    const qrCode = computed(() => {
+      return store.getters["userModule/getCode"];
+    });
+
+    const getQrCode = async () => {
+      qrLoading.value = true;
+      store.dispatch("userModule/fetchQrCode").finally(() => {
+        qrLoading.value = false;
+      });
+    };
+
+    const dismiss = () => {
+      if (modal?.value) {
+        // @ts-ignore
+        modal.value.$el.dismiss();
+      }
+    };
+
     return {
+      qrLoading,
+      getQrCode,
+      dismiss,
+      qrCode,
+      modal,
       homeOutline,
       cartOutline,
       calendarClearOutline,
       schoolOutline,
       qrCodeOutline,
+      close,
     };
   },
 });
@@ -142,6 +198,46 @@ export default defineComponent({
   ion-tab-bar {
     background: #001a35;
     height: 61px;
+  }
+}
+
+// qr-code
+ion-modal#qr-modal {
+  --width: fit-content;
+  --min-width: 280px;
+  --height: fit-content;
+  --border-radius: 10px;
+  --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
+  --min-height: 380px;
+  --overflow: visivle;
+}
+
+ion-modal#qr-modal ion-icon {
+  color: #0a1938;
+}
+
+.qr-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.qr-modal {
+  padding: 28px 25px 25px;
+
+  &__user {
+    margin-bottom: 47px;
+  }
+
+  &__close {
+    position: absolute;
+    top: auto;
+    left: 50%;
+    bottom: -58px;
+    margin-left: -28px;
+    --background: #fff;
   }
 }
 </style>

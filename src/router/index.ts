@@ -32,6 +32,10 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/views/events/index.vue"),
       },
       {
+        path: "news",
+        component: () => import("@/views/news/index.vue"),
+      },
+      {
         path: "news-detail/:news_id",
         component: () => import("@/views/news/detail.vue"),
         name: "newsDetail",
@@ -47,6 +51,14 @@ const routes: Array<RouteRecordRaw> = [
         path: "qr-code",
         component: () => import("@/views/QrCodePage.vue"),
         name: "QrCode",
+      },
+      {
+        path: "development",
+        component: () => import("@/views/Development.vue"),
+      },
+      {
+        path: "events-history",
+        component: () => import("@/views/events/history.vue"),
       },
     ],
   },

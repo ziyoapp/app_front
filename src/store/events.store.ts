@@ -101,6 +101,34 @@ const actions = {
       return Promise.reject();
     }
   },
+  async subscribeToEvent(context: any, eventId: number) {
+    try {
+      const { data } = await EventsServices.subscribe(eventId);
+      return Promise.resolve(data);
+    } catch (e) {
+      if (e instanceof EventsError) {
+        context.commit("dataError", {
+          errorMessage: e.errorMessage || e.message,
+          responseErrorCode: e.errorCode,
+        });
+      }
+      return Promise.reject();
+    }
+  },
+  async unSubscribeToEvent(context: any, eventId: number) {
+    try {
+      const { data } = await EventsServices.unSubscribe(eventId);
+      return Promise.resolve(data);
+    } catch (e) {
+      if (e instanceof EventsError) {
+        context.commit("dataError", {
+          errorMessage: e.errorMessage || e.message,
+          responseErrorCode: e.errorCode,
+        });
+      }
+      return Promise.reject();
+    }
+  },
 };
 
 const mutations = {

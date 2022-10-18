@@ -19,6 +19,8 @@
           :loading="eventsLoading"
         />
         <news-list :list="newsList" :loading="newsLoading" />
+        <tasks-list class="main-page__tasks" :loading="newsLoading" />
+        <banner-pic />
       </ion-content>
     </div>
   </ion-page>
@@ -27,6 +29,7 @@
 <script lang="ts">
 import { computed, defineComponent, reactive, toRefs, watch } from "vue";
 import { useStore } from "vuex";
+import { useRoute } from "vue-router";
 import { useUserCompositions } from "@/compositions/useUserCompositions";
 
 import {
@@ -36,11 +39,13 @@ import {
   IonRefresher,
   IonRefresherContent,
 } from "@ionic/vue";
+
 import HeaderComponent from "@/components/HeaderComponent.vue";
 import NewsList from "@/components/main/NewsList.vue";
 import EventsList from "@/components/main/EventsList.vue";
 import StoriesSlider from "@/components/main/StoriesSlider.vue";
-import { useRoute } from "vue-router";
+import TasksList from "@/components/main/Tasks.vue";
+import BannerPic from "@/components/main/BannerPic.vue";
 
 export default defineComponent({
   name: "MainPage",
@@ -53,6 +58,8 @@ export default defineComponent({
     StoriesSlider,
     IonRefresher,
     IonRefresherContent,
+    TasksList,
+    BannerPic,
   },
   setup() {
     const userCompositions = useUserCompositions();
@@ -134,6 +141,9 @@ export default defineComponent({
   }
   &__events {
     margin-bottom: 25px;
+  }
+  &__tasks {
+    margin-top: 30px;
   }
 }
 </style>

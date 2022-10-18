@@ -34,6 +34,24 @@
             <ion-skeleton-text :animated="true" class="event-detail__desc" />
           </div>
           <div v-else class="event-detail__desc" v-html="event.content"></div>
+          <ion-button
+            v-if="!event.subscribed"
+            color="success-2"
+            class="ion-margin-top event-detail__btn"
+            expand="block"
+            @click="subscribe"
+          >
+            Хочу посетить
+          </ion-button>
+          <ion-button
+            v-else
+            class="ion-margin-top event-detail__btn"
+            color="danger"
+            expand="block"
+            @click="unSubscribe"
+          >
+            Отменить посещение
+          </ion-button>
         </div>
       </ion-content>
     </div>
@@ -51,6 +69,7 @@ import {
   loadingController,
   IonSkeletonText,
   IonThumbnail,
+  IonButton,
 } from "@ionic/vue";
 
 export default defineComponent({
@@ -60,6 +79,7 @@ export default defineComponent({
     IonPage,
     IonSkeletonText,
     IonThumbnail,
+    IonButton,
   },
   setup() {
     const store = useStore();
@@ -86,6 +106,42 @@ export default defineComponent({
         });
     };
 
+    const subscribe = async () => {
+      loadingStatus.value = true;
+      const loading = await loadingController.create({
+        message: "Загрузка...",
+      });
+      await loading.present();
+
+      await store
+        .dispatch("events/subscribeToEvent", route.params.event_id)
+        .then(() => {
+          getOneEvent();
+        })
+        .finally(() => {
+          loading.dismiss();
+          loadingStatus.value = false;
+        });
+    };
+
+    const unSubscribe = async () => {
+      loadingStatus.value = true;
+      const loading = await loadingController.create({
+        message: "Загрузка...",
+      });
+      await loading.present();
+
+      await store
+        .dispatch("events/unSubscribeToEvent", route.params.event_id)
+        .then(() => {
+          getOneEvent();
+        })
+        .finally(() => {
+          loading.dismiss();
+          loadingStatus.value = false;
+        });
+    };
+
     const imgSrc = computed(() => {
       return (
         event.value.image_url ||
@@ -101,6 +157,8 @@ export default defineComponent({
       event,
       imgSrc,
       loadingStatus,
+      subscribe,
+      unSubscribe,
     };
   },
 });
@@ -142,6 +200,12 @@ export default defineComponent({
     font-size: 10px;
     line-height: 12px;
     color: #0a1938;
+  }
+  &__btn {
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 19px;
+    --border-radius: 10px;
   }
 }
 </style>

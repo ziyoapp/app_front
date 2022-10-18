@@ -61,6 +61,34 @@ const EventsServices = {
       this.catchError(error, EventsError);
     }
   },
+  subscribe: async function (eventId: number) {
+    const requestData: AxiosRequestConfig = {
+      method: "post",
+      url: `/events/${eventId}/add-user`,
+    };
+
+    try {
+      const response = await ApiService.customRequest(requestData);
+
+      return response.data;
+    } catch (error) {
+      this.catchError(error, EventsError);
+    }
+  },
+  unSubscribe: async function (eventId: number) {
+    const requestData: AxiosRequestConfig = {
+      method: "delete",
+      url: `/events/${eventId}/undo-user`,
+    };
+
+    try {
+      const response = await ApiService.customRequest(requestData);
+
+      return response.data;
+    } catch (error) {
+      this.catchError(error, EventsError);
+    }
+  },
   catchError: catchError,
 };
 

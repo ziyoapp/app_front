@@ -1,23 +1,8 @@
 <template>
   <Teleport v-if="hasMenu" to="ion-app">
-    <ion-menu content-id="main-content">
+    <ion-menu content-id="main-content" ref="menu">
       <ion-content class="app-menu">
-        <div class="app-menu__user user">
-          <div class="user__logo">
-            <ion-img src="/assets/logo-default.svg" />
-          </div>
-          <div class="user__info">
-            <div class="user__name">
-              {{ user.first_name }} {{ user.last_name }} {{ user.patronymic }}
-            </div>
-            <div class="user__user-name">
-              {{ user.email }}
-            </div>
-            <div class="user__phone">
-              {{ user.phone }}
-            </div>
-          </div>
-        </div>
+        <user-component class="app-menu__user" />
         <!--        <div class="app-menu__progress">-->
         <!--          <span> Уровень 4 </span>-->
         <!--          <span class="app-menu__points"> 700 YC </span>-->
@@ -42,7 +27,11 @@
             ></ion-icon>
             Настройки
           </ion-button>
-          <ion-button fill="clear" color="dark">
+          <ion-button
+            fill="clear"
+            color="dark"
+            @click="openPage('/tabs/events-history')"
+          >
             <ion-icon
               :icon="timeOutline"
               slot="start"
@@ -109,8 +98,9 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from "vue";
+import { computed, defineComponent, ref } from "vue";
 import { useStore } from "vuex";
+import { useUserCompositions } from "@/compositions/useUserCompositions";
 
 import {
   IonToolbar,
@@ -123,7 +113,6 @@ import {
   IonTitle,
   IonContent,
   IonBackButton,
-  IonImg,
 } from "@ionic/vue";
 
 import {
@@ -138,7 +127,9 @@ import {
 
 import LogoIcon from "@/assets/svg/Logo.vue";
 import LogoForum from "@/assets/svg/LogoForum.vue";
-import { useUserCompositions } from "@/compositions/useUserCompositions";
+
+import UserComponent from "@/components/UserComponent.vue";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   name: "HeaderComponent",
@@ -185,17 +176,28 @@ export default defineComponent({
     IonMenu,
     IonTitle,
     IonContent,
-    IonImg,
+    UserComponent,
   },
   setup() {
     const store = useStore();
+    const router = useRouter();
     const userComposition = useUserCompositions();
+
+    const menu = ref(null);
 
     const user = computed(() => {
       return store.getters["userModule/getUser"];
     });
 
+    const openPage = (url: string) => {
+      router.push(url).then(() => {
+        // @ts-ignore
+        menu.value.$el.close();
+      });
+    };
+
     return {
+      openPage,
       search,
       notificationsOutline,
       shareSocialOutline,
@@ -204,6 +206,7 @@ export default defineComponent({
       timeOutline,
       logOutOutline,
       user,
+      menu,
       logOutHandler: userComposition.logOut,
     };
   },
@@ -258,41 +261,6 @@ export default defineComponent({
   --padding-bottom: 90px;
   --padding-start: 15px;
   --padding-end: 15px;
-  .user {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
-
-    &__logo {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      margin-right: 11px;
-      border: 2px solid #61c000;
-    }
-
-    &__name {
-      font-weight: 600;
-      font-size: 14px;
-      line-height: 17px;
-      color: #001a35;
-    }
-
-    &__user-name {
-      font-weight: 600;
-      font-size: 8px;
-      line-height: 10px;
-      color: #61c000;
-      margin-bottom: 4px;
-    }
-
-    &__phone {
-      font-weight: 600;
-      font-size: 10px;
-      line-height: 12px;
-      color: rgba(0, 26, 53, 0.5);
-    }
-  }
 
   &__progress {
     background: #ecffd8;

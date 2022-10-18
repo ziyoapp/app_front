@@ -21,6 +21,7 @@ const defaultEvent: event = {
   date_start: "",
   date_end: "",
   published_at: "",
+  subscribed: false,
 };
 
 export { defaultEvent };

@@ -1,32 +1,34 @@
 <template>
-  <app-header :has-logo="false" :has-menu="false" has-title title="Новости" />
-  <div class="news-page__content">
-    <ion-content :fullscreen="true">
-      <div class="news-page__list">
-        <ion-item
-          v-for="(item, index) in list"
-          :key="index"
-          router-direction="forward"
-          class="news-page__item"
-          :router-link="`/tabs/news-detail/${item.id}`"
+  <ion-page class="news-page">
+    <app-header :has-logo="false" :has-menu="false" has-title title="Новости" />
+    <div class="news-page__content">
+      <ion-content :fullscreen="true">
+        <div class="news-page__list">
+          <ion-item
+            v-for="(item, index) in list"
+            :key="index"
+            router-direction="forward"
+            class="news-page__item"
+            :router-link="`/tabs/news-detail/${item.id}`"
+          >
+            <news-card-big :item="item" />
+          </ion-item>
+        </div>
+        <ion-infinite-scroll
+          @ionInfinite="infiniteScrollHandler($event)"
+          threshold="100px"
+          id="infinite-scroll"
+          :disabled="isDisabledLoadMore"
         >
-          <news-card-big :item="item" />
-        </ion-item>
-      </div>
-      <ion-infinite-scroll
-        @ionInfinite="infiniteScrollHandler($event)"
-        threshold="100px"
-        id="infinite-scroll"
-        :disabled="isDisabledLoadMore"
-      >
-        <ion-infinite-scroll-content
-          loading-spinner="bubbles"
-          loading-text="Загрузка..."
-        >
-        </ion-infinite-scroll-content>
-      </ion-infinite-scroll>
-    </ion-content>
-  </div>
+          <ion-infinite-scroll-content
+            loading-spinner="bubbles"
+            loading-text="Загрузка..."
+          >
+          </ion-infinite-scroll-content>
+        </ion-infinite-scroll>
+      </ion-content>
+    </div>
+  </ion-page>
 </template>
 
 <script lang="ts">
@@ -41,6 +43,7 @@ import {
   IonInfiniteScroll,
   IonInfiniteScrollContent,
   IonItem,
+  IonPage,
 } from "@ionic/vue";
 
 import NewsCardBig from "@/components/NewsCardBig.vue";
@@ -54,6 +57,7 @@ export default defineComponent({
     IonInfiniteScrollContent,
     IonContent,
     IonItem,
+    IonPage,
   },
   setup() {
     const store = useStore();

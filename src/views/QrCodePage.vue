@@ -17,24 +17,9 @@
 </template>
 
 <script lang="ts">
-import {
-  computed,
-  defineComponent,
-  onMounted,
-  reactive,
-  toRefs,
-  watch,
-} from "vue";
+import { computed, defineComponent, onMounted, watch } from "vue";
 import { useStore } from "vuex";
-import {
-  IonPage,
-  IonContent,
-  loadingController,
-  IonCard,
-  IonInfiniteScroll,
-  IonInfiniteScrollContent,
-  IonButton,
-} from "@ionic/vue";
+import { IonPage, IonContent, loadingController, IonCard } from "@ionic/vue";
 import { useRoute } from "vue-router";
 
 export default defineComponent({

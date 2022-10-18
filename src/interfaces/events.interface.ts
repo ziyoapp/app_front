@@ -21,6 +21,7 @@ export interface event {
   price_ball: number;
   register_count: number;
   schedule_text: string;
+  subscribed: boolean;
 }
 
 export interface eventsGetRequest {

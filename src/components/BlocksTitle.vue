@@ -11,6 +11,20 @@
       >
         {{ linkText }}
       </ion-button>
+      <ion-button
+        v-else-if="type === BLOCK_TYPES_RECORD.news"
+        fill="clear"
+        router-link="/tabs/news"
+      >
+        {{ linkText }}
+      </ion-button>
+      <ion-button
+        v-else-if="DEVELOPMENT_PAGES.includes(type)"
+        fill="clear"
+        router-link="/tabs/development"
+      >
+        {{ linkText }}
+      </ion-button>
       <ion-nav-link v-else router-direction="forward" :component="component">
         {{ linkText }}
       </ion-nav-link>
@@ -22,7 +36,7 @@
 import { computed, defineComponent } from "vue";
 import { BLOCK_TYPES, BLOCK_TYPES_RECORD } from "@/shared/constants";
 
-import { IonNavLink, IonItem, IonLabel, IonButton } from "@ionic/vue";
+import { IonNavLink, IonButton } from "@ionic/vue";
 import NewsPage from "@/views/news/index.vue";
 import NotFoundPage from "@/views/404.vue";
 
@@ -44,18 +58,21 @@ export default defineComponent({
   },
   components: { IonNavLink, IonButton },
   setup(props) {
+    const DEVELOPMENT_PAGES = [BLOCK_TYPES_RECORD.tasks];
+
     const component = computed(() => {
       if (!BLOCK_TYPES.includes(props.type)) {
         return NotFoundPage;
       }
       if (props.type === BLOCK_TYPES_RECORD.news) return NewsPage;
 
-      return NotFoundPage;
+      return null;
     });
 
     return {
       BLOCK_TYPES,
       BLOCK_TYPES_RECORD,
+      DEVELOPMENT_PAGES,
       component,
     };
   },
