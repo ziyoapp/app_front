@@ -19,7 +19,11 @@
         <!--          <span slot="end" style="margin-left: auto"> +100YC </span>-->
         <!--        </ion-button>-->
         <div class="app-menu__list">
-          <ion-button fill="clear" color="dark">
+          <ion-button
+            fill="clear"
+            color="dark"
+            @click="openPage('/tabs/settings')"
+          >
             <ion-icon
               :icon="settingsOutline"
               slot="start"
@@ -39,7 +43,11 @@
             ></ion-icon>
             История событий
           </ion-button>
-          <ion-button fill="clear" color="dark">
+          <ion-button
+            fill="clear"
+            color="dark"
+            @click="openPage('/tabs/development')"
+          >
             <ion-icon
               :icon="helpCircleOutline"
               slot="start"
@@ -47,7 +55,11 @@
             ></ion-icon>
             Часто задаваемые вопросы
           </ion-button>
-          <ion-button fill="clear" color="dark">
+          <ion-button
+            fill="clear"
+            color="dark"
+            @click="openPage('/tabs/development')"
+          >
             <ion-icon
               :icon="shareSocialOutline"
               slot="start"

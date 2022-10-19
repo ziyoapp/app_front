@@ -8,7 +8,7 @@
             v-for="(item, index) in list"
             :key="index"
             router-direction="forward"
-            class="news-page__item"
+            class="news-page__item default"
             :router-link="`/tabs/news-detail/${item.id}`"
           >
             <news-card-big :item="item" />

@@ -60,6 +60,14 @@ const routes: Array<RouteRecordRaw> = [
         path: "events-history",
         component: () => import("@/views/events/history.vue"),
       },
+      {
+        path: "settings",
+        component: () => import("@/views/SettingsPage.vue"),
+      },
+      {
+        path: "info",
+        component: () => import("@/views/InfoPage.vue"),
+      },
     ],
   },
   {

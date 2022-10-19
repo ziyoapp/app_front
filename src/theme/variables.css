@@ -292,7 +292,7 @@ ion-button.no-background {
   --background: transparent;
 }
 
-ion-item {
+ion-item:not(.default) {
   --border-radius: 12px;
   --border-width: 2px;
   --border-color: rgba(101, 46, 147, 0.2);

@@ -51,7 +51,7 @@
               >
                 <ion-item
                   router-direction="forward"
-                  class="events-page__item"
+                  class="events-page__item default"
                   :router-link="`/tabs/event/${event.id}`"
                 >
                   <event-card-big :event="event" />
