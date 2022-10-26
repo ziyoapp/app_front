@@ -37,7 +37,7 @@
             button
             :detail="true"
             router-direction="forward"
-            router-link="/tabs/development"
+            router-link="/tabs/notifications"
           >
             <ion-icon :icon="notificationsOutline" slot="start"></ion-icon>
             <ion-label> Уведомления </ion-label>

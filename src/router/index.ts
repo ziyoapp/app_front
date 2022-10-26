@@ -82,6 +82,11 @@ const routes: Array<RouteRecordRaw> = [
         path: "info",
         component: () => import("@/views/InfoPage.vue"),
       },
+      {
+        path: "notifications",
+        component: () => import("@/views/NotificationsPage.vue"),
+        name: "Notification",
+      },
     ],
   },
   {

@@ -1,3 +1,5 @@
+import { pagination } from "@/interfaces/common.interface";
+
 export interface user {
   id: number;
   first_name: string;
@@ -18,4 +20,21 @@ export interface userState {
   qrCode: string;
   userError: string;
   bonus: number;
+  transactions: Array<bonusHistory>;
+  bonusPagination: pagination;
+}
+
+export interface bonusHistory {
+  id: number;
+  operation_type: string;
+  name: string;
+  ball: string;
+  currency: string;
+  date: string;
+}
+
+export interface bonusHistoryGetRequest {
+  page?: number;
+  per_page?: number;
+  isInfiniteScroll?: boolean;
 }

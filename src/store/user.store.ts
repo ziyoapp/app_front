@@ -1,12 +1,28 @@
-import { user, userState } from "@/interfaces/user.interface";
+import {
+  bonusHistory,
+  bonusHistoryGetRequest,
+  user,
+  userState,
+} from "@/interfaces/user.interface";
 import { UserServices, UserError } from "@/services/user.services";
 import { userDefault } from "@/models/user.models";
+import { pagination } from "@/interfaces/common.interface";
 
 const state: userState = {
   user: userDefault,
   qrCode: "",
   userError: "",
   bonus: 0,
+  transactions: [],
+  bonusPagination: {
+    current_page: 1,
+    from: 1,
+    last_page: 1,
+    path: "",
+    per_page: 10,
+    to: 1,
+    total: 1,
+  },
 };
 
 const getters = {
@@ -21,6 +37,12 @@ const getters = {
   },
   getBonus: (state: userState) => {
     return state.bonus;
+  },
+  getTransactions: (state: userState) => {
+    return state.transactions;
+  },
+  getTransactionsPagination: (state: userState) => {
+    return state.bonusPagination;
   },
 };
 
@@ -67,6 +89,27 @@ const actions = {
       return Promise.reject();
     }
   },
+  async fetchTransactions(context: any, dataSet: bonusHistoryGetRequest) {
+    try {
+      const { data, meta: pagination } = await UserServices.getBonusHistory(
+        dataSet
+      );
+      if (dataSet.isInfiniteScroll) {
+        context.commit("pushTransactions", data);
+      } else {
+        context.commit("setTransactions", data);
+      }
+      context.commit("setPagination", pagination);
+    } catch (e) {
+      if (e instanceof UserError) {
+        context.commit("dataError", {
+          errorMessage: e.errorMessage || e.message,
+          responseErrorCode: e.errorCode,
+        });
+      }
+      return Promise.reject();
+    }
+  },
 };
 
 const mutations = {
@@ -81,6 +124,15 @@ const mutations = {
   },
   dataError(state: userState, { errorMessage }: any) {
     state.userError = errorMessage;
+  },
+  setPagination(state: userState, pagination: pagination) {
+    state.bonusPagination = pagination;
+  },
+  pushTransactions(state: userState, data: Array<bonusHistory>) {
+    state.transactions.push(...data);
+  },
+  setTransactions(state: userState, data: Array<bonusHistory>) {
+    state.transactions = data;
   },
 };
 
