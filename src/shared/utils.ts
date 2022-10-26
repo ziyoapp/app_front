@@ -6,7 +6,6 @@ function cleanPhone(phone: string | number): string {
 
 function catchError(error: any, errorType: any) {
   let description;
-  console.log(error);
   const status = error.response?.status;
   const errorsList = error.response?.data?.errors;
   const errorKeys = errorsList ? Object.keys(errorsList) : [];

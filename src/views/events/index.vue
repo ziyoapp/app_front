@@ -254,6 +254,14 @@ export default defineComponent({
     --border-width: 0;
     --border-radius: 0;
     --border-color: transparent;
+    --padding-start: 0;
+    --padding-end: 0;
+    --padding-right: 0;
+  }
+
+  .item-inner {
+    padding-right: 0;
+    --padding-right: 0;
   }
 }
 </style>

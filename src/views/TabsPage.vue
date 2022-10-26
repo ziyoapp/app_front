@@ -15,19 +15,31 @@
       </div>
       <ion-tab-bar slot="bottom">
         <div class="tabs-main__btns">
-          <ion-tab-button tab="tab1" @click="$router.push('/tabs/main')">
+          <ion-tab-button
+            tab="tab1"
+            @click="$router.push('/tabs/main')"
+            :selected="$route.name === 'Main'"
+          >
             <ion-icon :icon="homeOutline" />
             <ion-label>Главная</ion-label>
           </ion-tab-button>
 
-          <ion-tab-button tab="tab2" @click="$router.push('/tabs/development')">
+          <ion-tab-button
+            tab="tab2"
+            @click="$router.push('/tabs/shop')"
+            :selected="$route.name === 'Shop'"
+          >
             <ion-icon :icon="cartOutline" />
             <ion-label>Магазин</ion-label>
           </ion-tab-button>
         </div>
 
         <div class="tabs-main__btns">
-          <ion-tab-button tab="tab3" @click="$router.push('/tabs/events')">
+          <ion-tab-button
+            tab="tab3"
+            @click="$router.push('/tabs/events')"
+            :selected="$route.name === 'Events'"
+          >
             <ion-icon :icon="calendarClearOutline" />
             <ion-label>События</ion-label>
           </ion-tab-button>
@@ -221,7 +233,7 @@ ion-modal#qr-modal ion-icon {
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 100%;
+  height: 200px;
 }
 
 .qr-modal {

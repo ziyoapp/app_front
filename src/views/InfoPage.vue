@@ -49,7 +49,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 
-import { IonContent, IonIcon, IonItem, IonPage, IonLabel } from "@ionic/vue";
+import { IonContent, IonPage } from "@ionic/vue";
 
 export default defineComponent({
   name: "InfoPage",

@@ -26,14 +26,28 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: "main",
         component: () => import("@/views/index.vue"),
+        name: "Main",
       },
       {
         path: "events",
         component: () => import("@/views/events/index.vue"),
+        name: "Events",
+      },
+      {
+        path: "shop",
+        component: () => import("@/views/shop/index.vue"),
+        name: "Shop",
+      },
+      {
+        path: "shop/:product_id",
+        component: () => import("@/views/shop/detail.vue"),
+        name: "productDetail",
+        props: true,
       },
       {
         path: "news",
         component: () => import("@/views/news/index.vue"),
+        name: "News",
       },
       {
         path: "news-detail/:news_id",

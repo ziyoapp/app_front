@@ -17,4 +17,5 @@ export interface userState {
   user: user;
   qrCode: string;
   userError: string;
+  bonus: number;
 }

@@ -37,30 +37,15 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted, reactive, toRefs } from "vue";
 import { useStore } from "vuex";
-import { useRoute } from "vue-router";
 import * as moment from "moment";
 
-import { event } from "@/interfaces/events.interface";
-
-import {
-  IonPage,
-  IonContent,
-  loadingController,
-  IonSkeletonText,
-  IonThumbnail,
-  IonButton,
-  IonInfiniteScroll,
-  IonInfiniteScrollContent,
-} from "@ionic/vue";
+import { IonPage, IonContent, loadingController } from "@ionic/vue";
 
 export default defineComponent({
   name: "history",
   components: {
     IonPage,
     IonContent,
-    // IonSkeletonText,
-    // IonThumbnail,
-    // IonButton,
   },
   setup() {
     const store = useStore();

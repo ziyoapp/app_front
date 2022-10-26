@@ -1,7 +1,7 @@
 import ApiService from "./api.service";
 import { AxiosRequestConfig } from "axios";
 import { catchError } from "@/shared/utils";
-import { newsGetRequest, news as oneNews } from "@/interfaces/news.interface";
+import { newsGetRequest } from "@/interfaces/news.interface";
 
 class NewsError extends Error {
   errorCode: any;

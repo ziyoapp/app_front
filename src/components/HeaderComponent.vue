@@ -3,10 +3,10 @@
     <ion-menu content-id="main-content" ref="menu">
       <ion-content class="app-menu">
         <user-component class="app-menu__user" />
-        <!--        <div class="app-menu__progress">-->
-        <!--          <span> Уровень 4 </span>-->
-        <!--          <span class="app-menu__points"> 700 YC </span>-->
-        <!--        </div>-->
+        <div class="app-menu__progress">
+          <span> Уровень 1 </span>
+          <span class="app-menu__points"> {{ bonus }} YC</span>
+        </div>
         <!--        <ion-button-->
         <!--          class="app-menu__bonus bonus"-->
         <!--          color="success-2"-->
@@ -87,6 +87,10 @@
         <ion-back-button v-else class="app-header__btn"></ion-back-button>
       </ion-buttons>
       <ion-buttons slot="primary">
+        <div v-if="showBonus" class="app-header__bonus-wrap">
+          <bonus-icon slot="start" />
+          <span class="app-header__bonus">{{ bonus }}</span>
+        </div>
         <ion-button v-if="hasSearch" shape="round">
           <ion-icon :icon="search"></ion-icon>
         </ion-button>
@@ -139,6 +143,7 @@ import {
 
 import LogoIcon from "@/assets/svg/Logo.vue";
 import LogoForum from "@/assets/svg/LogoForum.vue";
+import BonusIcon from "@/assets/svg/bonus.vue";
 
 import UserComponent from "@/components/UserComponent.vue";
 import { useRouter } from "vue-router";
@@ -174,6 +179,10 @@ export default defineComponent({
       type: String,
       default: "",
     },
+    showBonus: {
+      type: Boolean,
+      default: false,
+    },
   },
   components: {
     IonBackButton,
@@ -189,6 +198,7 @@ export default defineComponent({
     IonTitle,
     IonContent,
     UserComponent,
+    BonusIcon,
   },
   setup() {
     const store = useStore();
@@ -199,6 +209,10 @@ export default defineComponent({
 
     const user = computed(() => {
       return store.getters["userModule/getUser"];
+    });
+
+    const bonus = computed(() => {
+      return store.getters["userModule/getBonus"];
     });
 
     const openPage = (url: string) => {
@@ -219,6 +233,7 @@ export default defineComponent({
       logOutOutline,
       user,
       menu,
+      bonus,
       logOutHandler: userComposition.logOut,
     };
   },
@@ -266,6 +281,21 @@ export default defineComponent({
       justify-content: flex-start;
     }
   }
+  &__bonus-wrap {
+    display: flex;
+    align-items: center;
+    padding: 10px 9px;
+    background: #ecffd8;
+    border-radius: 35px;
+  }
+  &__bonus {
+    font-family: MuseoSansCyrl-500, serif;
+    font-style: normal;
+    font-size: 10px;
+    line-height: 12px;
+    color: #001a35;
+    margin-left: 15px;
+  }
 }
 
 .app-menu {
@@ -275,6 +305,7 @@ export default defineComponent({
   --padding-end: 15px;
 
   &__progress {
+    font-family: MuseoSansCyrl-500, serif;
     background: #ecffd8;
     border-radius: 10px;
     height: 35px;

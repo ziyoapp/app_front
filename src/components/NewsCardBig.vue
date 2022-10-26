@@ -23,7 +23,6 @@ import {
   IonCardTitle,
   IonCardContent,
   IonCardSubtitle,
-  IonCardHeader,
 } from "@ionic/vue";
 
 export default defineComponent({

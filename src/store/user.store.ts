@@ -6,6 +6,7 @@ const state: userState = {
   user: userDefault,
   qrCode: "",
   userError: "",
+  bonus: 0,
 };
 
 const getters = {
@@ -17,6 +18,9 @@ const getters = {
   },
   getCode: (state: userState) => {
     return state.qrCode;
+  },
+  getBonus: (state: userState) => {
+    return state.bonus;
   },
 };
 
@@ -49,6 +53,20 @@ const actions = {
       return Promise.reject();
     }
   },
+  async fetchBonus(context: any) {
+    try {
+      const { ball: bonus } = await UserServices.getBonus();
+      context.commit("setBonus", bonus);
+    } catch (e) {
+      if (e instanceof UserError) {
+        context.commit("dataError", {
+          errorMessage: e.errorMessage || e.message,
+          responseErrorCode: e.errorCode,
+        });
+      }
+      return Promise.reject();
+    }
+  },
 };
 
 const mutations = {
@@ -57,6 +75,12 @@ const mutations = {
   },
   setCode(state: userState, data: string) {
     state.qrCode = data;
+  },
+  setBonus(state: userState, data: number) {
+    state.bonus = data;
+  },
+  dataError(state: userState, { errorMessage }: any) {
+    state.userError = errorMessage;
   },
 };
 

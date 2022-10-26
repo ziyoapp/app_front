@@ -2,7 +2,6 @@ import {
   eventsGetRequest,
   eventsState,
   event as oneEvent,
-  event,
 } from "@/interfaces/events.interface";
 import { pagination } from "@/interfaces/common.interface";
 import { EventsError, EventsServices } from "@/services/events.services";
@@ -144,8 +143,11 @@ const mutations = {
   pushToAll(state: eventsState, list: Array<oneEvent>) {
     state.list.push(...list);
   },
-  setOne(state: eventsState, data: event) {
+  setOne(state: eventsState, data: oneEvent) {
     state.event = data;
+  },
+  dataError(state: eventsState, { errorMessage }: any) {
+    state.eventError = errorMessage;
   },
 };
 

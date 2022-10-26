@@ -29,6 +29,7 @@ export default defineComponent({
     const initData = async () => {
       if (loggedIn.value) {
         store.dispatch("userModule/fetchUser");
+        store.dispatch("userModule/fetchBonus");
       }
     };
 

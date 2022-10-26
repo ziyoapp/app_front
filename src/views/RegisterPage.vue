@@ -266,7 +266,6 @@ import {
   IonListHeader,
   IonContent,
   loadingController,
-  alertController,
   toastController,
 } from "@ionic/vue";
 
@@ -314,7 +313,6 @@ export default defineComponent({
     });
 
     const handleRegister = async (data: registerInterface) => {
-      console.log({ ...localState.form, ...data });
       const requestData = { ...localState.form, ...data };
       requestData.phone = `+${requestData.phone.replaceAll("-", "")}`;
       const loading = await loadingController.create({

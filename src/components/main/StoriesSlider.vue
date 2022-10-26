@@ -252,36 +252,35 @@ export default {
     const endedEvent = () => {
       stopStory();
       localState.showSlider = false;
-      console.log("endedEvent");
+      // console.log("endedEvent");
     };
-    const prevStoryEvent = (index) => {
-      console.log("%cprevStoryEvent: " + index, "color:red");
+    const prevStoryEvent = () => {
+      // console.log("%cprevStoryEvent: " + index, "color:red");
     };
-    const nextStoryEvent = (index) => {
-      console.log("%cnextStoryEvent: " + index, "color:red");
+    const nextStoryEvent = () => {
+      // console.log("%cnextStoryEvent: " + index, "color:red");
     };
-    const prevSlideEvent = (index) => {
-      console.log("prevSlideEvent: " + index);
+    const prevSlideEvent = () => {
+      // console.log("prevSlideEvent: " + index);
     };
-    const nextSlideEvent = (index) => {
-      console.log("nextSlideEvent: " + index);
+    const nextSlideEvent = () => {
+      // console.log("nextSlideEvent: " + index);
     };
-    const slideChangedEvent = (index) => {
-      console.log("slideChangedEvent: " + index);
+    const slideChangedEvent = () => {
+      // console.log("slideChangedEvent: " + index);
     };
     const swipe_left = () => {
-      console.log("swipe_left Event");
+      // console.log("swipe_left Event");
       stories_component.value.nextStory();
     };
     const swipe_right = () => {
-      console.log("swipe_right Event");
+      // console.log("swipe_right Event");
       stories_component.value.prevStory();
     };
     const swipe_up = () => {
-      console.log("swipe_up Event");
+      // console.log("swipe_up Event");
     };
     const swipe_down = () => {
-      console.log("swipe_down Event");
       stopStory();
       localState.showSlider = false;
     };

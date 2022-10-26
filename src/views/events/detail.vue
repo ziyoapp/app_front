@@ -70,6 +70,7 @@ import {
   IonSkeletonText,
   IonThumbnail,
   IonButton,
+  toastController,
 } from "@ionic/vue";
 
 export default defineComponent({
@@ -115,8 +116,26 @@ export default defineComponent({
 
       await store
         .dispatch("events/subscribeToEvent", route.params.event_id)
-        .then(() => {
+        .then(async () => {
+          const toast = await toastController.create({
+            color: "success",
+            duration: 2000,
+            position: "bottom",
+            message: "Ваша заявка принята",
+          });
+
+          await toast.present();
           getOneEvent();
+        })
+        .catch(async (err) => {
+          const toast = await toastController.create({
+            color: "danger",
+            duration: 2000,
+            position: "middle",
+            message: err || store.getters["events/error"],
+          });
+
+          await toast.present();
         })
         .finally(() => {
           loading.dismiss();
