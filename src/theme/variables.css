@@ -471,4 +471,7 @@ ion-button._submit-btn {
   text-align: center;
   color: #FFFFFF;
   margin-top: 20px;
+  height: 37px;
+  --padding-top: 9px;
+  --padding-bottom: 9px;
 }

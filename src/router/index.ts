@@ -92,6 +92,16 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/views/ProfilePage.vue"),
         name: "Profile",
       },
+      {
+        path: "questions",
+        component: () => import("@/views/QuestionsPage.vue"),
+        name: "Questions",
+      },
+      {
+        path: "questions-form",
+        component: () => import("@/views/QuestionFormPage.vue"),
+        name: "QuestionsForm",
+      },
     ],
   },
   {

@@ -210,13 +210,14 @@ import {
 import { calendarSharp } from "ionicons/icons";
 
 import { useStore } from "vuex";
+import { useRoute } from "vue-router";
+
 import { updateUserForm } from "@/models/user.models";
+import { updateUser } from "@/interfaces/user.interface";
 
 import * as V from "vee-validate";
 import { isRequired } from "@/utils/validators";
-import { updateUser } from "@/interfaces/user.interface";
 import { mask } from "@thedoctor0/vue-input-mask";
-import { useRoute } from "vue-router";
 
 export default defineComponent({
   name: "ProfilePage",

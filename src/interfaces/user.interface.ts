@@ -46,3 +46,8 @@ export interface updateUser {
   gender: string;
   phone: string;
 }
+
+export interface userQuestion {
+  email: string;
+  text: string;
+}

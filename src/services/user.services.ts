@@ -5,6 +5,7 @@ import { catchError } from "@/shared/utils";
 import {
   bonusHistoryGetRequest,
   updateUser,
+  userQuestion,
 } from "@/interfaces/user.interface";
 
 class UserError extends Error {
@@ -82,6 +83,21 @@ const UserServices = {
     const requestData: AxiosRequestConfig = {
       method: "post",
       url: "/user/update",
+      data,
+    };
+
+    try {
+      const response = await ApiService.customRequest(requestData);
+
+      return response.data;
+    } catch (error) {
+      this.catchError(error, EventsError);
+    }
+  },
+  sendQuestion: async function (data: userQuestion) {
+    const requestData: AxiosRequestConfig = {
+      method: "post",
+      url: "/user/question",
       data,
     };
 

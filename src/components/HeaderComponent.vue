@@ -46,7 +46,7 @@
           <ion-button
             fill="clear"
             color="dark"
-            @click="openPage('/tabs/development')"
+            @click="openPage('/tabs/questions')"
           >
             <ion-icon
               :icon="helpCircleOutline"
