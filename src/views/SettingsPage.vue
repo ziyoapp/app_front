@@ -17,7 +17,7 @@
             button
             :detail="true"
             router-direction="forward"
-            router-link="/tabs/development"
+            router-link="/tabs/profile"
           >
             <ion-icon :icon="personOutline" slot="start"></ion-icon>
             <ion-label> Профиль </ion-label>

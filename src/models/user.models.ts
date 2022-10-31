@@ -1,4 +1,4 @@
-import { user } from "@/interfaces/user.interface";
+import { updateUser, user } from "@/interfaces/user.interface";
 
 export const userDefault: user = {
   id: 1,
@@ -13,4 +13,12 @@ export const userDefault: user = {
     role_id: 3,
     role_name: "user",
   },
+};
+
+export const updateUserForm: updateUser = {
+  first_name: "",
+  last_name: "",
+  birth_date: "",
+  gender: "male",
+  phone: "",
 };

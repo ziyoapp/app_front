@@ -55,7 +55,7 @@
               color="tertiary"
               :icon="calendarSharp"
             ></ion-icon>
-            <ion-label position="floating"> Даиа рожения: </ion-label>
+            <ion-label position="floating"> Дата рожения: </ion-label>
             <ion-input
               v-if="form.birth_date"
               v-model="form.birth_date"

@@ -1,6 +1,7 @@
 import {
   bonusHistory,
   bonusHistoryGetRequest,
+  updateUser,
   user,
   userState,
 } from "@/interfaces/user.interface";
@@ -50,6 +51,20 @@ const actions = {
   async fetchUser(context: any) {
     try {
       const { data } = await UserServices.getUser();
+      context.commit("setUser", data);
+    } catch (e) {
+      if (e instanceof UserError) {
+        context.commit("dataError", {
+          errorMessage: e.errorMessage || e.message,
+          responseErrorCode: e.errorCode,
+        });
+      }
+      return Promise.reject();
+    }
+  },
+  async saveUser(context: any, dataSet: updateUser) {
+    try {
+      const { data } = await UserServices.updateUser(dataSet);
       context.commit("setUser", data);
     } catch (e) {
       if (e instanceof UserError) {

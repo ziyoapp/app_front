@@ -38,3 +38,11 @@ export interface bonusHistoryGetRequest {
   per_page?: number;
   isInfiniteScroll?: boolean;
 }
+
+export interface updateUser {
+  first_name: string;
+  last_name: string;
+  birth_date: string;
+  gender: string;
+  phone: string;
+}

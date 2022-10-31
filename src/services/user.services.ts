@@ -2,7 +2,10 @@ import { AxiosRequestConfig } from "axios";
 import ApiService from "@/services/api.service";
 import { EventsError } from "@/services/events.services";
 import { catchError } from "@/shared/utils";
-import { bonusHistoryGetRequest } from "@/interfaces/user.interface";
+import {
+  bonusHistoryGetRequest,
+  updateUser,
+} from "@/interfaces/user.interface";
 
 class UserError extends Error {
   errorCode: any;
@@ -65,6 +68,21 @@ const UserServices = {
       method: "get",
       url: "/user/bonus-history",
       params: data,
+    };
+
+    try {
+      const response = await ApiService.customRequest(requestData);
+
+      return response.data;
+    } catch (error) {
+      this.catchError(error, EventsError);
+    }
+  },
+  updateUser: async function (data: updateUser) {
+    const requestData: AxiosRequestConfig = {
+      method: "post",
+      url: "/user/update",
+      data,
     };
 
     try {
