@@ -57,7 +57,7 @@ const ApiService = {
       async (error) => {
         if (error.request.status === 401) {
           await store.dispatch("auth/signOut");
-          await router.push("/login");
+          await router.push("/auth");
           throw error;
         }
         throw error;

@@ -71,6 +71,10 @@ export default defineComponent({
       eventsLoading: false,
     });
 
+    const bonus = computed(() => {
+      return store.getters["userModule/getBonus"];
+    });
+
     const newsList = computed(() => {
       return store.getters["news/getShortList"];
     });
@@ -112,11 +116,13 @@ export default defineComponent({
     watch(
       () => route.path,
       (val) => {
-        if (
-          val === "/tabs/main" &&
-          (!newsList.value.length || !eventsList.value.length)
-        ) {
-          initData();
+        if (val === "/tabs/main") {
+          if (!newsList.value.length || !eventsList.value.length) {
+            initData();
+          }
+          if (!bonus.value) {
+            store.dispatch("userModule/fetchBonus");
+          }
         }
       }
     );

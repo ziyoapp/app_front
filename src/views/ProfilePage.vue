@@ -169,7 +169,7 @@
             expand="block"
             type="submit"
           >
-            <span> Заказать </span>
+            <span> Сохранить </span>
           </ion-button>
         </v-form>
       </ion-content>

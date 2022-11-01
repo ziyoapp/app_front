@@ -7,7 +7,7 @@ export default {
       await this.signOut().then(() => {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        this.$router.push("/auth/login");
+        this.$router.push("/auth");
       });
     },
   },
