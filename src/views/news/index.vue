@@ -3,17 +3,26 @@
     <app-header :has-logo="false" :has-menu="false" has-title title="Новости" />
     <div class="news-page__content">
       <ion-content :fullscreen="true">
-        <div class="news-page__list">
-          <ion-item
-            v-for="(item, index) in list"
-            :key="index"
-            router-direction="forward"
-            class="news-page__item default"
-            :router-link="`/tabs/news-detail/${item.id}`"
-          >
-            <news-card-big :item="item" />
-          </ion-item>
-        </div>
+        <ion-grid>
+          <ion-row class="news-page__list">
+            <ion-col
+              v-for="(item, index) in list"
+              :key="index"
+              size="6"
+              size-md="6"
+              size-lg="4"
+              size-xs="12"
+            >
+              <ion-item
+                router-direction="forward"
+                class="news-page__item default"
+                :router-link="`/tabs/news-detail/${item.id}`"
+              >
+                <news-card-big :item="item" />
+              </ion-item>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
         <ion-infinite-scroll
           @ionInfinite="infiniteScrollHandler($event)"
           threshold="100px"
@@ -44,6 +53,9 @@ import {
   IonInfiniteScrollContent,
   IonItem,
   IonPage,
+  IonGrid,
+  IonRow,
+  IonCol,
 } from "@ionic/vue";
 
 import NewsCardBig from "@/components/NewsCardBig.vue";
@@ -58,6 +70,9 @@ export default defineComponent({
     IonContent,
     IonItem,
     IonPage,
+    IonGrid,
+    IonRow,
+    IonCol,
   },
   setup() {
     const store = useStore();
@@ -139,11 +154,6 @@ export default defineComponent({
   height: 100%;
   &__content {
     height: 100%;
-  }
-  &__list {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
   }
   &__item {
     --border-width: 0;

@@ -52,13 +52,13 @@ export default defineComponent({
 .news-big {
   box-shadow: none;
   max-width: 100%;
-  width: 330px;
-  margin: 5px;
+  margin: auto;
   img {
     border-radius: 10px;
     overflow: hidden;
     box-shadow: none;
     width: 100%;
+    max-height: 226px;
     object-fit: cover;
   }
   &__title {

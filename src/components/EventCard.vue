@@ -1,5 +1,5 @@
 <template>
-  <div class="event-card">
+  <div class="event-card" @click="$router.push(`/tabs/event/${event.id}`)">
     <div class="event-card__img">
       <img
         :src="
@@ -99,6 +99,7 @@ export default defineComponent({
     img {
       width: 100%;
       max-width: 100%;
+      max-height: 100%;
       height: auto;
       object-fit: contain;
     }
