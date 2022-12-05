@@ -6,7 +6,7 @@
       :has-search="true"
       :has-notify="true"
       :has-title="true"
-      title="Задания"
+      title="Гранты"
     />
     <div class="not-found__content">
       <ion-content :fullscreen="true">

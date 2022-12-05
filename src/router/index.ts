@@ -71,6 +71,10 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/views/Development.vue"),
       },
       {
+        path: "grants",
+        component: () => import("@/views/GrantsPage.vue"),
+      },
+      {
         path: "events-history",
         component: () => import("@/views/events/history.vue"),
       },

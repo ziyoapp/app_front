@@ -44,7 +44,7 @@
             <ion-label>События</ion-label>
           </ion-tab-button>
 
-          <ion-tab-button tab="tab4" @click="$router.push('/tabs/development')">
+          <ion-tab-button tab="tab4" @click="$router.push('/tabs/grants')">
             <ion-icon :icon="schoolOutline" />
             <ion-label>Гранты</ion-label>
           </ion-tab-button>

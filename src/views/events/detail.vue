@@ -193,14 +193,13 @@ export default defineComponent({
   }
   &__img {
     width: 100%;
-    max-height: 260px;
     margin-bottom: 10px;
     overflow: hidden;
     img {
       width: 100%;
       display: block;
       object-fit: cover;
-      max-height: 260px;
+      max-height: 100%;
     }
   }
   &__inner {
