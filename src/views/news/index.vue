@@ -112,9 +112,7 @@ export default defineComponent({
     const getNews = async (isInfiniteScroll: boolean, showLoader = true) => {
       let loading: any;
       if (!isInfiniteScroll && showLoader) {
-        loading = await loadingController.create({
-          message: "Загрузка...",
-        });
+        loading = await loadingController.create({});
         await loading.present();
       }
       await store

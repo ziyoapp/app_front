@@ -1,23 +1,12 @@
 <template>
   <Teleport v-if="hasMenu" to="ion-app">
     <ion-menu content-id="main-content" ref="menu">
-      <ion-content class="app-menu">
+      <ion-content class="app-menu" :class="{ _ios: isPlatform('ios') }">
         <user-component class="app-menu__user" />
         <div class="app-menu__progress">
           <span> Уровень 1 </span>
           <span class="app-menu__points"> {{ bonus }} YC</span>
         </div>
-        <!--        <ion-button-->
-        <!--          class="app-menu__bonus bonus"-->
-        <!--          color="success-2"-->
-        <!--          size="small"-->
-        <!--          expand="block"-->
-        <!--        >-->
-        <!--          <span slot="start" style="margin-right: 10px"-->
-        <!--            >Заполните профиль полностью</span-->
-        <!--          >-->
-        <!--          <span slot="end" style="margin-left: auto"> +100YC </span>-->
-        <!--        </ion-button>-->
         <div class="app-menu__list">
           <ion-button
             fill="clear"
@@ -58,7 +47,7 @@
           <ion-button
             fill="clear"
             color="dark"
-            @click="openPage('/tabs/development')"
+            @click="openPage('/tabs/empty')"
           >
             <ion-icon
               :icon="shareSocialOutline"
@@ -84,17 +73,21 @@
     <ion-toolbar>
       <ion-buttons slot="start">
         <ion-menu-button v-if="hasMenu" auto-hide="false"></ion-menu-button>
-        <ion-back-button v-else class="app-header__btn"></ion-back-button>
+        <ion-back-button
+          v-else
+          class="app-header__btn"
+          text="назад"
+        ></ion-back-button>
       </ion-buttons>
       <ion-buttons slot="primary">
         <div v-if="showBonus" class="app-header__bonus-wrap">
           <bonus-icon slot="start" />
           <span class="app-header__bonus">{{ bonus }}</span>
         </div>
-        <ion-button v-if="hasSearch" shape="round">
-          <ion-icon :icon="search"></ion-icon>
-        </ion-button>
-        <ion-button v-if="hasNotify" shape="round">
+        <!--        <ion-button v-if="hasSearch" shape="round">-->
+        <!--          <ion-icon :icon="search"></ion-icon>-->
+        <!--        </ion-button>-->
+        <ion-button v-if="hasNotify" @click="openNotifyPage" shape="round">
           <ion-icon :icon="notificationsOutline"></ion-icon>
         </ion-button>
         <ion-button v-if="hasShare" shape="round">
@@ -129,6 +122,7 @@ import {
   IonTitle,
   IonContent,
   IonBackButton,
+  isPlatform,
 } from "@ionic/vue";
 
 import {
@@ -222,8 +216,19 @@ export default defineComponent({
       });
     };
 
+    const openNotifyPage = () => {
+      router.push({ name: "Notification", params: { notify: 1 } });
+    };
+
+    const logOutHandler = () => {
+      userComposition.logOut();
+      // @ts-ignore
+      menu.value.$el.close();
+    };
+
     return {
       openPage,
+      openNotifyPage,
       search,
       notificationsOutline,
       shareSocialOutline,
@@ -234,7 +239,8 @@ export default defineComponent({
       user,
       menu,
       bonus,
-      logOutHandler: userComposition.logOut,
+      logOutHandler,
+      isPlatform,
     };
   },
 });
@@ -303,6 +309,10 @@ export default defineComponent({
   --padding-bottom: 90px;
   --padding-start: 15px;
   --padding-end: 15px;
+
+  &._ios {
+    --padding-top: 60px;
+  }
 
   &__progress {
     font-family: MuseoSansCyrl-500, serif;
@@ -391,5 +401,13 @@ export default defineComponent({
     color: rgba(0, 26, 53, 0.5);
     text-align: right;
   }
+}
+ion-toolbar {
+  --padding-end: 0;
+  --padding-start: 0;
+  padding-inline-start: 0;
+  padding-inline-end: 0;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
 }
 </style>

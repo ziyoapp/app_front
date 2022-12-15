@@ -85,9 +85,7 @@ export default defineComponent({
     });
 
     const handleLogin = async () => {
-      const loading = await loadingController.create({
-        message: "Загрузка...",
-      });
+      const loading = await loadingController.create({});
       await loading.present();
       await store
         .dispatch("auth/signIn", localState.form)

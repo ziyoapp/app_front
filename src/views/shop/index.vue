@@ -143,9 +143,7 @@ export default defineComponent({
     ) => {
       let loading: any;
       if (!isInfiniteScroll && showLoader) {
-        loading = await loadingController.create({
-          message: "Загрузка...",
-        });
+        loading = await loadingController.create({});
         await loading.present();
       }
       await store

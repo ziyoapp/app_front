@@ -116,9 +116,7 @@ export default defineComponent({
     const handleSend = async (data: userQuestion) => {
       const requestData = { ...localState.form, ...data };
 
-      const loading = await loadingController.create({
-        message: "Загрузка...",
-      });
+      const loading = await loadingController.create({});
       await loading.present();
 
       store

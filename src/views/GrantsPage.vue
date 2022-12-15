@@ -10,7 +10,7 @@
     />
     <div class="not-found__content">
       <ion-content :fullscreen="true">
-        <development-empty />
+        <grants-empty />
       </ion-content>
     </div>
   </ion-page>
@@ -20,14 +20,14 @@
 import { defineComponent } from "vue";
 import { IonPage, IonContent } from "@ionic/vue";
 
-import DevelopmentEmpty from "../components/empty/DevelopmentEmpty.vue";
+import GrantsEmpty from "@/components/empty/GrantsEmpty.vue";
 
 export default defineComponent({
   name: "DevelopmenPage",
   components: {
     IonPage,
     IonContent,
-    DevelopmentEmpty,
+    GrantsEmpty,
   },
 });
 </script>

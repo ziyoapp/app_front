@@ -315,9 +315,7 @@ export default defineComponent({
     const handleRegister = async (data: registerInterface) => {
       const requestData = { ...localState.form, ...data };
       requestData.phone = `+${requestData.phone.replaceAll("-", "")}`;
-      const loading = await loadingController.create({
-        message: "Загрузка...",
-      });
+      const loading = await loadingController.create({});
       await loading.present();
       await store
         .dispatch("auth/signup", requestData)

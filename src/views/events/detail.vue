@@ -34,23 +34,35 @@
             <ion-skeleton-text :animated="true" class="event-detail__desc" />
           </div>
           <div v-else class="event-detail__desc" v-html="event.content"></div>
-          <ion-button
-            v-if="!event.subscribed"
-            color="success-2"
-            class="ion-margin-top event-detail__btn"
-            expand="block"
-            @click="subscribe"
-          >
-            Хочу посетить
-          </ion-button>
+          <template v-if="dateAvailable">
+            <ion-button
+              v-if="!event.subscribed"
+              color="success-2"
+              class="ion-margin-top event-detail__btn"
+              expand="block"
+              @click="subscribe"
+            >
+              Хочу посетить
+            </ion-button>
+            <ion-button
+              v-else
+              class="ion-margin-top event-detail__btn"
+              color="danger"
+              expand="block"
+              @click="unSubscribe"
+            >
+              Отменить посещение
+            </ion-button>
+          </template>
+
           <ion-button
             v-else
             class="ion-margin-top event-detail__btn"
-            color="danger"
+            color="dark"
             expand="block"
-            @click="unSubscribe"
+            disabled
           >
-            Отменить посещение
+            Событие закончилось
           </ion-button>
         </div>
       </ion-content>
@@ -62,6 +74,7 @@
 import { computed, defineComponent, onMounted, ref } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
+import moment from "moment";
 
 import {
   IonPage,
@@ -94,9 +107,7 @@ export default defineComponent({
 
     const getOneEvent = async () => {
       loadingStatus.value = true;
-      const loading = await loadingController.create({
-        message: "Загрузка...",
-      });
+      const loading = await loadingController.create({});
       await loading.present();
 
       await store
@@ -109,9 +120,7 @@ export default defineComponent({
 
     const subscribe = async () => {
       loadingStatus.value = true;
-      const loading = await loadingController.create({
-        message: "Загрузка...",
-      });
+      const loading = await loadingController.create({});
       await loading.present();
 
       await store
@@ -145,9 +154,7 @@ export default defineComponent({
 
     const unSubscribe = async () => {
       loadingStatus.value = true;
-      const loading = await loadingController.create({
-        message: "Загрузка...",
-      });
+      const loading = await loadingController.create({});
       await loading.present();
 
       await store
@@ -168,6 +175,12 @@ export default defineComponent({
       );
     });
 
+    const dateAvailable = computed(() => {
+      let dateNow = moment();
+      let eventDateEnd = moment(event.value.date_end);
+      return dateNow <= eventDateEnd;
+    });
+
     onMounted(() => {
       getOneEvent();
     });
@@ -178,6 +191,7 @@ export default defineComponent({
       loadingStatus,
       subscribe,
       unSubscribe,
+      dateAvailable,
     };
   },
 });

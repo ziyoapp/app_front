@@ -29,5 +29,9 @@ export default defineComponent({
   &:after {
     display: none;
   }
+
+  &__btn {
+    margin-left: 5px;
+  }
 }
 </style>

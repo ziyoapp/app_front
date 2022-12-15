@@ -81,9 +81,7 @@ export default defineComponent({
 
     const getOneNews = async () => {
       loadingStatus.value = true;
-      const loading = await loadingController.create({
-        message: "Загрузка...",
-      });
+      const loading = await loadingController.create({});
       await loading.present();
 
       await store

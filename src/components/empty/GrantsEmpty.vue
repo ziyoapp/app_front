@@ -2,10 +2,10 @@
   <ion-card class="empty-dev">
     <empty-clip-board />
     <ion-card-header>
-      <ion-card-title> Грантов пока нет... </ion-card-title>
+      <ion-card-title> {{ title }} </ion-card-title>
     </ion-card-header>
 
-    <ion-card-content> Здесь будут гранты. </ion-card-content>
+    <ion-card-content> {{ text }} </ion-card-content>
     <ion-button @click="goHome" color="success-2 empty-dev__btn" expand="block">
       Перейти на главную
     </ion-button>
@@ -26,7 +26,17 @@ import EmptyClipBoard from "@/assets/svg/EmptyClipBoard.vue";
 import { useRouter } from "vue-router";
 
 export default defineComponent({
-  name: "DevelopmentEmpty",
+  name: "GrantsEmpty",
+  props: {
+    title: {
+      type: String,
+      default: "Грантов пока нет...",
+    },
+    text: {
+      type: String,
+      default: "Здесь будут гранты.",
+    },
+  },
   components: {
     IonCard,
     IonCardHeader,

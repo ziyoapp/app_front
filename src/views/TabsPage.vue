@@ -2,7 +2,7 @@
   <ion-page>
     <ion-tabs class="tabs-main">
       <ion-router-outlet></ion-router-outlet>
-      <div slot="top" class="qr-btn-wrap">
+      <div slot="top" class="qr-btn-wrap" :class="{ _ios: isPlatform('ios') }">
         <ion-fab-button
           class="qr-btn"
           shape="round"
@@ -84,6 +84,7 @@ import {
   IonFabButton,
   IonModal,
   IonSpinner,
+  isPlatform,
 } from "@ionic/vue";
 import {
   homeOutline,
@@ -140,6 +141,7 @@ export default defineComponent({
       qrLoading,
       getQrCode,
       dismiss,
+      isPlatform,
       qrCode,
       modal,
       homeOutline,
@@ -180,6 +182,10 @@ export default defineComponent({
     top: auto;
     bottom: 30px;
     z-index: 11;
+
+    &._ios {
+      bottom: 64px;
+    }
 
     &::before {
       content: "";

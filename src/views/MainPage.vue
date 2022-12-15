@@ -86,9 +86,7 @@ export default defineComponent({
     const initData = async () => {
       localState.newsLoading = true;
       localState.eventsLoading = true;
-      const loading = await loadingController.create({
-        message: "Загрузка...",
-      });
+      const loading = await loadingController.create({});
       await loading.present();
       await store.dispatch("userModule/fetchUser").finally(() => {
         loading.dismiss();

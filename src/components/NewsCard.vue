@@ -7,7 +7,7 @@
       {{ news.description }}
     </div>
     <div class="news-card__date">
-      {{ news.published_at }}
+      {{ dateFormat(news.published_at) }}
     </div>
   </div>
 </template>
@@ -15,6 +15,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
 import { news as oneNews } from "@/interfaces/news.interface";
+import { useUserCompositions } from "@/compositions/useUserCompositions";
 
 export default defineComponent({
   name: "NewsCard",
@@ -25,7 +26,11 @@ export default defineComponent({
     },
   },
   setup() {
-    //
+    const userComposition = useUserCompositions();
+
+    return {
+      dateFormat: userComposition.formatFn,
+    };
   },
 });
 </script>

@@ -27,7 +27,7 @@
             button
             :detail="true"
             router-direction="forward"
-            router-link="/tabs/development"
+            router-link="/tabs/empty"
           >
             <ion-icon :icon="lockClosedOutline" slot="start"></ion-icon>
             <ion-label> Безопасность </ion-label>
@@ -46,12 +46,17 @@
             class="default"
             button
             :detail="true"
-            router-direction="forward"
-            router-link="/tabs/development"
+            :detailIcon="showSubMenu.lang ? chevronDown : chevronForward"
+            @click="showSubMenu.lang = !showSubMenu.lang"
           >
             <ion-icon :icon="globeOutline" slot="start"></ion-icon>
             <ion-label> Язык приложения </ion-label>
           </ion-item>
+          <ion-item-group v-if="showSubMenu.lang">
+            <ion-item class="default" button>
+              <ion-label> русский </ion-label>
+            </ion-item>
+          </ion-item-group>
           <ion-item
             class="default"
             button
@@ -64,9 +69,9 @@
           </ion-item>
         </div>
         <div class="settings-page__footer">
-          <span>Согласие на обработку данных</span>
-          <span>Публичная оферта</span>
-          <span>Политика конфиденциальности</span>
+          <span @click="openAboutPage">Согласие на обработку данных</span>
+          <span @click="openAboutPage">Публичная оферта</span>
+          <span @click="openAboutPage">Политика конфиденциальности</span>
         </div>
       </ion-content>
     </div>
@@ -74,16 +79,26 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import {
   personOutline,
   lockClosedOutline,
   notificationsOutline,
   globeOutline,
   alertCircleOutline,
+  chevronDown,
+  chevronForward,
 } from "ionicons/icons";
 
-import { IonContent, IonIcon, IonItem, IonPage, IonLabel } from "@ionic/vue";
+import {
+  IonContent,
+  IonIcon,
+  IonItem,
+  IonPage,
+  IonLabel,
+  IonItemGroup,
+} from "@ionic/vue";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   name: "SettingsPage",
@@ -93,14 +108,29 @@ export default defineComponent({
     IonItem,
     IonIcon,
     IonLabel,
+    IonItemGroup,
   },
   setup() {
+    const router = useRouter();
+
+    const openAboutPage = () => {
+      router.push("/tabs/info");
+    };
+
+    const showSubMenu = ref({
+      lang: false,
+    });
+
     return {
       personOutline,
       lockClosedOutline,
       notificationsOutline,
       globeOutline,
       alertCircleOutline,
+      chevronDown,
+      chevronForward,
+      openAboutPage,
+      showSubMenu,
     };
   },
 });

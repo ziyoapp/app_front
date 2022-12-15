@@ -35,6 +35,7 @@ export default defineComponent({
   overflow: hidden;
 
   &__title {
+    opacity: 0;
     font-weight: 600;
     font-size: 10px;
     line-height: 12px;

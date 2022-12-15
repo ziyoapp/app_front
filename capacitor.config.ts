@@ -1,10 +1,10 @@
-import { CapacitorConfig } from '@capacitor/cli';
+import { CapacitorConfig } from "@capacitor/cli";
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
-  appName: 'ZiyoForum',
-  webDir: 'dist',
-  bundledWebRuntime: false
+  appId: "ziyo.forum.app",
+  appName: "ZiyoForum",
+  webDir: "dist",
+  bundledWebRuntime: false,
 };
 
 export default config;

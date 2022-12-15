@@ -1,0 +1,6 @@
+{
+	"appId": "ziyo.forum.app",
+	"appName": "ZiyoForum",
+	"webDir": "dist",
+	"bundledWebRuntime": false
+}

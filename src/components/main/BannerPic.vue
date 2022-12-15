@@ -17,7 +17,7 @@ export default defineComponent({
     const router = useRouter();
 
     const clickHandler = () => {
-      router.push("/tabs/development");
+      router.push("/tabs/empty");
     };
 
     return { clickHandler };

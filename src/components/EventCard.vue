@@ -1,6 +1,9 @@
 <template>
-  <div class="event-card" @click="$router.push(`/tabs/event/${event.id}`)">
-    <div class="event-card__img">
+  <div class="event-card">
+    <div
+      class="event-card__img"
+      @click="$router.push(`/tabs/event/${event.id}`)"
+    >
       <img
         :src="
           event.image_url || 'https://ziyoforum-app.uz/storage/1/360x260.png'
@@ -9,14 +12,17 @@
       />
     </div>
     <div class="event-card__content">
-      <div class="event-card__title">
+      <div
+        class="event-card__title"
+        @click="$router.push(`/tabs/event/${event.id}`)"
+      >
         {{ event.title }}
       </div>
       <div class="event-card__desc">
         {{ event.description }}
       </div>
       <div class="event-card__date">
-        {{ event.published_at }}
+        {{ dateFormat(event.published_at) }}
       </div>
     </div>
   </div>
@@ -25,6 +31,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
 import { event as oneEvent } from "@/interfaces/events.interface";
+import { useUserCompositions } from "@/compositions/useUserCompositions";
 
 export default defineComponent({
   name: "EventCard",
@@ -33,6 +40,13 @@ export default defineComponent({
       type: Object as PropType<oneEvent>,
       required: true,
     },
+  },
+  setup() {
+    const userComposition = useUserCompositions();
+
+    return {
+      dateFormat: userComposition.formatFn,
+    };
   },
 });
 </script>

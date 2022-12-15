@@ -38,9 +38,7 @@ export default defineComponent({
     });
 
     const getQrCode = async () => {
-      const loading = await loadingController.create({
-        message: "Загрузка...",
-      });
+      const loading = await loadingController.create({});
       await loading.present();
       store.dispatch("userModule/fetchQrCode").finally(() => {
         loading.dismiss();

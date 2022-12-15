@@ -90,6 +90,7 @@ export default defineComponent({
     font-size: 10px;
     line-height: 13px;
     color: #000000;
+    font-family: MuseoSansCyrl-700, serif;
   }
   &__link,
   &__link button,

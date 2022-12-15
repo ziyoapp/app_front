@@ -372,7 +372,7 @@ body {
 /*}*/
 
 .ion-page {
-  padding: 13px 15px;
+  padding: 13px 8px;
 }
 
 ion-button:not(.button-clear) {

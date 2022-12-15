@@ -7,7 +7,7 @@
       :has-search="false"
       :has-notify="false"
     />
-    <ion-toolbar>
+    <ion-toolbar :class="{ _ios: isPlatform('ios') }">
       <ion-segment v-model="selectedSegment">
         <ion-segment-button value="notifications">
           Уведомления
@@ -49,10 +49,12 @@ import {
   loadingController,
   IonInfiniteScroll,
   IonInfiniteScrollContent,
+  isPlatform,
 } from "@ionic/vue";
 import { useStore } from "vuex";
 
 import TransactionsList from "@/components/notifications/TransactionsList.vue";
+import { useRoute } from "vue-router";
 
 export default defineComponent({
   name: "NotificationsPage",
@@ -68,6 +70,7 @@ export default defineComponent({
   },
   setup() {
     const store = useStore();
+    const route = useRoute();
 
     const localState = reactive({
       filterDataTransactions: {
@@ -94,7 +97,7 @@ export default defineComponent({
         localState.filterDataTransactions.page =
           pagination.value.current_page + 1;
         localState.filterDataTransactions.per_page = pagination.value.per_page;
-        await getLists(true).then(() => {
+        await getLists({ isInfiniteScroll: true }).then(() => {
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           ev.target.complete();
@@ -104,12 +107,13 @@ export default defineComponent({
       }
     };
 
-    const getLists = async (isInfiniteScroll: boolean, showLoader = true) => {
+    const getLists = async ({
+      isInfiniteScroll = false,
+      showLoader = true,
+    }) => {
       let loading: any;
       if (!isInfiniteScroll && showLoader) {
-        loading = await loadingController.create({
-          message: "Загрузка...",
-        });
+        loading = await loadingController.create({});
         await loading.present();
       }
       await store
@@ -125,11 +129,27 @@ export default defineComponent({
         });
     };
 
+    const setDefaultSegment = () => {
+      setTimeout(() => {
+        if (route.params?.notify) {
+          localState.selectedSegment = "notifications";
+        } else {
+          localState.selectedSegment = "transactions";
+        }
+      });
+    };
+
     onMounted(() => {
-      getLists(false, true);
+      setDefaultSegment();
+      getLists({ isInfiniteScroll: false, showLoader: true });
     });
 
-    return { ...toRefs(localState), transactions, infiniteScrollHandler };
+    return {
+      ...toRefs(localState),
+      transactions,
+      infiniteScrollHandler,
+      isPlatform,
+    };
   },
 });
 </script>
@@ -148,6 +168,10 @@ export default defineComponent({
   ion-toolbar {
     top: -30px;
     height: 30px;
+
+    &._ios {
+      height: 40px;
+    }
   }
 
   ion-segment {

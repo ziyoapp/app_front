@@ -23,7 +23,7 @@ import { IonPage, IonContent } from "@ionic/vue";
 import DevelopmentEmpty from "../components/empty/DevelopmentEmpty.vue";
 
 export default defineComponent({
-  name: "DevelopmenPage",
+  name: "DevelopmentPage",
   components: {
     IonPage,
     IonContent,

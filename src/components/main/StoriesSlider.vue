@@ -14,7 +14,7 @@
     <!-- Stories View -->
     <ion-modal :is-open="showSlider" class="full-screen">
       <div class="overlay">
-        <div class="stories__wrapper">
+        <div class="stories__wrapper" :class="{ _ios: isPlatform('ios') }">
           <stories
             :autoplay="false"
             :duration="duration"
@@ -39,7 +39,7 @@
               </div>
             </template>
           </stories>
-          <div class="stories__close">
+          <div class="stories__close" :class="{ _ios: isPlatform('ios') }">
             <ion-button @click="stopStory" size="small" color="dark">
               <ion-icon slot="icon-only" :icon="arrowBack"></ion-icon>
             </ion-button>
@@ -54,7 +54,7 @@
 <script>
 import Stories from "vue3-insta-stories";
 import { ref, reactive, toRefs } from "vue";
-import { IonModal, IonCard, IonButton, IonIcon } from "@ionic/vue";
+import { IonModal, IonCard, IonButton, IonIcon, isPlatform } from "@ionic/vue";
 import { arrowBack } from "ionicons/icons";
 
 export default {
@@ -308,6 +308,7 @@ export default {
       resetStory,
       stopStory,
       playStory,
+      isPlatform,
     };
   },
 };
@@ -333,6 +334,11 @@ export default {
   &__wrapper {
     width: 100%;
     height: 100vh;
+
+    &._ios {
+      margin-top: 60px;
+    }
+
     .slide {
       width: 100%;
       height: 100%;
@@ -351,6 +357,10 @@ export default {
     top: 20px;
     left: 10px;
     z-index: 10;
+
+    &._ios {
+      top: 90px;
+    }
   }
 }
 </style>
