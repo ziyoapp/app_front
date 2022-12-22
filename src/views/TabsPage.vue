@@ -1,5 +1,5 @@
 <template>
-  <ion-page>
+  <ion-page class="root-page">
     <ion-tabs class="tabs-main">
       <ion-router-outlet></ion-router-outlet>
       <div slot="top" class="qr-btn-wrap" :class="{ _ios: isPlatform('ios') }">
@@ -156,6 +156,9 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+.root-page {
+  background: #f5f5f5;
+}
 .tabs-main {
   &__btns {
     display: flex;

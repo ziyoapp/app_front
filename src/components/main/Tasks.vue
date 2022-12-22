@@ -69,7 +69,6 @@ export default defineComponent({
 .tasks-short {
   &__title {
     margin-bottom: 10px;
-    margin-right: 25px;
   }
   &__card {
     width: 100%;

@@ -70,12 +70,12 @@ export default defineComponent({
 .events-short {
   &__title {
     margin-bottom: 10px;
-    padding-right: 25px;
+    padding-right: 10px;
   }
   &__list {
     display: flex;
     align-items: center;
-    overflow: auto;
+    overflow-x: auto;
   }
   &__item {
     width: 200px;

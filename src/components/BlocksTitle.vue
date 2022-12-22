@@ -86,11 +86,11 @@ export default defineComponent({
   justify-content: space-between;
   &__text {
     font-style: normal;
-    font-weight: 600;
+    font-weight: 500;
     font-size: 10px;
     line-height: 13px;
     color: #000000;
-    font-family: MuseoSansCyrl-700, serif;
+    font-family: MuseoSansCyrl-500, serif;
   }
   &__link,
   &__link button,

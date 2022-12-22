@@ -18,9 +18,14 @@
           :list="eventsList"
           :loading="eventsLoading"
         />
-        <news-list :list="newsList" :loading="newsLoading" />
+        <news-list
+          v-if="newsList.length"
+          class="main-page__news"
+          :list="newsList"
+          :loading="newsLoading"
+        />
         <tasks-list class="main-page__tasks" :loading="newsLoading" />
-        <banner-pic />
+        <banner-pic class="main-page__banner" />
       </ion-content>
     </div>
   </ion-page>
@@ -140,6 +145,7 @@ export default defineComponent({
 <style scoped lang="scss">
 .main-page {
   height: 100%;
+  padding-right: 0;
   &__content {
     height: 100%;
   }
@@ -148,6 +154,13 @@ export default defineComponent({
   }
   &__tasks {
     margin-top: 30px;
+    padding-right: 10px;
+  }
+  &__news {
+    padding-right: 10px;
+  }
+  &__banner {
+    margin-right: 10px;
   }
 }
 </style>

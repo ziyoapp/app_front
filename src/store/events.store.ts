@@ -2,6 +2,7 @@ import {
   eventsGetRequest,
   eventsState,
   event as oneEvent,
+  category,
 } from "@/interfaces/events.interface";
 import { pagination } from "@/interfaces/common.interface";
 import { EventsError, EventsServices } from "@/services/events.services";
@@ -10,6 +11,7 @@ import { defaultEvent } from "@/models/events.models";
 const state: eventsState = {
   shortList: [],
   list: [],
+  categories: [],
   eventError: "",
   pagination: {
     current_page: 1,
@@ -38,6 +40,9 @@ const getters = {
   },
   getPagination(state: eventsState) {
     return state.pagination;
+  },
+  getCategories(state: eventsState) {
+    return state.categories;
   },
 };
 
@@ -128,6 +133,21 @@ const actions = {
       return Promise.reject();
     }
   },
+  async getAllCategories(context: any) {
+    try {
+      const { data } = await EventsServices.fetchCategories();
+      context.commit("setCategories", data);
+      return Promise.resolve(data);
+    } catch (e) {
+      if (e instanceof EventsError) {
+        context.commit("dataError", {
+          errorMessage: e.errorMessage || e.message,
+          responseErrorCode: e.errorCode,
+        });
+      }
+      return Promise.reject();
+    }
+  },
 };
 
 const mutations = {
@@ -145,6 +165,9 @@ const mutations = {
   },
   setOne(state: eventsState, data: oneEvent) {
     state.event = data;
+  },
+  setCategories(state: eventsState, list: Array<category>) {
+    state.categories = list;
   },
   dataError(state: eventsState, { errorMessage }: any) {
     state.eventError = errorMessage;

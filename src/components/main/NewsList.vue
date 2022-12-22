@@ -72,7 +72,6 @@ export default defineComponent({
 .news-short {
   &__title {
     margin-bottom: 10px;
-    padding-right: 25px;
   }
   &__list {
     display: flex;

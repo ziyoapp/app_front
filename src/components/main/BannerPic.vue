@@ -1,7 +1,7 @@
 <template>
   <div class="banner-pic" @click="clickHandler">
     <div class="banner-pic__img">
-      <img src="/assets/people.svg" />
+      <img src="/assets/people.png" />
     </div>
     <div class="banner-pic__text">Стань Волонтером!</div>
   </div>
@@ -37,9 +37,10 @@ export default defineComponent({
 
   &__img {
     width: 163px;
-    height: 107px;
+    height: auto;
+    object-fit: contain;
     margin-right: 12px;
-    margin-top: -17px;
+    margin-top: -12px;
     margin-left: 7px;
   }
 

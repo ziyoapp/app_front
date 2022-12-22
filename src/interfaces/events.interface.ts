@@ -5,6 +5,12 @@ export interface label {
   name: string;
 }
 
+export interface category {
+  id: number;
+  name: string;
+  events_count: number;
+}
+
 export interface event {
   id: number;
   labels: Array<label>;
@@ -36,4 +42,6 @@ export interface eventsState {
   eventError: string;
   pagination: pagination;
   event: event;
+
+  categories: Array<category>;
 }

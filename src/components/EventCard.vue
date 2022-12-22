@@ -62,6 +62,7 @@ export default defineComponent({
   max-width: 500px;
   padding: 10px;
   height: 120px;
+  overflow: hidden;
   color: #fff;
 
   &__content {

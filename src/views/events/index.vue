@@ -25,17 +25,15 @@
           </ion-row>
 
           <div class="events-page__filters">
-            <ion-button color="success-2" fill="solid" size="small">
-              Все события(8)
-            </ion-button>
-            <ion-button color="success-2" fill="outline" size="small">
-              Новые(5)
-            </ion-button>
-            <ion-button color="success-2" fill="outline" size="small">
-              Бесплатные(5)
-            </ion-button>
-            <ion-button color="success-2" fill="outline" size="small">
-              Прошедшие
+            <ion-button
+              v-for="(cat, index) in categories"
+              @click="selectCategory(cat)"
+              :key="index"
+              color="success-2"
+              :fill="cat.id === selectedCategoryId ? 'solid' : 'outline'"
+              size="small"
+            >
+              {{ cat.name }}({{ cat.events_count }})
             </ion-button>
           </div>
           <div class="events-page__list">
@@ -99,6 +97,8 @@ import {
 } from "@ionic/vue";
 import { useStore } from "vuex";
 
+import { category as eventCategory } from "@/interfaces/events.interface";
+
 export default defineComponent({
   name: "index",
   components: {
@@ -125,10 +125,15 @@ export default defineComponent({
         per_page: 5,
       },
       isDisabledLoadMore: false,
+      selectedCategoryId: 0,
     });
 
     const list = computed(() => {
       return store.getters["events/getAll"];
+    });
+
+    const categories = computed(() => {
+      return store.getters["events/getCategories"];
     });
 
     const pagination = computed(() => {
@@ -169,15 +174,30 @@ export default defineComponent({
         });
     };
 
+    const getCategories = () => {
+      store.dispatch("events/getAllCategories").then(() => {
+        localState.selectedCategoryId = categories.value[0].id;
+      });
+    };
+
+    const selectCategory = (category: eventCategory) => {
+      if (localState.selectedCategoryId === category.id) return;
+
+      localState.selectedCategoryId = category.id;
+    };
+
     onMounted(() => {
+      getCategories();
       getEvents(false);
     });
 
     return {
       ...toRefs(localState),
       infiniteScrollHandler,
+      selectCategory,
       pagination,
       list,
+      categories,
     };
   },
 });
