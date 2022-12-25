@@ -148,6 +148,37 @@ const actions = {
       return Promise.reject();
     }
   },
+  async getActiveEvents(context: any, userId: number) {
+    try {
+      const { data } = await EventsServices.fetchActiveEventsForUser(userId);
+      return Promise.resolve(data);
+    } catch (e) {
+      if (e instanceof EventsError) {
+        context.commit("dataError", {
+          errorMessage: e.errorMessage || e.message,
+          responseErrorCode: e.errorCode,
+        });
+      }
+      return Promise.reject();
+    }
+  },
+  async setPoints(context: any, dataSet: { userId: number; eventId: number }) {
+    try {
+      const { data } = await EventsServices.addPointsByEventToUser(
+        dataSet.userId,
+        dataSet.eventId
+      );
+      return Promise.resolve(data);
+    } catch (e) {
+      if (e instanceof EventsError) {
+        context.commit("dataError", {
+          errorMessage: e.errorMessage || e.message,
+          responseErrorCode: e.errorCode,
+        });
+      }
+      return Promise.reject();
+    }
+  },
 };
 
 const mutations = {

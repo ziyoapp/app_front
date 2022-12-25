@@ -9,6 +9,7 @@ import RegisterPage from "@/views/RegisterPage.vue";
 import WelcomePage from "@/views/WelcomePage.vue";
 import AuthPage from "@/views/AuthPage.vue";
 import tabsPage from "@/views/TabsPage.vue";
+import ScannerPage from "@/views/ScannerPage.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -22,6 +23,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: "",
         redirect: "/tabs/main",
+        props: true,
       },
       {
         path: "main",
@@ -110,6 +112,11 @@ const routes: Array<RouteRecordRaw> = [
         path: "questions-form",
         component: () => import("@/views/QuestionFormPage.vue"),
         name: "QuestionsForm",
+      },
+      {
+        path: "scanner",
+        name: "Scanner",
+        component: ScannerPage,
       },
     ],
   },

@@ -34,36 +34,38 @@
             <ion-skeleton-text :animated="true" class="event-detail__desc" />
           </div>
           <div v-else class="event-detail__desc" v-html="event.content"></div>
-          <template v-if="dateAvailable">
-            <ion-button
-              v-if="!event.subscribed"
-              color="success-2"
-              class="ion-margin-top event-detail__btn"
-              expand="block"
-              @click="subscribe"
-            >
-              Хочу посетить
-            </ion-button>
+          <template v-if="!isAdminOrModerator">
+            <template v-if="dateAvailable">
+              <ion-button
+                v-if="!event.subscribed"
+                color="success-2"
+                class="ion-margin-top event-detail__btn"
+                expand="block"
+                @click="subscribe"
+              >
+                Хочу посетить
+              </ion-button>
+              <ion-button
+                v-else
+                class="ion-margin-top event-detail__btn"
+                color="danger"
+                expand="block"
+                @click="unSubscribe"
+              >
+                Отменить посещение
+              </ion-button>
+            </template>
+
             <ion-button
               v-else
               class="ion-margin-top event-detail__btn"
-              color="danger"
+              color="dark"
               expand="block"
-              @click="unSubscribe"
+              disabled
             >
-              Отменить посещение
+              Событие закончилось
             </ion-button>
           </template>
-
-          <ion-button
-            v-else
-            class="ion-margin-top event-detail__btn"
-            color="dark"
-            expand="block"
-            disabled
-          >
-            Событие закончилось
-          </ion-button>
         </div>
       </ion-content>
     </div>
@@ -85,6 +87,7 @@ import {
   IonButton,
   toastController,
 } from "@ionic/vue";
+import { useUserCompositions } from "@/compositions/useUserCompositions";
 
 export default defineComponent({
   name: "EventDetail",
@@ -98,6 +101,7 @@ export default defineComponent({
   setup() {
     const store = useStore();
     const route = useRoute();
+    const userComposition = useUserCompositions();
 
     const loadingStatus = ref(false);
 
@@ -192,6 +196,7 @@ export default defineComponent({
       subscribe,
       unSubscribe,
       dateAvailable,
+      isAdminOrModerator: userComposition.isAdminOrModerator,
     };
   },
 });

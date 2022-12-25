@@ -4,11 +4,17 @@ import { news } from "@/store/news.store";
 import { events } from "@/store/events.store";
 import { userModule } from "@/store/user.store";
 import { shop } from "@/store/shop.store";
+import { TextResult } from "capacitor-plugin-dynamsoft-barcode-reader";
 
 export const store = createStore({
   state: {
     pusherConnectionStatus: "empty",
     commonError: "",
+    qrCode: {
+      QRCodeOnly: true,
+      continuousScan: false,
+      barcodeResults: [] as TextResult[],
+    },
   },
   mutations: {
     dataError(state, { errorMessage }: any) {

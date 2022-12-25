@@ -14,7 +14,11 @@
             v-for="(category, index) in categories"
             :key="index"
             color="success-2"
-            :fill="category.id === selectedCategoryId ? 'solid' : 'outline'"
+            :fill="
+              Number(category.id) === Number(selectedCategoryId)
+                ? 'solid'
+                : 'outline'
+            "
             size="small"
             @click="selectCategory(category.id)"
           >

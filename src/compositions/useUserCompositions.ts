@@ -1,9 +1,19 @@
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
+import { computed } from "vue";
+import { USER_ROLES } from "@/shared/constants";
 
 const useUserCompositions = () => {
   const store = useStore();
   const router = useRouter();
+
+  const userRole = computed(() => {
+    return store.getters["userModule/getUserRoleId"];
+  });
+
+  const isAdminOrModerator = computed(() => {
+    return userRole.value !== USER_ROLES.USER;
+  });
 
   const logOut = () => {
     store.dispatch("auth/signOut").then(() => {
@@ -24,6 +34,7 @@ const useUserCompositions = () => {
   return {
     logOut,
     formatFn,
+    isAdminOrModerator,
   };
 };
 

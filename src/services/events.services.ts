@@ -103,6 +103,37 @@ const EventsServices = {
       this.catchError(error, EventsError);
     }
   },
+  fetchActiveEventsForUser: async function (userId: number) {
+    const requestData: AxiosRequestConfig = {
+      method: "get",
+      url: `/events/active/${userId}/user`,
+    };
+
+    try {
+      const response = await ApiService.customRequest(requestData);
+
+      return response.data;
+    } catch (error) {
+      this.catchError(error, EventsError);
+    }
+  },
+  addPointsByEventToUser: async function (userId: number, eventId: number) {
+    const requestData: AxiosRequestConfig = {
+      method: "post",
+      url: `/events/${eventId}/add-ball`,
+      data: {
+        user_id: userId,
+      },
+    };
+
+    try {
+      const response = await ApiService.customRequest(requestData);
+
+      return response.data;
+    } catch (error) {
+      this.catchError(error, EventsError);
+    }
+  },
   catchError: catchError,
 };
 

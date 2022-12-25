@@ -34,6 +34,9 @@ const getters = {
   getUser: (state: userState) => {
     return state.user;
   },
+  getUserRoleId: (state: userState) => {
+    return state.user.role.role_id;
+  },
   getCode: (state: userState) => {
     return state.qrCode;
   },

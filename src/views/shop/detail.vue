@@ -71,25 +71,27 @@
               v-html="product.description"
             ></div>
           </template>
-          <ion-button
-            v-if="product.quantity > 0"
-            color="success-2"
-            class="ion-margin-top page-detail__btn"
-            expand="block"
-            :disabled="buyLoading"
-            @click="buyHandler"
-          >
-            <ion-spinner v-if="buyLoading" name="crescent"></ion-spinner>
-            <span v-else> Заказать </span>
-          </ion-button>
-          <ion-text
-            v-else
-            style="display: block"
-            color="dark"
-            class="ion-text-center ion-margin-top"
-          >
-            нет в наличии
-          </ion-text>
+          <template v-if="!isAdminOrModerator">
+            <ion-button
+              v-if="product.quantity > 0"
+              color="success-2"
+              class="ion-margin-top page-detail__btn"
+              expand="block"
+              :disabled="buyLoading"
+              @click="buyHandler"
+            >
+              <ion-spinner v-if="buyLoading" name="crescent"></ion-spinner>
+              <span v-else> Заказать </span>
+            </ion-button>
+            <ion-text
+              v-else
+              style="display: block"
+              color="dark"
+              class="ion-text-center ion-margin-top"
+            >
+              нет в наличии
+            </ion-text>
+          </template>
         </div>
       </ion-content>
     </div>
@@ -122,6 +124,7 @@ import {
   toastController,
   IonSpinner,
 } from "@ionic/vue";
+import { useUserCompositions } from "@/compositions/useUserCompositions";
 
 export default defineComponent({
   name: "ProductDetail",
@@ -140,6 +143,7 @@ export default defineComponent({
   setup() {
     const store = useStore();
     const route = useRoute();
+    const userComposition = useUserCompositions();
 
     const loadingStatus = ref(false);
     const buyLoading = ref(false);
@@ -216,6 +220,7 @@ export default defineComponent({
       loadingStatus,
       buyLoading,
       buyHandler,
+      isAdminOrModerator: userComposition.isAdminOrModerator,
       modules: [Pagination, Zoom],
     };
   },

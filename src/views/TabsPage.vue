@@ -4,6 +4,17 @@
       <ion-router-outlet></ion-router-outlet>
       <div slot="top" class="qr-btn-wrap" :class="{ _ios: isPlatform('ios') }">
         <ion-fab-button
+          v-if="isAdminOrModerator"
+          class="qr-btn"
+          shape="round"
+          router-direction="forward"
+          id="open-qr-dialog"
+          @click="openScan"
+        >
+          <ion-icon :icon="scanOutline" />
+        </ion-fab-button>
+        <ion-fab-button
+          v-else
           class="qr-btn"
           shape="round"
           router-direction="forward"
@@ -68,11 +79,41 @@
         <ion-icon :icon="close" />
       </ion-fab-button>
     </ion-modal>
+    <ion-modal :is-open="eventsModal" ref="modal">
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Выберите событие</ion-title>
+          <ion-buttons slot="end">
+            <ion-button @click="eventsModal = false">закрыть</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <ion-list>
+          <ion-item
+            v-for="(event, index) in events"
+            :key="index"
+            class="default"
+            @click="selectEventToAddPoint(event)"
+          >
+            <ion-avatar slot="start">
+              <ion-img :src="event.image_url"></ion-img>
+            </ion-avatar>
+            <ion-label>
+              <h2>
+                {{ event.title }}
+              </h2>
+              <p>{{ event.description }}</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-content>
+    </ion-modal>
   </ion-page>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from "vue";
+import { defineComponent, ref, computed, watch } from "vue";
 import {
   IonTabBar,
   IonTabButton,
@@ -85,6 +126,17 @@ import {
   IonModal,
   IonSpinner,
   isPlatform,
+  IonToolbar,
+  IonHeader,
+  IonTitle,
+  IonAvatar,
+  IonItem,
+  IonImg,
+  IonList,
+  IonContent,
+  IonButtons,
+  IonButton,
+  toastController,
 } from "@ionic/vue";
 import {
   homeOutline,
@@ -92,11 +144,16 @@ import {
   calendarClearOutline,
   schoolOutline,
   qrCodeOutline,
+  scanOutline,
   close,
 } from "ionicons/icons";
 import { useStore } from "vuex";
 
 import UserComponent from "@/components/UserComponent.vue";
+import { useUserCompositions } from "@/compositions/useUserCompositions";
+import { useRoute, useRouter } from "vue-router";
+
+import { event } from "@/interfaces/events.interface";
 
 export default defineComponent({
   name: "TabsPage",
@@ -112,12 +169,28 @@ export default defineComponent({
     IonModal,
     IonSpinner,
     UserComponent,
+    IonToolbar,
+    IonHeader,
+    IonTitle,
+    IonAvatar,
+    IonItem,
+    IonImg,
+    IonList,
+    IonContent,
+    IonButtons,
+    IonButton,
   },
   setup() {
     const store = useStore();
+    const router = useRouter();
+    const route = useRoute();
+    const userComposition = useUserCompositions();
 
     const qrLoading = ref(false);
     const modal = ref(null);
+    const eventsModal = ref(false);
+    const events = ref([]);
+    const qrUserId = ref(null);
 
     const qrCode = computed(() => {
       return store.getters["userModule/getCode"];
@@ -130,6 +203,10 @@ export default defineComponent({
       });
     };
 
+    const openScan = () => {
+      router.push("/tabs/scanner");
+    };
+
     const dismiss = () => {
       if (modal?.value) {
         // @ts-ignore
@@ -137,12 +214,100 @@ export default defineComponent({
       }
     };
 
+    const openScanModal = async () => {
+      if (!store.state.qrCode?.barcodeResults[0]?.barcodeText) {
+        return;
+      }
+      const jsonResult = await JSON.parse(
+        store.state.qrCode.barcodeResults[0]?.barcodeText
+      );
+      if (jsonResult.user_id) {
+        qrUserId.value = jsonResult.user_id;
+        await store
+          .dispatch("events/getActiveEvents", jsonResult.user_id)
+          .then(async (data) => {
+            if (data?.length) {
+              events.value = data;
+              eventsModal.value = true;
+            } else {
+              const toast = await toastController.create({
+                color: "warning",
+                duration: 2000,
+                position: "top",
+                message: "Нет активных событий",
+              });
+              await toast.present();
+            }
+            store.state.qrCode = {
+              QRCodeOnly: true,
+              continuousScan: false,
+              barcodeResults: [],
+            };
+          });
+      }
+      const toast = await toastController.create({
+        color: "error",
+        duration: 2000,
+        position: "bottom",
+        message: "Не корректный QR-code",
+      });
+      await toast.present();
+      eventsModal.value = false;
+    };
+
+    const selectEventToAddPoint = (event: event) => {
+      store
+        .dispatch("events/setPoints", {
+          userId: qrUserId.value,
+          eventId: event.id,
+        })
+        .then(async () => {
+          const toast = await toastController.create({
+            color: "success",
+            duration: 2000,
+            position: "bottom",
+            message: "Баллы начислены",
+          });
+          await toast.present();
+        })
+        .catch(async (err) => {
+          const toast = await toastController.create({
+            color: "danger",
+            duration: 2000,
+            position: "middle",
+            message: err || store.getters["events/error"],
+          });
+
+          await toast.present();
+        })
+        .finally(() => {
+          eventsModal.value = false;
+        });
+    };
+
+    watch(
+      () => route.path,
+      () => {
+        console.log(route);
+        if (route.name === "Main") {
+          openScanModal();
+        }
+      }
+    );
+
     return {
       qrLoading,
       getQrCode,
       dismiss,
+      openScan,
+      openScanModal,
+      selectEventToAddPoint,
+      events,
+      eventsModal,
+      isAdminOrModerator: userComposition.isAdminOrModerator,
       isPlatform,
       qrCode,
+      scanOutline,
       modal,
       homeOutline,
       cartOutline,
