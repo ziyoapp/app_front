@@ -207,6 +207,10 @@ http://ionicframework.com/docs/theming/ */
   --ion-text-color: #0A1938;
 }
 
+html.scan {
+  --ion-background-color: none;
+}
+
 body {
   --ion-text-color: #0A1938;
 }
@@ -374,6 +378,10 @@ body {
 .ion-page {
   padding: 13px 8px;
   background: #f5f5f5;
+}
+
+.ion-page.scan {
+  background: none;
 }
 
 ion-button:not(.button-clear) {

@@ -12,7 +12,11 @@ const useUserCompositions = () => {
   });
 
   const isAdminOrModerator = computed(() => {
-    return userRole.value !== USER_ROLES.USER;
+    return Number(userRole.value) !== USER_ROLES.USER;
+  });
+
+  const isUser = computed(() => {
+    return Number(userRole.value) === USER_ROLES.USER;
   });
 
   const logOut = () => {
@@ -35,6 +39,7 @@ const useUserCompositions = () => {
     logOut,
     formatFn,
     isAdminOrModerator,
+    isUser,
   };
 };
 

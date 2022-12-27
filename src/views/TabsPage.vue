@@ -1,8 +1,13 @@
 <template>
-  <ion-page class="root-page">
+  <ion-page :class="{ 'root-page': route.name !== 'Scanner' }">
     <ion-tabs class="tabs-main">
       <ion-router-outlet></ion-router-outlet>
-      <div slot="top" class="qr-btn-wrap" :class="{ _ios: isPlatform('ios') }">
+      <div
+        v-if="!pagesWithForm.includes(String(route.name))"
+        slot="top"
+        class="qr-btn-wrap"
+        :class="{ _ios: isPlatform('ios') }"
+      >
         <ion-fab-button
           v-if="isAdminOrModerator"
           class="qr-btn"
@@ -14,7 +19,7 @@
           <ion-icon :icon="scanOutline" />
         </ion-fab-button>
         <ion-fab-button
-          v-else
+          v-else-if="isUser"
           class="qr-btn"
           shape="round"
           router-direction="forward"
@@ -79,7 +84,7 @@
         <ion-icon :icon="close" />
       </ion-fab-button>
     </ion-modal>
-    <ion-modal :is-open="eventsModal" ref="modal">
+    <ion-modal :is-open="eventsModal" ref="eventsModal">
       <ion-header>
         <ion-toolbar>
           <ion-title>Выберите событие</ion-title>
@@ -191,6 +196,7 @@ export default defineComponent({
     const eventsModal = ref(false);
     const events = ref([]);
     const qrUserId = ref(null);
+    const pagesWithForm = ["Profile", "QuestionsForm"];
 
     const qrCode = computed(() => {
       return store.getters["userModule/getCode"];
@@ -204,7 +210,7 @@ export default defineComponent({
     };
 
     const openScan = () => {
-      router.push("/tabs/scanner");
+      router.push("/scanner");
     };
 
     const dismiss = () => {
@@ -218,41 +224,56 @@ export default defineComponent({
       if (!store.state.qrCode?.barcodeResults[0]?.barcodeText) {
         return;
       }
-      const jsonResult = await JSON.parse(
-        store.state.qrCode.barcodeResults[0]?.barcodeText
-      );
-      if (jsonResult.user_id) {
-        qrUserId.value = jsonResult.user_id;
-        await store
-          .dispatch("events/getActiveEvents", jsonResult.user_id)
-          .then(async (data) => {
-            if (data?.length) {
-              events.value = data;
-              eventsModal.value = true;
-            } else {
-              const toast = await toastController.create({
-                color: "warning",
-                duration: 2000,
-                position: "top",
-                message: "Нет активных событий",
-              });
-              await toast.present();
-            }
-            store.state.qrCode = {
-              QRCodeOnly: true,
-              continuousScan: false,
-              barcodeResults: [],
-            };
-          });
+      try {
+        const jsonResult = await JSON.parse(
+          store.state.qrCode.barcodeResults[0]?.barcodeText
+        );
+
+        if (jsonResult.user_id) {
+          qrUserId.value = jsonResult.user_id;
+          await store
+            .dispatch("events/getActiveEvents", jsonResult.user_id)
+            .then(async (data) => {
+              if (data?.length) {
+                events.value = data;
+                eventsModal.value = true;
+              } else {
+                const toast = await toastController.create({
+                  color: "success",
+                  duration: 3000,
+                  position: "bottom",
+                  message: "Нет активных событий",
+                });
+                await toast.present();
+              }
+              store.state.qrCode = {
+                QRCodeOnly: true,
+                continuousScan: false,
+                barcodeResults: [],
+              };
+            });
+        } else {
+          alert(" have not user_id");
+          await showIncorrectQrNotify();
+        }
+      } catch (e: any) {
+        alert(e.toString());
+        alert(store.state.qrCode.barcodeResults[0]?.barcodeText);
+        alert("error handled");
+        await showIncorrectQrNotify();
       }
+
+      eventsModal.value = false;
+    };
+
+    const showIncorrectQrNotify = async () => {
       const toast = await toastController.create({
-        color: "error",
-        duration: 2000,
+        color: "danger",
+        duration: 3000,
         position: "bottom",
         message: "Не корректный QR-code",
       });
       await toast.present();
-      eventsModal.value = false;
     };
 
     const selectEventToAddPoint = (event: event) => {
@@ -288,9 +309,21 @@ export default defineComponent({
     watch(
       () => route.path,
       () => {
-        console.log(route);
         if (route.name === "Main") {
-          openScanModal();
+          setTimeout(() => {
+            openScanModal();
+          });
+        }
+
+        const rootElement = document.querySelector("html");
+        if (route.name === "Scanner") {
+          if (rootElement) {
+            rootElement.classList.add("scan");
+          }
+        } else {
+          if (rootElement) {
+            rootElement.classList.remove("scan");
+          }
         }
       }
     );
@@ -305,8 +338,10 @@ export default defineComponent({
       events,
       eventsModal,
       isAdminOrModerator: userComposition.isAdminOrModerator,
+      isUser: userComposition.isUser,
       isPlatform,
       qrCode,
+      route,
       scanOutline,
       modal,
       homeOutline,
@@ -315,6 +350,7 @@ export default defineComponent({
       schoolOutline,
       qrCodeOutline,
       close,
+      pagesWithForm,
     };
   },
 });

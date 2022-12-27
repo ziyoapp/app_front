@@ -1,9 +1,9 @@
 <template>
-  <ion-page>
+  <ion-page class="scan">
     <QRCodeScanner
       v-if="showScan"
       ref="scanner"
-      license="DLS2eyJoYW5kc2hha2VDb2RlIjoiMTAxNTUyNjk2LVRYbFhaV0pRY205cVgyUmljZyIsIm9yZ2FuaXphdGlvbklEIjoiMTAxNTUyNjk2IiwiY2hlY2tDb2RlIjo3Njc3NDk2OTV9"
+      :license="codrovaLicense"
       :torchOn="torchOn"
       :runtimeSettings="runtimeSettings"
       @onScanned="onScanned"
@@ -82,6 +82,11 @@ export default defineComponent({
     const router = useRouter();
     const route = useRoute();
 
+    const codrovaLicense =
+      "DLS2eyJoYW5kc2hha2VDb2RlIjoiMTAxNTUyNjk2LVRYbE5iMkpwYkdWUWNtOXFYMlJpY2ciLCJvcmdhbml6YXRpb25JRCI6IjEwMTU1MjY5NiIsImNoZWNrQ29kZSI6NzAxNDAxMDc5fQ==";
+    const webLicense =
+      "DLS2eyJoYW5kc2hha2VDb2RlIjoiMTAxNTUyNjk2LVRYbFhaV0pRY205cVgyUmljZyIsIm9yZ2FuaXphdGlvbklEIjoiMTAxNTUyNjk2IiwiY2hlY2tDb2RlIjo3Njc3NDk2OTV9";
+
     addIcons({
       "ellipsis-horizontal-outline": ellipsisHorizontalOutline,
       "flashlight-outline": flashlightOutline,
@@ -115,6 +120,7 @@ export default defineComponent({
         scanned = true;
         sharedStates.barcodeResults = result.results;
         showScan.value = false;
+        console.log(sharedStates.barcodeResults);
         close();
       } else {
         if (result.deviceOrientation === "portrait") {
@@ -173,12 +179,17 @@ export default defineComponent({
       getPointsData,
       onScanned,
       onPlayed,
+      codrovaLicense,
+      webLicense,
     };
   },
 });
 </script>
 
-<style scoped>
+<style>
+:root {
+  --ion-background-color: none;
+}
 .barcode-polygon {
   fill: rgba(85, 240, 40, 0.5);
   stroke: green;

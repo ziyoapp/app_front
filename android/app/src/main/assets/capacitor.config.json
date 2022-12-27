@@ -1,6 +1,6 @@
 {
-	"appId": "io.ionic.starter",
-	"appName": "ZiyoForum",
+	"appId": "ziyo.forum.app",
+	"appName": "ZiyoApp",
 	"webDir": "dist",
 	"bundledWebRuntime": false
 }

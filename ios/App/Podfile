@@ -13,9 +13,11 @@ def capacitor_pods
   pod 'CapacitorHaptics', :path => '../../node_modules/@capacitor/haptics'
   pod 'CapacitorKeyboard', :path => '../../node_modules/@capacitor/keyboard'
   pod 'CapacitorStatusBar', :path => '../../node_modules/@capacitor/status-bar'
+  pod 'CapacitorPluginDynamsoftBarcodeReader', :path => '../../node_modules/capacitor-plugin-dynamsoft-barcode-reader'
+  pod 'CordovaPlugins', :path => '../capacitor-cordova-ios-plugins'
 end
 
-target 'App' do
+target 'ZiyoApp' do
   capacitor_pods
   # Add your Pods here
 end

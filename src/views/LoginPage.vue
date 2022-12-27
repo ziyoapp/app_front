@@ -90,7 +90,9 @@ export default defineComponent({
       await store
         .dispatch("auth/signIn", localState.form)
         .then(() => {
-          router.push("/");
+          router.push("/").then(() => {
+            window.location.reload();
+          });
         })
         .catch(async (err: any) => {
           const errorAlert = await alertController.create({

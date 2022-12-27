@@ -113,12 +113,12 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/views/QuestionFormPage.vue"),
         name: "QuestionsForm",
       },
-      {
-        path: "scanner",
-        name: "Scanner",
-        component: ScannerPage,
-      },
     ],
+  },
+  {
+    path: "/scanner",
+    name: "Scanner",
+    component: ScannerPage,
   },
   {
     path: "/auth",

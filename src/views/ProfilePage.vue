@@ -272,7 +272,9 @@ export default defineComponent({
 
     const handleUpdate = async (data: updateUser) => {
       const requestData = { ...localState.form, ...data };
-      requestData.phone = `+${requestData.phone.replaceAll("-", "")}`;
+      requestData.phone = `+${requestData.phone
+        .replaceAll("-", "")
+        .replaceAll("+", "")}`;
       const loading = await loadingController.create({});
       await loading.present();
 

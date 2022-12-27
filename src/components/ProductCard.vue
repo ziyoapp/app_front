@@ -17,7 +17,7 @@
         <span> {{ product.price }} </span>
       </div>
       <span class="product-card__category">
-        {{ product.categories[0].name }}
+        {{ product.categories[0] ? product.categories[0].name : "-" }}
       </span>
     </div>
   </div>

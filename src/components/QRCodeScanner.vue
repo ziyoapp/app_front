@@ -1,5 +1,7 @@
 <template>
-  <div v-if="!initialized">Инициализация...</div>
+  <div class="ion-text-center ion-padding-top" v-if="!initialized">
+    Инициализация...
+  </div>
 </template>
 
 <script lang="ts" setup>
