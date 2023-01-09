@@ -13,7 +13,6 @@
           class="qr-btn"
           shape="round"
           router-direction="forward"
-          id="open-qr-dialog"
           @click="openScan"
         >
           <ion-icon :icon="scanOutline" />
@@ -23,7 +22,6 @@
           class="qr-btn"
           shape="round"
           router-direction="forward"
-          id="open-qr-dialog"
           @click="getQrCode"
         >
           <ion-icon :icon="qrCodeOutline" />
@@ -67,7 +65,7 @@
         </div>
       </ion-tab-bar>
     </ion-tabs>
-    <ion-modal id="qr-modal" ref="modal" trigger="open-qr-dialog">
+    <ion-modal :is-open="qrModal" id="qr-modal">
       <div v-if="qrLoading" class="qr-loading">
         <ion-spinner name="crescent"></ion-spinner>
       </div>
@@ -79,12 +77,12 @@
         size="small"
         class="qr-modal__close"
         shape="round"
-        @click="dismiss"
+        @click="qrModal = false"
       >
         <ion-icon :icon="close" />
       </ion-fab-button>
     </ion-modal>
-    <ion-modal :is-open="eventsModal" ref="eventsModal">
+    <ion-modal :is-open="eventsModal" class="events-modal">
       <ion-header>
         <ion-toolbar>
           <ion-title>Выберите событие</ion-title>
@@ -118,7 +116,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch } from "vue";
+import { defineComponent, ref, computed, watch, reactive, toRefs } from "vue";
 import {
   IonTabBar,
   IonTabButton,
@@ -141,7 +139,6 @@ import {
   IonContent,
   IonButtons,
   IonButton,
-  toastController,
 } from "@ionic/vue";
 import {
   homeOutline,
@@ -191,21 +188,27 @@ export default defineComponent({
     const route = useRoute();
     const userComposition = useUserCompositions();
 
-    const qrLoading = ref(false);
+    const localState = reactive({
+      qrLoading: false,
+      eventsModal: false,
+      qrModal: false,
+      events: [],
+      qrUserId: null,
+      pagesWithForm: ["Profile", "QuestionsForm"],
+    });
+
     const modal = ref(null);
-    const eventsModal = ref(false);
-    const events = ref([]);
-    const qrUserId = ref(null);
-    const pagesWithForm = ["Profile", "QuestionsForm"];
 
     const qrCode = computed(() => {
       return store.getters["userModule/getCode"];
     });
 
     const getQrCode = async () => {
-      qrLoading.value = true;
+      localState.qrModal = false;
+      localState.qrLoading = true;
       store.dispatch("userModule/fetchQrCode").finally(() => {
-        qrLoading.value = false;
+        localState.qrLoading = false;
+        localState.qrModal = true;
       });
     };
 
@@ -214,6 +217,7 @@ export default defineComponent({
     };
 
     const dismiss = () => {
+      console.log(modal?.value);
       if (modal?.value) {
         // @ts-ignore
         modal.value.$el.dismiss();
@@ -228,23 +232,21 @@ export default defineComponent({
         const jsonResult = await JSON.parse(
           store.state.qrCode.barcodeResults[0]?.barcodeText
         );
-
         if (jsonResult.user_id) {
-          qrUserId.value = jsonResult.user_id;
+          localState.qrUserId = jsonResult.user_id;
           await store
             .dispatch("events/getActiveEvents", jsonResult.user_id)
-            .then(async (data) => {
+            .then((data) => {
               if (data?.length) {
-                events.value = data;
-                eventsModal.value = true;
+                localState.events = data;
+                localState.eventsModal = true;
               } else {
-                const toast = await toastController.create({
-                  color: "success",
+                userComposition.showNotify({
+                  type: "success",
                   duration: 3000,
                   position: "bottom",
                   message: "Нет активных событий",
                 });
-                await toast.present();
               }
               store.state.qrCode = {
                 QRCodeOnly: true,
@@ -253,56 +255,46 @@ export default defineComponent({
               };
             });
         } else {
-          alert(" have not user_id");
           await showIncorrectQrNotify();
         }
       } catch (e: any) {
-        alert(e.toString());
-        alert(store.state.qrCode.barcodeResults[0]?.barcodeText);
-        alert("error handled");
         await showIncorrectQrNotify();
       }
-
-      eventsModal.value = false;
     };
 
-    const showIncorrectQrNotify = async () => {
-      const toast = await toastController.create({
-        color: "danger",
+    const showIncorrectQrNotify = () => {
+      userComposition.showNotify({
+        type: "danger",
         duration: 3000,
         position: "bottom",
         message: "Не корректный QR-code",
       });
-      await toast.present();
     };
 
     const selectEventToAddPoint = (event: event) => {
       store
         .dispatch("events/setPoints", {
-          userId: qrUserId.value,
+          userId: localState.qrUserId,
           eventId: event.id,
         })
-        .then(async () => {
-          const toast = await toastController.create({
-            color: "success",
+        .then(() => {
+          userComposition.showNotify({
+            type: "success",
             duration: 2000,
             position: "bottom",
             message: "Баллы начислены",
           });
-          await toast.present();
         })
-        .catch(async (err) => {
-          const toast = await toastController.create({
-            color: "danger",
+        .catch((err) => {
+          userComposition.showNotify({
+            type: "danger",
             duration: 2000,
             position: "middle",
             message: err || store.getters["events/error"],
           });
-
-          await toast.present();
         })
         .finally(() => {
-          eventsModal.value = false;
+          localState.eventsModal = false;
         });
     };
 
@@ -329,28 +321,25 @@ export default defineComponent({
     );
 
     return {
-      qrLoading,
+      ...toRefs(localState),
       getQrCode,
       dismiss,
       openScan,
       openScanModal,
       selectEventToAddPoint,
-      events,
-      eventsModal,
       isAdminOrModerator: userComposition.isAdminOrModerator,
       isUser: userComposition.isUser,
       isPlatform,
       qrCode,
       route,
-      scanOutline,
       modal,
+      scanOutline,
       homeOutline,
       cartOutline,
       calendarClearOutline,
       schoolOutline,
       qrCodeOutline,
       close,
-      pagesWithForm,
     };
   },
 });
