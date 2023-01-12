@@ -1,5 +1,9 @@
 <template>
-  <div class="ion-text-center ion-padding-top" v-if="!initialized">
+  <div
+    ref="scanArea"
+    class="ion-text-center ion-padding-top"
+    v-if="!initialized"
+  >
     Инициализация...
   </div>
 </template>

@@ -24,6 +24,7 @@
       </template>
       <news-card
         v-else
+        @click="$router.push(`/tabs/news-detail/${news.id}`)"
         v-for="(news, index) in list"
         :key="index"
         :news="news"

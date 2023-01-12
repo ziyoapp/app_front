@@ -86,8 +86,8 @@ export default defineComponent({
   justify-content: space-between;
   &__text {
     font-style: normal;
-    font-weight: 500;
-    font-size: 10px;
+    font-weight: 600;
+    font-size: 12px;
     line-height: 13px;
     color: #000000;
     font-family: MuseoSansCyrl-500, serif;
@@ -96,7 +96,7 @@ export default defineComponent({
   &__link button,
   &__link ion-button {
     font-weight: 600;
-    font-size: 10px;
+    font-size: 12px;
     line-height: 13px;
     text-align: right;
     color: #46bb0c;

@@ -33,7 +33,7 @@
             class="news-detail__date"
           />
           <div v-else class="news-detail__date">
-            {{ news.published_at }}
+            {{ moment(news.published_at).format("DD.MM.YYYY") }}
           </div>
           <div v-if="loadingStatus">
             <ion-skeleton-text :animated="true" class="news-detail__desc" />
@@ -52,6 +52,8 @@
 import { computed, defineComponent, onMounted, ref } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
+
+import moment from "moment";
 
 import {
   IonPage,
@@ -99,6 +101,7 @@ export default defineComponent({
     return {
       news,
       loadingStatus,
+      moment,
     };
   },
 });
@@ -143,7 +146,8 @@ export default defineComponent({
     margin-bottom: 13px;
   }
   &__desc {
-    font-weight: 700;
+    font-family: MuseoSansCyrl-500, serif;
+    font-weight: 500;
     font-size: 10px;
     line-height: 12px;
     color: #0a1938;

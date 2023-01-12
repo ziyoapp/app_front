@@ -2,7 +2,10 @@
   <Teleport v-if="hasMenu" to="ion-app">
     <ion-menu content-id="main-content" ref="menu">
       <ion-content class="app-menu" :class="{ _ios: isPlatform('ios') }">
-        <user-component class="app-menu__user" />
+        <user-component
+          class="app-menu__user"
+          @click="openPage('/tabs/profile')"
+        />
         <div class="app-menu__progress">
           <span> Уровень 1 </span>
           <span class="app-menu__points"> {{ bonus }} YC</span>
@@ -44,11 +47,7 @@
             ></ion-icon>
             Часто задаваемые вопросы
           </ion-button>
-          <ion-button
-            fill="clear"
-            color="dark"
-            @click="openPage('/tabs/empty')"
-          >
+          <ion-button fill="clear" color="dark" @click="shareLink">
             <ion-icon
               :icon="shareSocialOutline"
               slot="start"
@@ -90,7 +89,7 @@
         <ion-button v-if="hasNotify" @click="openNotifyPage" shape="round">
           <ion-icon :icon="notificationsOutline"></ion-icon>
         </ion-button>
-        <ion-button v-if="hasShare" shape="round">
+        <ion-button v-if="hasShare" shape="round" @click="shareLink">
           <ion-icon :icon="shareSocialOutline"></ion-icon>
         </ion-button>
       </ion-buttons>
@@ -240,6 +239,7 @@ export default defineComponent({
       menu,
       bonus,
       logOutHandler,
+      shareLink: userComposition.shareLink,
       isPlatform,
     };
   },
@@ -248,7 +248,7 @@ export default defineComponent({
 
 <style lang="scss">
 .app-header {
-  margin-bottom: 16px;
+  margin-bottom: -13px;
   top: -13px;
   &::after {
     display: none;

@@ -119,13 +119,18 @@ export default defineComponent({
   setup() {
     const store = useStore();
 
+    interface getEventsParams {
+      isInfiniteScroll: boolean;
+      showLoader: boolean;
+    }
+
     const localState = reactive({
       filterData: {
         page: 1,
         per_page: 5,
       },
       isDisabledLoadMore: false,
-      selectedCategoryId: 0,
+      selectedCategoryId: "all",
     });
 
     const list = computed(() => {
@@ -145,26 +150,31 @@ export default defineComponent({
       if (pageNumber <= pagination.value.last_page) {
         localState.filterData.page = pagination.value.current_page + 1;
         localState.filterData.per_page = pagination.value.per_page;
-        await getEvents(true).then(() => {
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          ev.target.complete();
-        });
+        await getEvents({ isInfiniteScroll: true, showLoader: false }).then(
+          () => {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            ev.target.complete();
+          }
+        );
       } else {
         localState.isDisabledLoadMore = true;
       }
     };
 
-    const getEvents = async (isInfiniteScroll: boolean, showLoader = true) => {
+    const getEvents = async (dataSet: getEventsParams) => {
       let loading: any;
-      if (!isInfiniteScroll && showLoader) {
+      if (!dataSet.isInfiniteScroll && dataSet.showLoader) {
         loading = await loadingController.create({});
         await loading.present();
       }
       await store
         .dispatch("events/fetchAll", {
-          data: localState.filterData,
-          isInfiniteScroll,
+          data: {
+            ...localState.filterData,
+            type: localState.selectedCategoryId,
+          },
+          isInfiniteScroll: dataSet.isInfiniteScroll,
         })
         .then(() => {
           localState.isDisabledLoadMore = false;
@@ -184,11 +194,12 @@ export default defineComponent({
       if (localState.selectedCategoryId === category.id) return;
 
       localState.selectedCategoryId = category.id;
+      getEvents({ isInfiniteScroll: false, showLoader: true });
     };
 
     onMounted(() => {
       getCategories();
-      getEvents(false);
+      getEvents({ isInfiniteScroll: true, showLoader: false });
     });
 
     return {

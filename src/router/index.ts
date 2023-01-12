@@ -20,6 +20,7 @@ const routes: Array<RouteRecordRaw> = [
     path: "/tabs/",
     component: tabsPage,
     children: [
+      // @ts-ignore
       {
         path: "",
         redirect: "/tabs/main",

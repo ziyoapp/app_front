@@ -6,7 +6,7 @@ export interface label {
 }
 
 export interface category {
-  id: number;
+  id: string;
   name: string;
   events_count: number;
 }
@@ -34,6 +34,8 @@ export interface eventsGetRequest {
   limit?: number;
   page?: number;
   per_page?: number;
+
+  type?: string;
 }
 
 export interface eventsState {

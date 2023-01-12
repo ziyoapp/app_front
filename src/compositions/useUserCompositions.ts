@@ -20,6 +20,14 @@ const useUserCompositions = () => {
     return Number(userRole.value) === USER_ROLES.USER;
   });
 
+  const shareLink = async () => {
+    try {
+      await window.navigator.share({ url: "https://ru.ziyoforum.uz/app" });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const logOut = () => {
     store.dispatch("auth/signOut").then(() => {
       router.push("/auth");
@@ -55,6 +63,7 @@ const useUserCompositions = () => {
     logOut,
     formatFn,
     showNotify,
+    shareLink,
     isAdminOrModerator,
     isUser,
   };

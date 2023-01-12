@@ -72,7 +72,7 @@ export default defineComponent({
   &__date {
     font-style: normal;
     font-weight: 400;
-    font-size: 8px;
+    font-size: 10px;
     line-height: 10px;
     margin-top: auto;
     /* identical to box height */

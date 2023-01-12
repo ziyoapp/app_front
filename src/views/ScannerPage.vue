@@ -44,15 +44,8 @@
 </template>
 
 <script lang="ts">
-import {
-  IonPage,
-  IonIcon,
-  IonFab,
-  IonFabButton,
-  IonFabList,
-  IonRouterOutlet,
-  useIonRouter,
-} from "@ionic/vue";
+import { IonPage, IonIcon, IonFab, IonFabButton, IonFabList } from "@ionic/vue";
+
 import { defineComponent, onMounted, ref, watch } from "vue";
 import QRCodeScanner from "../components/QRCodeScanner.vue";
 import {

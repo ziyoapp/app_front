@@ -325,7 +325,7 @@ export default {
     width: 90px;
     height: 90px;
     flex: 0 0 90px;
-    margin-right: 10px;
+    margin-right: 0;
     border-radius: 10px;
     &:last-child {
       margin-right: 0;

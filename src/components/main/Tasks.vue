@@ -72,7 +72,7 @@ export default defineComponent({
   }
   &__card {
     width: 100%;
-    height: 70px;
+    height: 90px;
     background: #ffd705;
     border-radius: 10px;
     display: flex;
@@ -92,8 +92,8 @@ export default defineComponent({
   }
   &__card-text {
     font-weight: 300;
-    font-size: 8px;
-    line-height: 10px;
+    font-size: 12px;
+    line-height: 16px;
     color: #001a35;
   }
   &__card-img {

@@ -70,7 +70,7 @@ const actions = {
     }
   ) {
     try {
-      const { data, meta: pagination } = await EventsServices.getAll(
+      const { data, meta: pagination } = await EventsServices.getAllByCategory(
         dataSet.data
       );
       if (dataSet.isInfiniteScroll) {
