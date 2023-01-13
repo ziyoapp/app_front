@@ -63,3 +63,10 @@ export interface changePassword {
   new_password: string;
   new_password_confirmation: string;
 }
+
+export interface resetPassword {
+  phone: string;
+  password: string;
+  password_confirmation: string;
+  code: number;
+}

@@ -127,7 +127,7 @@ import { useRouter } from "vue-router";
 import * as V from "vee-validate";
 
 import { registerForm } from "@/models/auth.models";
-import { isRequired, emailValidate } from "@/utils/validators";
+import { isRequired } from "@/utils/validators";
 import { useStore } from "vuex";
 import { registerInterface } from "@/interfaces/auth.interface";
 import { useUserCompositions } from "@/compositions/useUserCompositions";
@@ -161,7 +161,7 @@ export default defineComponent({
       requestData.phone = requestData.phone.replaceAll("-", "");
       localState.form.phone = requestData.phone;
       if (!requestData.code) {
-        getCode();
+        await getCode();
         return;
       }
       const loading = await loadingController.create({});
@@ -186,8 +186,10 @@ export default defineComponent({
         });
     };
 
-    const getCode = () => {
-      store
+    const getCode = async () => {
+      const loading = await loadingController.create({});
+      await loading.present();
+      await store
         .dispatch("auth/getCode", localState.form.phone)
         .then(async () => {
           const toast = await toastController.create({
@@ -208,6 +210,9 @@ export default defineComponent({
           });
 
           await toast.present();
+        })
+        .finally(() => {
+          loading.dismiss();
         });
     };
 
@@ -218,7 +223,6 @@ export default defineComponent({
       router,
       handleRegister,
       isRequired,
-      emailValidate,
       getCode,
       formRef,
       phoneHandler: userComposition.phoneHandler,

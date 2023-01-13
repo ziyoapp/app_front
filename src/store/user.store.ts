@@ -10,6 +10,8 @@ import {
 import { UserServices, UserError } from "@/services/user.services";
 import { userDefault } from "@/models/user.models";
 import { pagination } from "@/interfaces/common.interface";
+import { registerInterface } from "@/interfaces/auth.interface";
+import { AuthenticationError } from "@/services/auth.service";
 
 const state: userState = {
   user: userDefault,
@@ -96,6 +98,35 @@ const actions = {
         context.commit("dataError", {
           errorMessage: e.errorMessage || e.message,
           responseErrorCode: e.errorCode,
+        });
+      }
+      return Promise.reject();
+    }
+  },
+  async resetPassword(context: any, dataSet: registerInterface) {
+    try {
+      await UserServices.resetPassword(dataSet);
+      return Promise.resolve();
+    } catch (e) {
+      if (e instanceof UserError) {
+        context.commit("dataError", {
+          errorMessage: e.errorMessage || e.message,
+          responseErrorCode: e.errorCode,
+        });
+      }
+      return Promise.reject();
+    }
+  },
+  async getResetCode(context: any, phone: string) {
+    try {
+      return await UserServices.getResetCode(phone).then((res) => {
+        return Promise.resolve(res);
+      });
+    } catch (e) {
+      if (e instanceof AuthenticationError) {
+        context.commit("signInError", {
+          errorCode: e.errorCode,
+          errorMessage: e.message,
         });
       }
       return Promise.reject();

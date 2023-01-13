@@ -1,40 +1,119 @@
 <template>
   <ion-page class="login-page">
     <go-back />
-    <form @submit.prevent="handleLogin" class="login-page__form">
+    <v-form ref="formRef" @submit="handleReset" class="login-page__form">
       <div class="login-page__title">Забыли пароль?</div>
       <ion-item class="login-page__item">
-        <ion-label position="floating">E-mail</ion-label>
+        <ion-label position="floating">
+          Телефон: <span class="required-star">*</span>
+        </ion-label>
         <ion-input
-          :value="form.email"
-          id="email"
+          v-if="form.phone"
+          v-model="form.phone"
+          id="phone"
+          @keyup="phoneHandler"
+          type="tel"
           required
-          placeholder="example@gmail.com"
+          placeholder="+998"
         >
         </ion-input>
+        <v-field v-else name="phone" v-slot="{ field }" :rules="isRequired">
+          <ion-input
+            v-bind="field"
+            type="tel"
+            @keyup="phoneHandler"
+          ></ion-input>
+        </v-field>
+        <v-error-message name="phone" class="error" />
+      </ion-item>
+      <ion-item class="login-page__item">
+        <ion-label position="floating">
+          Пароль: <span class="required-star">*</span>
+        </ion-label>
+        <ion-input
+          v-if="form.password"
+          v-model="form.password"
+          id="password"
+          type="password"
+          required
+          placeholder="*****"
+        >
+        </ion-input>
+        <v-field v-else name="password" v-slot="{ field }" :rules="isRequired">
+          <ion-input v-bind="field" type="password"></ion-input>
+        </v-field>
+        <v-error-message name="password" class="error" />
+      </ion-item>
+      <ion-item class="login-page__item">
+        <ion-label position="floating">
+          Повторите пароль: <span class="required-star">*</span>
+        </ion-label>
+        <ion-input
+          v-if="form.password_confirmation"
+          v-model="form.password_confirmation"
+          id="repeatPassword"
+          type="password"
+          required
+          placeholder="*****"
+        >
+        </ion-input>
+        <v-field
+          v-else
+          name="password_confirmation"
+          v-slot="{ field }"
+          :rules="isRequired"
+        >
+          <ion-input v-bind="field" type="password"></ion-input>
+        </v-field>
+        <v-error-message name="password_confirmation" class="error" />
+      </ion-item>
+      <ion-item v-if="form.phone" class="login-page__item">
+        <ion-label position="floating">
+          Код: <span class="required-star">*</span>
+        </ion-label>
+        <ion-input
+          v-if="form.code"
+          v-model="form.code"
+          id="code"
+          type="number"
+          required
+          placeholder="*****"
+        >
+        </ion-input>
+        <v-field v-else name="code" v-slot="{ field }" :rules="isRequired">
+          <ion-input v-bind="field" type="number"></ion-input>
+        </v-field>
+        <v-error-message name="code" class="error" />
       </ion-item>
       <div class="login-page__actions">
-        <ion-button
-          class="login-page__btn"
-          type="submit"
-          size="default"
-          :disabled="!isCanLogIn"
-        >
-          Подтвердить
+        <ion-button class="login-page__btn" type="submit" size="default">
+          {{ form.phone ? "Обновить пароль" : "Получить код" }}
         </ion-button>
       </div>
-    </form>
+    </v-form>
   </ion-page>
 </template>
 
 <script lang="ts">
-import { IonPage, IonItem, IonLabel, IonButton, IonInput } from "@ionic/vue";
-
+import {
+  IonPage,
+  IonItem,
+  IonLabel,
+  IonButton,
+  IonInput,
+  toastController,
+  loadingController,
+} from "@ionic/vue";
 import { computed, defineComponent, reactive, toRefs } from "vue";
-import { useRouter } from "vue-router";
 
-import { loginForm } from "@/models/auth.models";
-// import GoBack from "@/components/GoBack.vue";
+import { useRouter } from "vue-router";
+import { useUserCompositions } from "@/compositions/useUserCompositions";
+
+import { isRequired } from "@/utils/validators";
+import * as V from "vee-validate";
+
+import { registerInterface } from "@/interfaces/auth.interface";
+import { useStore } from "vuex";
 
 export default defineComponent({
   name: "LoginPage",
@@ -44,28 +123,93 @@ export default defineComponent({
     IonLabel,
     IonButton,
     IonInput,
-    // GoBack,
+    VField: V.Field,
+    VForm: V.Form,
+    VErrorMessage: V.ErrorMessage,
   },
   setup() {
     const router = useRouter();
+    const store = useStore();
+    const userComposition = useUserCompositions();
 
     const localState = reactive({
-      form: loginForm,
+      form: {} as registerInterface,
     });
 
     const isCanLogIn = computed(() => {
       return localState.form.phone && localState.form.password;
     });
 
-    const handleLogin = () => {
-      //
+    const handleReset = async (data: registerInterface) => {
+      const requestData = { ...localState.form, ...data };
+
+      requestData.phone = requestData.phone.replaceAll("-", "");
+      localState.form.phone = requestData.phone;
+
+      if (!requestData.code) {
+        await getCode();
+        return;
+      }
+
+      const loading = await loadingController.create({});
+      await loading.present();
+      await store
+        .dispatch("userModule/resetPassword", requestData)
+        .then(() => {
+          router.push("/auth");
+        })
+        .catch(async (err: any) => {
+          const toast = await toastController.create({
+            color: "danger",
+            duration: 2000,
+            position: "middle",
+            message: err || store.getters["userModule/error"],
+          });
+
+          await toast.present();
+        })
+        .finally(() => {
+          loading.dismiss();
+        });
+    };
+
+    const getCode = async () => {
+      const loading = await loadingController.create({});
+      await loading.present();
+      await store
+        .dispatch("userModule/getResetCode", localState.form.phone)
+        .then(async () => {
+          const toast = await toastController.create({
+            color: "success",
+            duration: 2000,
+            position: "middle",
+            message: "Код отправен на указанный номер",
+          });
+
+          await toast.present();
+        })
+        .catch(async (err: any) => {
+          const toast = await toastController.create({
+            color: "danger",
+            duration: 2000,
+            position: "middle",
+            message: err || store.getters["userModule/error"],
+          });
+
+          await toast.present();
+        })
+        .finally(() => {
+          loading.dismiss();
+        });
     };
 
     return {
       ...toRefs(localState),
       router,
       isCanLogIn,
-      handleLogin,
+      handleReset,
+      isRequired,
+      phoneHandler: userComposition.phoneHandler,
     };
   },
 });

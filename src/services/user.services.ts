@@ -5,9 +5,12 @@ import { catchError } from "@/shared/utils";
 import {
   bonusHistoryGetRequest,
   changePassword,
+  resetPassword,
   updateUser,
   userQuestion,
 } from "@/interfaces/user.interface";
+import qs from "qs";
+import { AuthenticationError } from "@/services/auth.service";
 
 class UserError extends Error {
   errorCode: any;
@@ -111,6 +114,37 @@ const UserServices = {
       return response.data;
     } catch (error) {
       this.catchError(error, UserError);
+    }
+  },
+  resetPassword: async function (data: resetPassword) {
+    const requestData: AxiosRequestConfig = {
+      method: "post",
+      url: "/user/password-reset",
+      data,
+    };
+
+    try {
+      const response = await ApiService.customRequest(requestData);
+
+      return response.data;
+    } catch (error) {
+      this.catchError(error, UserError);
+    }
+  },
+  getResetCode: async function (phone: string) {
+    const requestData: AxiosRequestConfig = {
+      method: "post",
+      url: "/user/reset-verify-code",
+      data: qs.stringify({
+        phone,
+      }),
+    };
+
+    try {
+      const response = await ApiService.customRequest(requestData);
+      return response.data;
+    } catch (error) {
+      return this.catchError(error, AuthenticationError);
     }
   },
   sendQuestion: async function (data: userQuestion) {
