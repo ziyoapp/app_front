@@ -54,7 +54,7 @@ export default defineComponent({
     });
 
     const isCanLogIn = computed(() => {
-      return localState.form.email && localState.form.password;
+      return localState.form.phone && localState.form.password;
     });
 
     const handleLogin = () => {

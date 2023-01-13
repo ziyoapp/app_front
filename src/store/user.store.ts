@@ -1,6 +1,7 @@
 import {
   bonusHistory,
   bonusHistoryGetRequest,
+  changePassword,
   updateUser,
   user,
   userQuestion,
@@ -68,8 +69,28 @@ const actions = {
   },
   async saveUser(context: any, dataSet: updateUser) {
     try {
-      const { data } = await UserServices.updateUser(dataSet);
+      const formData = new FormData();
+      for (const key in dataSet) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        formData.append(key, dataSet[key]);
+      }
+      const { data } = await UserServices.updateUser(formData);
       context.commit("setUser", data);
+    } catch (e) {
+      if (e instanceof UserError) {
+        context.commit("dataError", {
+          errorMessage: e.errorMessage || e.message,
+          responseErrorCode: e.errorCode,
+        });
+      }
+      return Promise.reject();
+    }
+  },
+  async savePassword(context: any, dataSet: changePassword) {
+    try {
+      await UserServices.updatePassword(dataSet);
+      return Promise.resolve();
     } catch (e) {
       if (e instanceof UserError) {
         context.commit("dataError", {

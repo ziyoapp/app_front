@@ -94,10 +94,11 @@ const actions = {
     return state.refreshTokenPromise;
   },
 
-  async getCode(context: any, { phone, login }: any) {
+  async getCode(context: any, phone: string) {
     try {
-      await AuthService.getCode({ phone, login });
-      return Promise.resolve();
+      return await AuthService.getCode(phone).then((res) => {
+        return Promise.resolve(res);
+      });
     } catch (e) {
       if (e instanceof AuthenticationError) {
         context.commit("signInError", {

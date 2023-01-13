@@ -50,14 +50,12 @@ const AuthService = {
     }
   },
 
-  getCode: async function (codeData: any) {
+  getCode: async function (phone: string) {
     const requestData: AxiosRequestConfig = {
       method: "post",
-      url: `/auth/verifyCode?${codeData.login ? "login" : ""}`,
+      url: "/user/register-verify-code",
       data: qs.stringify({
-        grant_type: "password",
-        phone: codeData.phone,
-        login: codeData.login,
+        phone,
       }),
     };
 

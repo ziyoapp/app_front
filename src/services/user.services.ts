@@ -4,6 +4,7 @@ import { EventsError } from "@/services/events.services";
 import { catchError } from "@/shared/utils";
 import {
   bonusHistoryGetRequest,
+  changePassword,
   updateUser,
   userQuestion,
 } from "@/interfaces/user.interface";
@@ -33,7 +34,7 @@ const UserServices = {
 
       return response.data;
     } catch (error) {
-      this.catchError(error, EventsError);
+      this.catchError(error, UserError);
     }
   },
   getQrCode: async function () {
@@ -47,7 +48,7 @@ const UserServices = {
 
       return response.data;
     } catch (error) {
-      this.catchError(error, EventsError);
+      this.catchError(error, UserError);
     }
   },
   getBonus: async function () {
@@ -61,7 +62,7 @@ const UserServices = {
 
       return response.data;
     } catch (error) {
-      this.catchError(error, EventsError);
+      this.catchError(error, UserError);
     }
   },
   getBonusHistory: async function (data: bonusHistoryGetRequest) {
@@ -76,13 +77,31 @@ const UserServices = {
 
       return response.data;
     } catch (error) {
-      this.catchError(error, EventsError);
+      this.catchError(error, UserError);
     }
   },
-  updateUser: async function (data: updateUser) {
+  updateUser: async function (data: FormData) {
     const requestData: AxiosRequestConfig = {
       method: "post",
       url: "/user/update",
+      data,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+
+    try {
+      const response = await ApiService.customRequest(requestData);
+
+      return response.data;
+    } catch (error) {
+      this.catchError(error, UserError);
+    }
+  },
+  updatePassword: async function (data: changePassword) {
+    const requestData: AxiosRequestConfig = {
+      method: "post",
+      url: "/user/change-password",
       data,
     };
 
@@ -91,7 +110,7 @@ const UserServices = {
 
       return response.data;
     } catch (error) {
-      this.catchError(error, EventsError);
+      this.catchError(error, UserError);
     }
   },
   sendQuestion: async function (data: userQuestion) {
@@ -106,7 +125,7 @@ const UserServices = {
 
       return response.data;
     } catch (error) {
-      this.catchError(error, EventsError);
+      this.catchError(error, UserError);
     }
   },
   catchError: catchError,

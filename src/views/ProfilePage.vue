@@ -12,6 +12,36 @@
     <div class="profile-page__content">
       <ion-content :fullscreen="true">
         <v-form @submit="handleUpdate" class="profile-page__form">
+          <div class="profile-page__avatar">
+            <ion-avatar>
+              <img
+                v-if="form.avatar"
+                width="126"
+                height="126"
+                :src="form.avatar"
+              />
+              <img
+                v-else
+                width="126"
+                height="126"
+                src="https://ionicframework.com/docs/img/demos/avatar.svg"
+              />
+            </ion-avatar>
+          </div>
+          <div class="profile-page__buttons">
+            <ion-buttons slot="end">
+              <input
+                ref="avatarInput"
+                type="file"
+                accept="image/*"
+                @change="fileUploaded"
+                style="display: none"
+              />
+              <ion-button @click="openFiles">
+                <ion-icon :icon="cloudUpload" />
+              </ion-button>
+            </ion-buttons>
+          </div>
           <ion-item class="profile-page__item default" fill="outline">
             <ion-label position="floating"
               >Имя: <span class="required-star">*</span></ion-label
@@ -76,10 +106,20 @@
               >
                 <ion-datetime
                   presentation="date"
+                  ref="datetime"
+                  v-model="form.birth_date"
                   color="primary"
-                  :value="form.birth_date"
-                  @ionChange="setDate"
-                />
+                  :show-default-buttons="true"
+                >
+                  <ion-buttons slot="buttons">
+                    <ion-button color="primary" @click="isOpenPopover = false">
+                      Отмена
+                    </ion-button>
+                    <ion-button color="primary" @click="confirmDate()">
+                      Готово
+                    </ion-button>
+                  </ion-buttons>
+                </ion-datetime>
               </ion-popover>
             </ion-input>
             <v-field
@@ -104,10 +144,23 @@
                 >
                   <ion-datetime
                     presentation="date"
-                    :value="form.birth_date"
+                    ref="datetime"
+                    v-model="form.birth_date"
                     color="primary"
-                    @ionChange="setDate"
-                  />
+                    :show-default-buttons="true"
+                  >
+                    <ion-buttons slot="buttons">
+                      <ion-button
+                        color="primary"
+                        @click="isOpenPopover = false"
+                      >
+                        Отмена
+                      </ion-button>
+                      <ion-button color="primary" @click="confirmDate()">
+                        Готово
+                      </ion-button>
+                    </ion-buttons>
+                  </ion-datetime>
                 </ion-popover>
               </ion-input>
             </v-field>
@@ -140,28 +193,31 @@
               </ion-col>
             </ion-row>
           </ion-radio-group>
-          <ion-item class="register-page__item default" fill="outline">
-            <ion-label position="floating">
-              Телефон: <span class="required-star">*</span>
-            </ion-label>
+          <ion-item class="profile-page__item default" fill="outline">
+            <ion-label position="floating">Никнейм: </ion-label>
+            <ion-input v-model="form.nickname" id="nickname" type="text">
+            </ion-input>
+          </ion-item>
+          <ion-item class="profile-page__item">
+            <ion-label position="floating"> E-mail: </ion-label>
             <ion-input
-              v-if="form.phone"
-              v-model="form.phone"
-              id="phone"
-              @keyup="phoneHandler"
-              type="tel"
-              required
-              placeholder="+998"
+              v-model="form.email"
+              id="email"
+              type="email"
+              placeholder="name@mail.uz"
             >
             </ion-input>
-            <v-field v-else name="phone" v-slot="{ field }" :rules="isRequired">
-              <ion-input
-                v-bind="field"
-                type="tel"
-                @keyup="phoneHandler"
-              ></ion-input>
-            </v-field>
-            <v-error-message name="phone" class="error" />
+            <v-error-message name="email" class="error" />
+          </ion-item>
+
+          <ion-item class="profile-page__item default" fill="outline">
+            <ion-label position="floating">Доп информация: </ion-label>
+            <ion-textarea
+              v-model="form.additional_info"
+              id="additional_info"
+              type="text"
+            >
+            </ion-textarea>
           </ion-item>
           <ion-button
             color="success-2"
@@ -184,6 +240,7 @@ import {
   nextTick,
   onMounted,
   reactive,
+  ref,
   toRefs,
   watch,
 } from "vue";
@@ -193,6 +250,7 @@ import {
   IonPage,
   IonItem,
   IonInput,
+  IonTextarea,
   IonLabel,
   loadingController,
   toastController,
@@ -205,9 +263,11 @@ import {
   IonRow,
   IonCol,
   IonButton,
+  IonButtons,
+  IonAvatar,
 } from "@ionic/vue";
 
-import { calendarSharp } from "ionicons/icons";
+import { calendarSharp, cloudUpload, trashOutline } from "ionicons/icons";
 
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
@@ -216,7 +276,7 @@ import { updateUserForm } from "@/models/user.models";
 import { updateUser } from "@/interfaces/user.interface";
 
 import * as V from "vee-validate";
-import { isRequired } from "@/utils/validators";
+import { isRequired, emailValidate } from "@/utils/validators";
 import { mask } from "@thedoctor0/vue-input-mask";
 
 export default defineComponent({
@@ -239,28 +299,62 @@ export default defineComponent({
     IonRow,
     IonCol,
     IonButton,
+    IonTextarea,
+    IonButtons,
+    IonAvatar,
   },
   setup() {
     const store = useStore();
     const route = useRoute();
 
+    const datetime = ref(null);
+    const avatarInput = ref(null);
+
     const localState = reactive({
       form: updateUserForm,
       isOpenPopover: false,
+      newAvatar: null as any,
     });
 
     const user = computed(() => {
       return store.getters["userModule/getUser"];
     });
 
-    const setDate = (ev: { detail: { value: string } }) => {
-      const formattedDate = new Date(ev.detail.value)
+    const setDate = () => {
+      const formattedDate = new Date(localState.form.birth_date)
         .toISOString()
         .substring(0, 10);
       nextTick(() => {
         localState.isOpenPopover = false;
         localState.form.birth_date = formattedDate;
       });
+    };
+
+    const removeAvatar = () => {
+      localState.form.avatar = "";
+    };
+
+    const openFiles = () => {
+      // @ts-ignore
+      avatarInput.value?.click();
+    };
+
+    const fileUploaded = (event: any) => {
+      let files: FileList = event.target.files;
+      let result: File[] = [];
+      for (let i = 0; i < files.length; i++) {
+        // @ts-ignore
+        result.push(files.item(i));
+      }
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        localState.form.avatar = URL.createObjectURL(result[0]);
+        // @ts-ignore
+        localState.newAvatar = result[0];
+      };
+
+      reader.readAsBinaryString(result[0]);
     };
 
     const phoneHandler = (e: any): any => {
@@ -272,11 +366,13 @@ export default defineComponent({
 
     const handleUpdate = async (data: updateUser) => {
       const requestData = { ...localState.form, ...data };
-      requestData.phone = `+${requestData.phone
-        .replaceAll("-", "")
-        .replaceAll("+", "")}`;
       const loading = await loadingController.create({});
       await loading.present();
+
+      if (localState.newAvatar) {
+        // @ts-ignore
+        requestData.avatar = localState.newAvatar;
+      }
 
       store
         .dispatch("userModule/saveUser", requestData)
@@ -295,7 +391,7 @@ export default defineComponent({
             color: "danger",
             duration: 2000,
             position: "middle",
-            message: err || store.getters["userModule/error"],
+            message: store.getters["userModule/error"] || err,
           });
 
           await toast.present();
@@ -305,12 +401,21 @@ export default defineComponent({
         });
     };
 
+    const confirmDate = () => {
+      // @ts-ignore
+      datetime?.value?.$el.confirm(true);
+      localState.isOpenPopover = false;
+      setDate();
+    };
+
     const setDefaultData = () => {
       localState.form.first_name = user.value.first_name;
       localState.form.last_name = user.value.last_name;
       localState.form.gender = user.value.gender;
       localState.form.birth_date = user.value.birth_date;
-      localState.form.phone = user.value.phone;
+      localState.form.nickname = user.value.nickname;
+      localState.form.additional_info = user.value.additional_info;
+      localState.form.avatar = user.value.avatar;
     };
 
     onMounted(() => {
@@ -336,10 +441,19 @@ export default defineComponent({
       ...toRefs(localState),
       handleUpdate,
       isRequired,
+      emailValidate,
       setDate,
       phoneHandler,
+      confirmDate,
+      removeAvatar,
+      openFiles,
+      fileUploaded,
+      datetime,
+      avatarInput,
       user,
       calendarSharp,
+      cloudUpload,
+      trashOutline,
     };
   },
 });
@@ -348,6 +462,25 @@ export default defineComponent({
 <style scoped lang="scss">
 .profile-page {
   height: 100%;
+  &__avatar {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+    min-height: 126px;
+    img,
+    ion-avatar {
+      width: 126px;
+      height: 126px;
+      max-width: 126px;
+    }
+  }
+  &__buttons {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
   &__content {
     height: 100%;
   }

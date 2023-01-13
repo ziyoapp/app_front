@@ -27,7 +27,7 @@
             button
             :detail="true"
             router-direction="forward"
-            router-link="/tabs/empty"
+            router-link="/tabs/change-password"
           >
             <ion-icon :icon="lockClosedOutline" slot="start"></ion-icon>
             <ion-label> Безопасность </ion-label>

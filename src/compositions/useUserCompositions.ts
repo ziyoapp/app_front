@@ -3,6 +3,7 @@ import { useRouter } from "vue-router";
 import { computed } from "vue";
 import { USER_ROLES } from "@/shared/constants";
 import { toastController } from "@ionic/vue";
+import { mask } from "@thedoctor0/vue-input-mask";
 
 const useUserCompositions = () => {
   const store = useStore();
@@ -59,11 +60,19 @@ const useUserCompositions = () => {
     await toast.present();
   };
 
+  const phoneHandler = (e: any): any => {
+    setTimeout(() => {
+      const masked = mask(e.target.value, "998-##-###-##-##");
+      e.target.value = masked.substring(0, 16);
+    }, 250);
+  };
+
   return {
     logOut,
     formatFn,
     showNotify,
     shareLink,
+    phoneHandler,
     isAdminOrModerator,
     isUser,
   };

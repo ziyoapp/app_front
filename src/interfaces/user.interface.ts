@@ -8,11 +8,14 @@ export interface user {
   phone: string;
   gender: string;
   email: string;
-  email_verified: boolean;
+  email_verified?: boolean;
+  nickname?: string;
+  additional_info?: string;
   role: {
     role_id: number;
     role_name: string;
   };
+  avatar: string;
 }
 
 export interface userState {
@@ -44,10 +47,19 @@ export interface updateUser {
   last_name: string;
   birth_date: string;
   gender: string;
-  phone: string;
+  nickname: string;
+  additional_info: string;
+  email: string;
+  avatar: string;
 }
 
 export interface userQuestion {
   email: string;
   text: string;
+}
+
+export interface changePassword {
+  current_password: string;
+  new_password: string;
+  new_password_confirmation: string;
 }

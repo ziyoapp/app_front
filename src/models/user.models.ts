@@ -9,6 +9,7 @@ export const userDefault: user = {
   gender: "male",
   email: "",
   email_verified: true,
+  avatar: "",
   role: {
     role_id: 3,
     role_name: "user",
@@ -20,7 +21,10 @@ export const updateUserForm: updateUser = {
   last_name: "",
   birth_date: "",
   gender: "male",
-  phone: "",
+  additional_info: "",
+  nickname: "",
+  email: "",
+  avatar: "",
 };
 
 export const userQuestionForm: userQuestion = {

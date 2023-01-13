@@ -3,134 +3,12 @@
     <go-back />
     <div class="register-page__content">
       <ion-content :fullscreen="true">
-        <v-form @submit="handleRegister" class="register-page__form">
+        <v-form
+          ref="formRef"
+          @submit="handleRegister"
+          class="register-page__form"
+        >
           <div class="register-page__title">Регистрация</div>
-          <ion-item class="register-page__item">
-            <ion-label position="floating">
-              Имя: <span class="required-star">*</span>
-            </ion-label>
-            <ion-input
-              v-if="form.first_name"
-              v-model="form.first_name"
-              id="name"
-              placeholder="Самандар"
-              required
-            >
-            </ion-input>
-            <v-field
-              v-else
-              name="first_name"
-              v-slot="{ field }"
-              :rules="isRequired"
-            >
-              <ion-input v-bind="field"></ion-input>
-            </v-field>
-            <v-error-message name="first_name" class="error" />
-          </ion-item>
-          <ion-item class="register-page__item">
-            <ion-label position="floating">
-              Фамилия: <span class="required-star">*</span>
-            </ion-label>
-            <ion-input
-              v-if="form.last_name"
-              v-model="form.last_name"
-              id="lasName"
-              required
-              placeholder="Ибрагимов"
-            >
-            </ion-input>
-            <v-field
-              v-else
-              name="last_name"
-              v-slot="{ field }"
-              :rules="[isRequired]"
-            >
-              <ion-input v-bind="field"></ion-input>
-            </v-field>
-            <v-error-message name="last_name" class="error" />
-          </ion-item>
-          <ion-item class="register-page__item">
-            <ion-icon
-              slot="end"
-              color="tertiary"
-              :icon="calendarSharp"
-            ></ion-icon>
-            <ion-label position="floating"> Дата рожения: </ion-label>
-            <ion-input
-              v-if="form.birth_date"
-              v-model="form.birth_date"
-              @click="isOpenPopover = true"
-              id="open-date-input"
-            >
-              <ion-popover
-                :is-open="isOpenPopover"
-                trigger="open-date-input"
-                size="cover"
-                :show-backdrop="false"
-              >
-                <ion-datetime
-                  presentation="date"
-                  color="primary"
-                  :value="form.birth_date"
-                  @ionChange="setDate"
-                />
-              </ion-popover>
-            </ion-input>
-            <v-field
-              v-else
-              name="birth_date"
-              v-slot="{ field }"
-              :rules="isRequired"
-            >
-              <ion-input
-                v-bind="field"
-                :value="form.birth_date"
-                @click="isOpenPopover = true"
-                outline
-                id="open-date-input"
-                color="primary"
-              >
-                <ion-popover
-                  :is-open="isOpenPopover"
-                  trigger="open-date-input"
-                  size="cover"
-                  :show-backdrop="false"
-                >
-                  <ion-datetime
-                    presentation="date"
-                    :value="form.birth_date"
-                    color="primary"
-                    @ionChange="setDate"
-                  />
-                </ion-popover>
-              </ion-input>
-            </v-field>
-            <v-error-message name="birth_date" class="error" />
-          </ion-item>
-          <ion-radio-group v-model="form.gender">
-            <ion-list-header>
-              <ion-label>Пол</ion-label>
-            </ion-list-header>
-            <div class="register-page__radio-group">
-              <ion-item class="radio register-page__radio">
-                <ion-label>Муж.</ion-label>
-                <ion-radio
-                  slot="start"
-                  color="primary"
-                  value="male"
-                ></ion-radio>
-              </ion-item>
-
-              <ion-item class="radio register-page__radio">
-                <ion-label>Жен.</ion-label>
-                <ion-radio
-                  slot="start"
-                  color="primary"
-                  value="female"
-                ></ion-radio>
-              </ion-item>
-            </div>
-          </ion-radio-group>
           <ion-item class="register-page__item">
             <ion-label position="floating">
               Телефон: <span class="required-star">*</span>
@@ -153,29 +31,6 @@
               ></ion-input>
             </v-field>
             <v-error-message name="phone" class="error" />
-          </ion-item>
-          <ion-item class="register-page__item">
-            <ion-label position="floating">
-              E-mail: <span class="required-star">*</span>
-            </ion-label>
-            <ion-input
-              v-if="form.email"
-              v-model="form.email"
-              id="email"
-              type="email"
-              required
-              placeholder="name@mail.uz"
-            >
-            </ion-input>
-            <v-field
-              v-else
-              name="email"
-              v-slot="{ field }"
-              :rules="[isRequired, emailValidate]"
-            >
-              <ion-input v-bind="field" type="email"></ion-input>
-            </v-field>
-            <v-error-message name="email" class="error" />
           </ion-item>
           <ion-item class="register-page__item">
             <ion-label position="floating">
@@ -223,24 +78,27 @@
             </v-field>
             <v-error-message name="password_confirmation" class="error" />
           </ion-item>
-          <ion-item class="register-page__policy">
-            <ion-text>
-              Согласен с <a href="#">Политикой конфиденциальности</a>
-            </ion-text>
-            <ion-checkbox
-              v-model="form.privacy_accept"
-              color="tertiary"
-              slot="start"
-            ></ion-checkbox>
+          <ion-item v-if="form.phone" class="register-page__item">
+            <ion-label position="floating">
+              Код: <span class="required-star">*</span>
+            </ion-label>
+            <ion-input
+              v-if="form.code"
+              v-model="form.code"
+              id="code"
+              type="number"
+              required
+              placeholder="*****"
+            >
+            </ion-input>
+            <v-field v-else name="code" v-slot="{ field }" :rules="isRequired">
+              <ion-input v-bind="field" type="number"></ion-input>
+            </v-field>
+            <v-error-message name="code" class="error" />
           </ion-item>
           <div class="register-page__actions">
-            <ion-button
-              class="register-page__btn"
-              type="submit"
-              size="default"
-              :disabled="!form.privacy_accept"
-            >
-              Зарегистрироваться
+            <ion-button class="register-page__btn" type="submit" size="default">
+              {{ form.phone ? "Зарегистрироваться" : "Получить код" }}
             </ion-button>
           </div>
         </v-form>
@@ -252,18 +110,10 @@
 <script lang="ts">
 import {
   IonButton,
-  IonDatetime,
   IonInput,
   IonItem,
   IonLabel,
   IonPage,
-  IonPopover,
-  IonIcon,
-  IonCheckbox,
-  IonText,
-  IonRadioGroup,
-  IonRadio,
-  IonListHeader,
   IonContent,
   loadingController,
   toastController,
@@ -271,16 +121,16 @@ import {
 
 import { calendarSharp } from "ionicons/icons";
 
-import { defineComponent, nextTick, reactive, toRefs } from "vue";
+import { defineComponent, reactive, ref, toRefs } from "vue";
 import { useRouter } from "vue-router";
 
 import * as V from "vee-validate";
-import { mask } from "@thedoctor0/vue-input-mask";
 
 import { registerForm } from "@/models/auth.models";
 import { isRequired, emailValidate } from "@/utils/validators";
 import { useStore } from "vuex";
 import { registerInterface } from "@/interfaces/auth.interface";
+import { useUserCompositions } from "@/compositions/useUserCompositions";
 
 export default defineComponent({
   name: "RegisterPage",
@@ -290,14 +140,6 @@ export default defineComponent({
     IonLabel,
     IonButton,
     IonInput,
-    IonDatetime,
-    IonPopover,
-    IonIcon,
-    IonCheckbox,
-    IonText,
-    IonRadioGroup,
-    IonRadio,
-    IonListHeader,
     IonContent,
     VField: V.Field,
     VForm: V.Form,
@@ -306,21 +148,28 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const store = useStore();
+    const userComposition = useUserCompositions();
+
+    const formRef = ref(null);
 
     const localState = reactive({
       form: registerForm,
-      isOpenPopover: false,
     });
 
     const handleRegister = async (data: registerInterface) => {
       const requestData = { ...localState.form, ...data };
-      requestData.phone = `+${requestData.phone.replaceAll("-", "")}`;
+      requestData.phone = requestData.phone.replaceAll("-", "");
+      localState.form.phone = requestData.phone;
+      if (!requestData.code) {
+        getCode();
+        return;
+      }
       const loading = await loadingController.create({});
       await loading.present();
       await store
         .dispatch("auth/signup", requestData)
         .then(() => {
-          router.push("/");
+          router.push("/tabs/profile");
         })
         .catch(async (err: any) => {
           const toast = await toastController.create({
@@ -337,21 +186,29 @@ export default defineComponent({
         });
     };
 
-    const setDate = (ev: { detail: { value: string } }) => {
-      const formattedDate = new Date(ev.detail.value)
-        .toISOString()
-        .substring(0, 10);
-      nextTick(() => {
-        localState.isOpenPopover = false;
-        localState.form.birth_date = formattedDate;
-      });
-    };
+    const getCode = () => {
+      store
+        .dispatch("auth/getCode", localState.form.phone)
+        .then(async () => {
+          const toast = await toastController.create({
+            color: "success",
+            duration: 2000,
+            position: "middle",
+            message: "Код отправен на указанный номер",
+          });
 
-    const phoneHandler = (e: any): any => {
-      setTimeout(() => {
-        const masked = mask(e.target.value, "998-##-###-##-##");
-        e.target.value = masked.substring(0, 16);
-      }, 250);
+          await toast.present();
+        })
+        .catch(async (err: any) => {
+          const toast = await toastController.create({
+            color: "danger",
+            duration: 2000,
+            position: "middle",
+            message: err || store.getters["auth/authenticationError"],
+          });
+
+          await toast.present();
+        });
     };
 
     const icons = { calendarSharp };
@@ -362,8 +219,9 @@ export default defineComponent({
       handleRegister,
       isRequired,
       emailValidate,
-      setDate,
-      phoneHandler,
+      getCode,
+      formRef,
+      phoneHandler: userComposition.phoneHandler,
       ...icons,
     };
   },

@@ -5,14 +5,14 @@
       <ion-content :fullscreen="true">
         <form @submit.prevent="handleLogin" class="login-page__form">
           <div class="login-page__title">Войти</div>
-          <ion-item class="login-page__item">
-            <ion-label position="floating">E-mail</ion-label>
+          <ion-item class="login-page__item" placeholder="+998">
+            <ion-label position="floating">Номер телефона</ion-label>
             <ion-input
-              v-model.trim="form.email"
-              id="email"
+              v-model.trim="form.phone"
+              id="phone"
+              type="tel"
+              @keyup="phoneHandler"
               required
-              type="email"
-              placeholder="example@gmail.com"
             >
             </ion-input>
           </ion-item>
@@ -61,6 +61,7 @@ import { useRouter } from "vue-router";
 
 import { loginForm } from "@/models/auth.models";
 import { useStore } from "vuex";
+import { useUserCompositions } from "@/compositions/useUserCompositions";
 
 export default defineComponent({
   name: "LoginPage",
@@ -75,18 +76,20 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const store = useStore();
+    const userComposition = useUserCompositions();
 
     const localState = reactive({
       form: loginForm,
     });
 
     const isCanLogIn = computed(() => {
-      return localState.form.email && localState.form.password;
+      return localState.form.phone && localState.form.password;
     });
 
     const handleLogin = async () => {
       const loading = await loadingController.create({});
       await loading.present();
+      localState.form.phone = localState.form.phone.replaceAll("-", "");
       await store
         .dispatch("auth/signIn", localState.form)
         .then(() => {
@@ -111,6 +114,7 @@ export default defineComponent({
       ...toRefs(localState),
       router,
       isCanLogIn,
+      phoneHandler: userComposition.phoneHandler,
       handleLogin,
     };
   },
