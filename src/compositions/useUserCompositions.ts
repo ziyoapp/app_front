@@ -32,6 +32,7 @@ const useUserCompositions = () => {
   const logOut = () => {
     store.dispatch("auth/signOut").then(() => {
       router.push("/auth");
+      window.location.reload();
     });
   };
 
