@@ -50,7 +50,7 @@ export interface updateUser {
   nickname: string;
   additional_info: string;
   email: string;
-  avatar: string;
+  avatar?: string;
 }
 
 export interface userQuestion {

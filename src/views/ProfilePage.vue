@@ -372,6 +372,8 @@ export default defineComponent({
       if (localState.newAvatar) {
         // @ts-ignore
         requestData.avatar = localState.newAvatar;
+      } else {
+        delete requestData.avatar;
       }
 
       store

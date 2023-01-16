@@ -72,11 +72,7 @@
     <ion-toolbar>
       <ion-buttons slot="start">
         <ion-menu-button v-if="hasMenu" auto-hide="false"></ion-menu-button>
-        <ion-back-button
-          v-else
-          class="app-header__btn"
-          text="назад"
-        ></ion-back-button>
+        <ion-back-button v-else class="app-header__btn"></ion-back-button>
       </ion-buttons>
       <ion-buttons slot="primary">
         <div v-if="showBonus" class="app-header__bonus-wrap">

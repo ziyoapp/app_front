@@ -1,6 +1,14 @@
 <template>
   <ion-page class="register-page">
-    <go-back />
+    <app-header
+      :has-logo="false"
+      :has-menu="false"
+      :has-share="false"
+      :has-notify="false"
+      :has-search="false"
+      has-title
+      title="Создать аккаунт"
+    />
     <div class="register-page__content">
       <ion-content :fullscreen="true">
         <v-form
@@ -8,7 +16,6 @@
           @submit="handleRegister"
           class="register-page__form"
         >
-          <div class="register-page__title">Регистрация</div>
           <ion-item class="register-page__item">
             <ion-label position="floating">
               Телефон: <span class="required-star">*</span>
@@ -97,7 +104,13 @@
             <v-error-message name="code" class="error" />
           </ion-item>
           <div class="register-page__actions">
-            <ion-button class="register-page__btn" type="submit" size="default">
+            <ion-button
+              class="register-page__btn"
+              type="submit"
+              size="default"
+              expand="block"
+              color="success-2"
+            >
               {{ form.phone ? "Зарегистрироваться" : "Получить код" }}
             </ion-button>
           </div>
@@ -252,16 +265,7 @@ export default defineComponent({
     margin-bottom: 16px;
   }
   &__actions {
-    margin-top: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  &__forgot {
-    font-weight: 600;
-    font-size: 14px;
-    line-height: 20px;
-    color: #27aae2;
+    margin-top: 22px;
   }
   &__policy {
     font-weight: 400;
@@ -280,6 +284,10 @@ export default defineComponent({
   }
   &__form {
     margin: auto 0;
+  }
+  &__btn {
+    --border-radius: 10px;
+    margin-bottom: 10px;
   }
 }
 ion-item {

@@ -1,8 +1,15 @@
 <template>
   <ion-page class="login-page">
-    <go-back />
+    <app-header
+      :has-logo="false"
+      :has-menu="false"
+      :has-share="false"
+      :has-notify="false"
+      :has-search="false"
+      has-title
+      title="Восстановить пароль"
+    />
     <v-form ref="formRef" @submit="handleReset" class="login-page__form">
-      <div class="login-page__title">Забыли пароль?</div>
       <ion-item class="login-page__item">
         <ion-label position="floating">
           Телефон: <span class="required-star">*</span>
@@ -86,7 +93,13 @@
         <v-error-message name="code" class="error" />
       </ion-item>
       <div class="login-page__actions">
-        <ion-button class="login-page__btn" type="submit" size="default">
+        <ion-button
+          class="login-page__btn"
+          type="submit"
+          size="default"
+          expand="block"
+          color="success-2"
+        >
           {{ form.phone ? "Обновить пароль" : "Получить код" }}
         </ion-button>
       </div>
@@ -217,7 +230,7 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .login-page {
-  padding: 0;
+  padding: 0 7px;
   &__title {
     font-family: "Inter", serif;
     font-style: normal;
@@ -230,14 +243,15 @@ export default defineComponent({
   &__item {
     margin-bottom: 16px;
   }
-  &__actions {
-    margin-top: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
   &__form {
-    margin: auto 0;
+    margin-bottom: auto;
+  }
+  &__actions {
+    margin-top: 22px;
+  }
+  &__btn {
+    --border-radius: 10px;
+    margin-bottom: 10px;
   }
 }
 </style>

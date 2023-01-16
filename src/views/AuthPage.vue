@@ -48,7 +48,7 @@ export default defineComponent({
       max-width: 100%;
       max-height: 100%;
       height: 313px;
-      background: url("/src/assets/svg/welcome_bg.svg") 0 0 no-repeat;
+      //background: url("/src/assets/svg/welcome_bg.svg") 0 0 no-repeat;
       top: auto;
       bottom: 0;
       right: 0;

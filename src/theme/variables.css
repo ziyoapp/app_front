@@ -405,8 +405,8 @@ ion-button.no-background {
 
 ion-item:not(.default) {
   --border-radius: 12px;
-  --border-width: 2px;
-  --border-color: rgba(101, 46, 147, 0.2);
+  --border-width: 1px;
+  --border-color: rgba(10, 25, 56, 0.2);
 }
 
 ion-item.no-border {
