@@ -1,7 +1,8 @@
 <template>
   <div class="user">
     <div class="user__logo">
-      <ion-img src="/assets/logo-default.svg" />
+      <ion-img v-if="user.avatar" :src="user.avatar" />
+      <ion-img v-else src="/assets/logo-default.svg" />
     </div>
     <div class="user__info">
       <div class="user__name">
@@ -55,6 +56,7 @@ export default defineComponent({
     border-radius: 50%;
     margin-right: 11px;
     border: 2px solid #61c000;
+    overflow: hidden;
   }
 
   &__name {

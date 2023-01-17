@@ -194,7 +194,7 @@
             </ion-row>
           </ion-radio-group>
           <ion-item class="profile-page__item default" fill="outline">
-            <ion-label position="floating">Никнейм: </ion-label>
+            <ion-label position="stacked">Никнейм: </ion-label>
             <ion-input v-model="form.nickname" id="nickname" type="text">
             </ion-input>
           </ion-item>
@@ -211,7 +211,7 @@
           </ion-item>
 
           <ion-item class="profile-page__item default" fill="outline">
-            <ion-label position="floating">Доп информация: </ion-label>
+            <ion-label position="stacked">Доп информация: </ion-label>
             <ion-textarea
               v-model="form.additional_info"
               id="additional_info"
@@ -416,7 +416,7 @@ export default defineComponent({
       localState.form.gender = user.value.gender;
       localState.form.birth_date = user.value.birth_date;
       localState.form.nickname = user.value.nickname;
-      localState.form.additional_info = user.value.additional_info;
+      localState.form.additional_info = user.value.additional_info ?? "";
       localState.form.avatar = user.value.avatar;
     };
 
@@ -471,6 +471,8 @@ export default defineComponent({
     align-items: center;
     margin-bottom: 10px;
     min-height: 126px;
+    margin-top: 20px;
+
     img,
     ion-avatar {
       width: 126px;

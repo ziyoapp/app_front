@@ -136,5 +136,8 @@ export default defineComponent({
     font-family: MuseoSansCyrl-500, serif;
     padding-left: 15px;
   }
+  ion-accordion-group {
+    margin-top: 20px;
+  }
 }
 </style>

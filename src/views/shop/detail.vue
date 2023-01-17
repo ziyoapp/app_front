@@ -262,8 +262,9 @@ export default defineComponent({
     margin-bottom: 10px;
   }
   &__desc {
-    font-size: 10px;
-    line-height: 12px;
+    font-family: MuseoSansCyrl-300, serif;
+    font-size: 12px;
+    line-height: 14px;
     color: #001a35;
   }
   .swiper {

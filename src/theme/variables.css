@@ -484,3 +484,11 @@ ion-button._submit-btn {
   --padding-top: 9px;
   --padding-bottom: 9px;
 }
+
+* {
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox */
+}
+*::-webkit-scrollbar {
+  display: none;  /* Safari and Chrome */
+}

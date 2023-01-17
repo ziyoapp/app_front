@@ -6,25 +6,25 @@
         <ion-grid>
           <ion-row>
             <ion-col class="events-page__top-card _first" size="6">
-              <div>
+              <div @click="selectCategory({ id: 'all' })">
                 <student-events />
               </div>
             </ion-col>
             <ion-col class="events-page__top-card _second" size="6">
-              <div>
+              <div @click="selectCategory({ id: 'free' })">
                 <free-events />
               </div>
             </ion-col>
           </ion-row>
           <ion-row>
             <ion-col class="events-page__top-card _third" size="12">
-              <div>
+              <div @click="selectCategory({ id: 'exclusive' })">
                 <talk-events />
               </div>
             </ion-col>
           </ion-row>
 
-          <div class="events-page__filters">
+          <div ref="filters" class="events-page__filters">
             <ion-button
               v-for="(cat, index) in categories"
               @click="selectCategory(cat)"
@@ -76,7 +76,14 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, reactive, toRefs } from "vue";
+import {
+  computed,
+  defineComponent,
+  onMounted,
+  reactive,
+  ref,
+  toRefs,
+} from "vue";
 
 import EventCardBig from "@/components/EventCardBig.vue";
 import StudentEvents from "@/assets/svg/StudensEvent.vue";
@@ -118,6 +125,8 @@ export default defineComponent({
   },
   setup() {
     const store = useStore();
+
+    const filters = ref(null);
 
     interface getEventsParams {
       isInfiniteScroll: boolean;
@@ -190,11 +199,18 @@ export default defineComponent({
       });
     };
 
-    const selectCategory = (category: eventCategory) => {
+    const selectCategory = (category: { id: string }) => {
       if (localState.selectedCategoryId === category.id) return;
 
       localState.selectedCategoryId = category.id;
-      getEvents({ isInfiniteScroll: false, showLoader: true });
+      getEvents({ isInfiniteScroll: false, showLoader: true }).then(() => {
+        // @ts-ignore
+        filters?.value?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+          inline: "nearest",
+        });
+      });
     };
 
     onMounted(() => {
@@ -206,6 +222,7 @@ export default defineComponent({
       ...toRefs(localState),
       infiniteScrollHandler,
       selectCategory,
+      filters,
       pagination,
       list,
       categories,

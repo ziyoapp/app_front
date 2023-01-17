@@ -127,7 +127,7 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .welcome-page {
-  padding: 0 7px;
+  padding: 40px 7px 0;
   height: 100%;
   &__content {
     height: 100%;

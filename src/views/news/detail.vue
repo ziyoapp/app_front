@@ -146,10 +146,10 @@ export default defineComponent({
     margin-bottom: 13px;
   }
   &__desc {
-    font-family: MuseoSansCyrl-500, serif;
+    font-family: MuseoSansCyrl-300, serif;
     font-weight: 500;
-    font-size: 10px;
-    line-height: 12px;
+    font-size: 12px;
+    line-height: 14px;
     color: #0a1938;
   }
 }

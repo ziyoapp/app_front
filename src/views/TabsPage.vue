@@ -194,7 +194,7 @@ export default defineComponent({
       qrModal: false,
       events: [],
       qrUserId: null,
-      pagesWithForm: ["Profile", "QuestionsForm"],
+      pagesWithForm: ["Profile", "QuestionsForm", "ChangePassword"],
     });
 
     const modal = ref(null);
