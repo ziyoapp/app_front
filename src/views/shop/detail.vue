@@ -249,14 +249,14 @@ export default defineComponent({
   }
   &__title {
     font-family: MuseoSansCyrl-700, serif;
-    font-size: 20px;
+    font-size: 22px;
     line-height: 24px;
     color: #001a35;
     margin-bottom: 10px;
   }
   &__desc-title {
     font-family: MuseoSansCyrl-500, serif;
-    font-size: 13px;
+    font-size: 14px;
     line-height: 16px;
     color: rgba(0, 26, 53, 0.5);
     margin-bottom: 10px;

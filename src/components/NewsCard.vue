@@ -50,7 +50,7 @@ export default defineComponent({
   &__title {
     font-style: normal;
     font-weight: 600;
-    font-size: 13px;
+    font-size: 15px;
     line-height: 16px;
     margin-bottom: 5px;
   }
@@ -58,8 +58,8 @@ export default defineComponent({
   &__desc {
     font-style: normal;
     font-weight: 400;
-    font-size: 10px;
-    line-height: 12px;
+    font-size: 13px;
+    line-height: 14px;
     margin-bottom: 9px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -72,8 +72,8 @@ export default defineComponent({
   &__date {
     font-style: normal;
     font-weight: 400;
-    font-size: 10px;
-    line-height: 10px;
+    font-size: 13px;
+    line-height: 14px;
     margin-top: auto;
     /* identical to box height */
 

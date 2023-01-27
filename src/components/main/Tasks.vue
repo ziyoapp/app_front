@@ -72,7 +72,7 @@ export default defineComponent({
   }
   &__card {
     width: 100%;
-    height: 90px;
+    height: 95px;
     background: #ffd705;
     border-radius: 10px;
     display: flex;
@@ -84,15 +84,16 @@ export default defineComponent({
     max-width: 60%;
   }
   &__card-title {
+    font-family: MuseoSansCyrl-700, serif;
     font-weight: 600;
-    font-size: 14px;
-    line-height: 17px;
+    font-size: 17px;
+    line-height: 18px;
     color: #001a35;
     margin-bottom: 9px;
   }
   &__card-text {
-    font-weight: 300;
-    font-size: 12px;
+    font-family: MuseoSansCyrl-500, serif;
+    font-size: 15px;
     line-height: 16px;
     color: #001a35;
   }

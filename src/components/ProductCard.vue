@@ -59,8 +59,8 @@ export default defineComponent({
   }
   &__name {
     font-family: MuseoSansCyrl-500, serif;
-    font-size: 9px;
-    line-height: 11px;
+    font-size: 12px;
+    line-height: 14px;
     color: rgba(0, 26, 53, 0.5);
     margin-bottom: 5px;
   }
@@ -74,8 +74,8 @@ export default defineComponent({
     display: flex;
     align-items: center;
     font-weight: 600;
-    font-size: 8px;
-    line-height: 10px;
+    font-size: 10px;
+    line-height: 12px;
     color: #001a35;
 
     span {
@@ -85,9 +85,9 @@ export default defineComponent({
   &__category {
     background: #ecffd8;
     border-radius: 7px;
-    font-size: 8px;
+    font-size: 10px;
     padding: 2px 8px;
-    line-height: 10px;
+    line-height: 12px;
     text-align: center;
     color: #001a35;
   }

@@ -104,8 +104,6 @@ import {
 } from "@ionic/vue";
 import { useStore } from "vuex";
 
-import { category as eventCategory } from "@/interfaces/events.interface";
-
 export default defineComponent({
   name: "index",
   components: {
@@ -205,11 +203,11 @@ export default defineComponent({
       localState.selectedCategoryId = category.id;
       getEvents({ isInfiniteScroll: false, showLoader: true }).then(() => {
         // @ts-ignore
-        filters?.value?.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-          inline: "nearest",
-        });
+        // filters?.value?.scrollIntoView({
+        //   behavior: "smooth",
+        //   block: "start",
+        //   inline: "nearest",
+        // });
       });
     };
 

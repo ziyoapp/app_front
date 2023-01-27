@@ -210,8 +210,8 @@ export default defineComponent({
       margin-right: 7px;
       height: 32px;
       font-weight: 400;
-      font-size: 10px;
-      line-height: 12px;
+      font-size: 12px;
+      line-height: 14px;
       --color: rgba(0, 26, 53, 1);
       --border-width: 1px;
 

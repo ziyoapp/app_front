@@ -34,6 +34,7 @@
                 ref="avatarInput"
                 type="file"
                 accept="image/*"
+                lang="ru"
                 @change="fileUploaded"
                 style="display: none"
               />

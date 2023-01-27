@@ -227,7 +227,7 @@ export default defineComponent({
   }
   &__title {
     font-weight: 600;
-    font-size: 20px;
+    font-size: 21px;
     line-height: 24px;
     color: #0a1938;
     margin-bottom: 10px;
@@ -235,8 +235,8 @@ export default defineComponent({
   &__desc {
     font-family: MuseoSansCyrl-300, serif;
     font-weight: 500;
-    font-size: 12px;
-    line-height: 14px;
+    font-size: 14px;
+    line-height: 15px;
     color: #0a1938;
   }
   &__btn {
