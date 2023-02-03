@@ -102,6 +102,7 @@ export default defineComponent({
       store
         .dispatch("news/fetchShortList")
         .finally(() => (localState.newsLoading = false));
+      store.dispatch("storyModule/fetchStories");
     };
 
     const doRefresh = (event: CustomEvent) => {

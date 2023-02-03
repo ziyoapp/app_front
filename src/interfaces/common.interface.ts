@@ -7,3 +7,10 @@ export interface pagination {
   to: number;
   total: number;
 }
+
+export interface story {
+  id: number;
+  title: string;
+  preview_img_url: string;
+  images: Array<string>;
+}

@@ -3,7 +3,7 @@
     <div class="stories__list">
       <ion-card
         class="stories__item"
-        v-for="(story, index) in stories"
+        v-for="(story, index) in storiesList"
         :key="index"
         @click="storyClicked(index)"
       >
@@ -18,7 +18,7 @@
           <stories
             :autoplay="false"
             :duration="duration"
-            :stories="stories"
+            :stories="storiesList"
             width="200px"
             height="200px"
             ref="stories_component"
@@ -46,172 +46,32 @@
           </div>
         </div>
       </div>
-      <!-- /.overlay -->
     </ion-modal>
   </div>
 </template>
 
 <script>
 import Stories from "vue3-insta-stories";
-import { ref, reactive, toRefs } from "vue";
+import { ref, reactive, toRefs, computed } from "vue";
 import { IonModal, IonCard, IonButton, IonIcon, isPlatform } from "@ionic/vue";
 import { arrowBack } from "ionicons/icons";
+import { useStore } from "vuex";
 
 export default {
   name: "StoriesSlider",
   components: { Stories, IonModal, IonCard, IonButton, IonIcon },
   setup() {
+    const store = useStore();
+
     const stories_component = ref(null);
 
     const localState = reactive({
       showSlider: false,
       duration: 5000,
-      stories: [
-        {
-          custom_attribute: "Story 1",
-          src: "/assets/stories/story1.svg",
-          slides: [
-            {
-              id: 1,
-              color: "#D53738",
-              duration: 3000,
-              src: "/assets/stories/story1.svg",
-            },
-            {
-              id: 2,
-              color: "#D53738",
-              duration: 3000,
-              src: "/assets/stories/story2.svg",
-            },
-            {
-              id: 3,
-              color: "#D53738",
-              duration: 3000,
-              src: "/assets/stories/story3.svg",
-            },
-          ],
-        },
-        {
-          custom_attribute: "Story 2",
-          src: "/assets/stories/story2.svg",
-          slides: [
-            {
-              id: 1,
-              color: "#D53738",
-              duration: 3000,
-              src: "/assets/stories/story1.svg",
-            },
-            {
-              id: 2,
-              color: "#D53738",
-              duration: 3000,
-              src: "/assets/stories/story2.svg",
-            },
-            {
-              id: 3,
-              color: "#D53738",
-              duration: 3000,
-              src: "/assets/stories/story3.svg",
-            },
-          ],
-        },
-        {
-          custom_attribute: "Story 3",
-          src: "/assets/stories/story3.svg",
-          slides: [
-            {
-              id: 1,
-              color: "#D53738",
-              duration: 3000,
-              src: "/assets/stories/story1.svg",
-            },
-            {
-              id: 2,
-              color: "#D53738",
-              duration: 3000,
-              src: "/assets/stories/story2.svg",
-            },
-            {
-              id: 3,
-              color: "#D53738",
-              duration: 3000,
-              src: "/assets/stories/story3.svg",
-            },
-          ],
-        },
-        {
-          custom_attribute: "Story 1",
-          src: "/assets/stories/story1.svg",
-          slides: [
-            {
-              id: 1,
-              color: "#D53738",
-              duration: 3000,
-              src: "/assets/stories/story1.svg",
-            },
-            {
-              id: 2,
-              color: "#D53738",
-              duration: 3000,
-              src: "/assets/stories/story2.svg",
-            },
-            {
-              id: 3,
-              color: "#D53738",
-              duration: 3000,
-              src: "/assets/stories/story3.svg",
-            },
-          ],
-        },
-        {
-          custom_attribute: "Story 2",
-          src: "/assets/stories/story2.svg",
-          slides: [
-            {
-              id: 1,
-              color: "#D53738",
-              duration: 3000,
-              src: "/assets/stories/story1.svg",
-            },
-            {
-              id: 2,
-              color: "#D53738",
-              duration: 3000,
-              src: "/assets/stories/story2.svg",
-            },
-            {
-              id: 3,
-              color: "#D53738",
-              duration: 3000,
-              src: "/assets/stories/story3.svg",
-            },
-          ],
-        },
-        {
-          custom_attribute: "Story 3",
-          src: "/assets/stories/story3.svg",
-          slides: [
-            {
-              id: 1,
-              color: "#D53738",
-              duration: 3000,
-              src: "/assets/stories/story1.svg",
-            },
-            {
-              id: 2,
-              color: "#D53738",
-              duration: 3000,
-              src: "/assets/stories/story2.svg",
-            },
-            {
-              id: 3,
-              color: "#D53738",
-              duration: 3000,
-              src: "/assets/stories/story3.svg",
-            },
-          ],
-        },
-      ],
+    });
+
+    const storiesList = computed(() => {
+      return store.getters["storyModule/getStories"];
     });
 
     const storyClicked = (index) => {
@@ -285,6 +145,12 @@ export default {
       localState.showSlider = false;
     };
 
+    const fetchStories = async () => {
+      await store.dispatch("storyModule/fetchStories");
+    };
+
+    fetchStories();
+
     return {
       ...toRefs(localState),
       stories_component,
@@ -308,6 +174,7 @@ export default {
       resetStory,
       stopStory,
       playStory,
+      storiesList,
       isPlatform,
     };
   },
