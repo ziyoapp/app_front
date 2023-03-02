@@ -9,6 +9,32 @@
     />
     <div class="shop-page__content">
       <ion-content :fullscreen="true">
+        <div class="shop-page__slider">
+          <swiper
+            :modules="modules"
+            :pagination="true"
+            :zoom="true"
+            :slidesPerView="1"
+            :spaceBetween="10"
+          >
+            <swiper-slide
+              v-for="(product, index) in productsRandom"
+              :key="index"
+            >
+              <ion-item
+                class="shop-page__item default"
+                router-direction="forward"
+                style="height: 100%"
+                :router-link="`/tabs/shop/${product.id}`"
+              >
+                <div class="shop-page__slide">
+                  <img :src="product.image_url" alt="" />
+                  <h2>{{ product.name }}</h2>
+                </div>
+              </ion-item>
+            </swiper-slide>
+          </swiper>
+        </div>
         <div class="shop-page__filters">
           <ion-button
             v-for="(category, index) in categories"
@@ -84,6 +110,15 @@ import {
   IonButton,
   IonItem,
 } from "@ionic/vue";
+
+import { Swiper, SwiperSlide } from "swiper/vue";
+import { Pagination, Zoom } from "swiper";
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/scrollbar";
+import "swiper/css/zoom";
+import "@ionic/vue/css/ionic-swiper.css";
+
 import { useStore } from "vuex";
 
 import productCard from "@/components/ProductCard.vue";
@@ -101,6 +136,8 @@ export default defineComponent({
     IonCol,
     IonItem,
     productCard,
+    Swiper,
+    SwiperSlide,
   },
   setup() {
     const store = useStore();
@@ -116,6 +153,10 @@ export default defineComponent({
 
     const products = computed(() => {
       return store.getters["shop/getProducts"];
+    });
+
+    const productsRandom = computed(() => {
+      return store.getters["shop/getRandomProducts"];
     });
 
     const categories = computed(() => {
@@ -164,6 +205,10 @@ export default defineComponent({
         });
     };
 
+    const getProductsRandom = async () => {
+      await store.dispatch("shop/fetchProductsRandom");
+    };
+
     const selectCategory = (id: number | string) => {
       // @ts-ignore
       localState.selectedCategoryId = id;
@@ -180,6 +225,7 @@ export default defineComponent({
     onMounted(() => {
       store.dispatch("shop/fetchCategories");
       getProducts(false);
+      getProductsRandom();
     });
 
     return {
@@ -189,6 +235,8 @@ export default defineComponent({
       pagination,
       products,
       categories,
+      productsRandom,
+      modules: [Pagination, Zoom],
     };
   },
 });
@@ -199,6 +247,9 @@ export default defineComponent({
   height: 100%;
   &__content {
     height: 100%;
+  }
+  &__slider {
+    margin-bottom: 26px;
   }
   &__filters {
     display: flex;
@@ -229,6 +280,42 @@ export default defineComponent({
     --border-width: 0;
     --border-radius: 0;
     --border-color: transparent;
+  }
+
+  &__slide {
+    margin: auto;
+    img {
+      height: 180px;
+      margin-bottom: 15px;
+      border-radius: 10px;
+    }
+
+    h2 {
+      margin-top: 0;
+      margin-bottom: 15px;
+      font-size: 16px;
+      line-height: 19px;
+      font-weight: 600;
+      text-align: center;
+    }
+  }
+
+  .swiper .swiper-slide img {
+    height: 180px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+  }
+
+  .swiper-slide {
+    display: block;
+    width: 100%;
+    height: 255px;
+  }
+
+  .swiper {
+    --bullet-background-active: #0a1938;
+    --bullet-background: rgba(0, 26, 53, 0.5);
+    --bullet-width-active: 12px;
   }
 }
 </style>

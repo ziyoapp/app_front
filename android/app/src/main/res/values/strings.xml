@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">ZiyoForum</string>
-    <string name="title_activity_main">ZiyoForum</string>
-    <string name="package_name">io.ionic.starter</string>
-    <string name="custom_url_scheme">io.ionic.starter</string>
+    <string name="app_name">ZiyoApp</string>
+    <string name="title_activity_main">ZiyoApp</string>
+    <string name="package_name">ziyo.forum.app</string>
+    <string name="custom_url_scheme">ziyo.forum.app</string>
 </resources>

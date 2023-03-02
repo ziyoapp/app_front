@@ -12,6 +12,7 @@ import { pagination } from "@/interfaces/common.interface";
 const state: shopState = {
   oneProduct: defaultProduct,
   products: [],
+  productsRandom: [],
   categories: [],
   category: defaultCategory,
   pagination: {
@@ -35,6 +36,9 @@ const getters = {
   },
   getProducts: (state: shopState) => {
     return state.products;
+  },
+  getRandomProducts: (state: shopState) => {
+    return state.productsRandom;
   },
   getCategories: (state: shopState) => {
     return state.categories;
@@ -69,6 +73,21 @@ const actions = {
         context.commit("setProducts", data);
       }
       context.commit("setPagination", pagination);
+      return Promise.resolve(data);
+    } catch (e) {
+      if (e instanceof ShopError) {
+        context.commit("dataError", {
+          errorMessage: e.errorMessage || e.message,
+          responseErrorCode: e.errorCode,
+        });
+      }
+      return Promise.reject();
+    }
+  },
+  async fetchProductsRandom(context: any) {
+    try {
+      const { data } = await ShopService.getProductsRandom();
+      context.commit("setProductsRandom", data);
       return Promise.resolve(data);
     } catch (e) {
       if (e instanceof ShopError) {
@@ -117,6 +136,9 @@ const mutations = {
   },
   setProducts(state: shopState, list: Array<oneProduct>) {
     state.products = list;
+  },
+  setProductsRandom(state: shopState, list: Array<oneProduct>) {
+    state.productsRandom = list;
   },
   pushToProducts(state: shopState, list: Array<oneProduct>) {
     state.products.push(...list);
