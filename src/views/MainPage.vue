@@ -18,6 +18,7 @@
           :list="eventsList"
           :loading="eventsLoading"
         />
+        <popular-products :loading="popularLoading" :list="popularList" />
         <news-list
           v-if="newsList.length"
           class="main-page__news"
@@ -51,10 +52,12 @@ import EventsList from "@/components/main/EventsList.vue";
 import StoriesSlider from "@/components/main/StoriesSlider.vue";
 import TasksList from "@/components/main/Tasks.vue";
 import BannerPic from "@/components/main/BannerPic.vue";
+import PopularProducts from "@/components/main/PopularProducts.vue";
 
 export default defineComponent({
   name: "MainPage",
   components: {
+    PopularProducts,
     IonPage,
     IonContent,
     HeaderComponent,
@@ -74,6 +77,7 @@ export default defineComponent({
     const localState = reactive({
       newsLoading: false,
       eventsLoading: false,
+      popularLoading: false,
     });
 
     const bonus = computed(() => {
@@ -88,9 +92,14 @@ export default defineComponent({
       return store.getters["events/getShortList"];
     });
 
+    const popularList = computed(() => {
+      return store.getters["shop/getPopularProducts"];
+    });
+
     const initData = async () => {
       localState.newsLoading = true;
       localState.eventsLoading = true;
+      localState.popularLoading = true;
       const loading = await loadingController.create({});
       await loading.present();
       await store.dispatch("userModule/fetchUser").finally(() => {
@@ -102,6 +111,9 @@ export default defineComponent({
       store
         .dispatch("news/fetchShortList")
         .finally(() => (localState.newsLoading = false));
+      store
+        .dispatch("shop/fetchPopularProducts")
+        .finally(() => (localState.popularLoading = false));
       store.dispatch("storyModule/fetchStories");
     };
 
@@ -137,6 +149,7 @@ export default defineComponent({
       doRefresh,
       newsList,
       eventsList,
+      popularList,
       route,
     };
   },

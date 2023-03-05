@@ -28,6 +28,7 @@ export interface productsRequest {
 export interface shopState {
   oneProduct: product;
   products: Array<product>;
+  popularProducts: Array<product>;
   productsRandom: Array<product>;
   category: category;
   categories: Array<category>;

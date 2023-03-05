@@ -46,6 +46,20 @@ const ShopService = {
       this.catchError(error, ShopError);
     }
   },
+  getPopularProducts: async function () {
+    const requestData: AxiosRequestConfig = {
+      method: "get",
+      url: "/shop/products/popular",
+    };
+
+    try {
+      const response = await ApiService.customRequest(requestData);
+
+      return response.data;
+    } catch (error) {
+      this.catchError(error, ShopError);
+    }
+  },
   getProductsRandom: async function () {
     const requestData: AxiosRequestConfig = {
       method: "get",

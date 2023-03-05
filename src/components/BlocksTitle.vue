@@ -19,6 +19,13 @@
         {{ linkText }}
       </ion-button>
       <ion-button
+        v-else-if="type === BLOCK_TYPES_RECORD.goods"
+        fill="clear"
+        router-link="/tabs/shop"
+      >
+        {{ linkText }}
+      </ion-button>
+      <ion-button
         v-else-if="DEVELOPMENT_PAGES.includes(type)"
         fill="clear"
         router-link="/tabs/development"
