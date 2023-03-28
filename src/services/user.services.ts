@@ -1,12 +1,10 @@
 import { AxiosRequestConfig } from "axios";
 import ApiService from "@/services/api.service";
-import { EventsError } from "@/services/events.services";
 import { catchError } from "@/shared/utils";
 import {
   bonusHistoryGetRequest,
   changePassword,
   resetPassword,
-  updateUser,
   userQuestion,
 } from "@/interfaces/user.interface";
 import qs from "qs";
@@ -152,6 +150,23 @@ const UserServices = {
       method: "post",
       url: "/user/question",
       data,
+    };
+
+    try {
+      const response = await ApiService.customRequest(requestData);
+
+      return response.data;
+    } catch (error) {
+      this.catchError(error, UserError);
+    }
+  },
+  savePushToken: async function (token: string) {
+    const requestData: AxiosRequestConfig = {
+      method: "patch",
+      url: "/user/push-token",
+      data: {
+        token,
+      },
     };
 
     try {

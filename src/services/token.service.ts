@@ -1,5 +1,8 @@
-const TOKEN_KEY = "reservation_token";
-const REFRESH_TOKEN_KEY = "refresh_token";
+import {
+  TOKEN_KEY,
+  REFRESH_TOKEN_KEY,
+  PUSH_TOKEN_KEY,
+} from "@/shared/constants";
 
 const TokenService = {
   getToken() {
@@ -8,6 +11,10 @@ const TokenService = {
 
   saveToken(accessToken: string) {
     localStorage.setItem(TOKEN_KEY, accessToken);
+  },
+
+  savePushToken(accessToken: string) {
+    localStorage.setItem(PUSH_TOKEN_KEY, accessToken);
   },
 
   removeToken() {

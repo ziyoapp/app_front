@@ -76,7 +76,7 @@ export default defineComponent({
     const route = useRoute();
 
     const codrovaLicense =
-      "DLS2eyJoYW5kc2hha2VDb2RlIjoiMTAxNTUyNjk2LVRYbE5iMkpwYkdWUWNtOXFYMlJpY2ciLCJvcmdhbml6YXRpb25JRCI6IjEwMTU1MjY5NiIsImNoZWNrQ29kZSI6NzAxNDAxMDc5fQ==";
+      "DLS2eyJoYW5kc2hha2VDb2RlIjoiMTAxNzc5MTg1LVRYbE5iMkpwYkdWUWNtOXFYMlJpY2ciLCJtYWluU2VydmVyVVJMIjoiaHR0cHM6Ly9tbHRzLmR5bmFtc29mdC5jb20iLCJvcmdhbml6YXRpb25JRCI6IjEwMTc3OTE4NSIsImNoZWNrQ29kZSI6LTIwNTc1MzQ5MTd9";
     const webLicense =
       "DLS2eyJoYW5kc2hha2VDb2RlIjoiMTAxNTUyNjk2LVRYbFhaV0pRY205cVgyUmljZyIsIm9yZ2FuaXphdGlvbklEIjoiMTAxNTUyNjk2IiwiY2hlY2tDb2RlIjo3Njc3NDk2OTV9";
 

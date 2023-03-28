@@ -13,6 +13,8 @@ import { pagination } from "@/interfaces/common.interface";
 import { registerInterface } from "@/interfaces/auth.interface";
 import { AuthenticationError } from "@/services/auth.service";
 
+import { TokenService } from "@/services/token.service";
+
 const state: userState = {
   user: userDefault,
   qrCode: "",
@@ -135,6 +137,20 @@ const actions = {
   async sendUserQuestion(context: any, dataSet: userQuestion) {
     try {
       await UserServices.sendQuestion(dataSet);
+    } catch (e) {
+      if (e instanceof UserError) {
+        context.commit("dataError", {
+          errorMessage: e.errorMessage || e.message,
+          responseErrorCode: e.errorCode,
+        });
+      }
+      return Promise.reject();
+    }
+  },
+  async sendPushToken(context: any, token: string) {
+    try {
+      await UserServices.savePushToken(token);
+      TokenService.savePushToken(token);
     } catch (e) {
       if (e instanceof UserError) {
         context.commit("dataError", {

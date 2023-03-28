@@ -14,4 +14,15 @@ const USER_ROLES: Record<string, number> = {
   USER: 3,
 };
 
-export { BLOCK_TYPES, BLOCK_TYPES_RECORD, USER_ROLES };
+const TOKEN_KEY = "reservation_token";
+const PUSH_TOKEN_KEY = "reservation_token";
+const REFRESH_TOKEN_KEY = "refresh_token";
+
+export {
+  BLOCK_TYPES,
+  BLOCK_TYPES_RECORD,
+  USER_ROLES,
+  TOKEN_KEY,
+  PUSH_TOKEN_KEY,
+  REFRESH_TOKEN_KEY,
+};
