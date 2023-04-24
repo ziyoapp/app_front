@@ -13,3 +13,19 @@ export function isRequired(value: any) {
 
   return true;
 }
+
+export function passwordMinLength(value: any) {
+  if (value?.length < 8) {
+    return "Минимальное количество символов 8";
+  }
+
+  return true;
+}
+
+export function isSamePassword(value: string, value2: string) {
+  if (value !== value2) {
+    return "Пароли не совпадают";
+  }
+
+  return true;
+}

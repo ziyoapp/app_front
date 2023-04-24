@@ -1,7 +1,8 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { store } from "@/store";
-import { TokenService } from "@/services/token.service";
 import router from "@/router";
+import { Preferences } from "@capacitor/preferences";
+import { TOKEN_KEY } from "@/shared/constants";
 
 const ApiService = {
   _requestInterceptor: 0,
@@ -11,10 +12,8 @@ const ApiService = {
     axios.defaults.baseURL = baseURL;
   },
 
-  setHeader() {
-    axios.defaults.headers.common[
-      "Authorization"
-    ] = `Bearer ${TokenService.getToken()}`;
+  setHeader(token: string) {
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
   },
 
   removeHeader() {

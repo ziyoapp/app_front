@@ -52,6 +52,49 @@ const UserServices = {
       this.catchError(error, UserError);
     }
   },
+  fetchNotifications: async function (data: bonusHistoryGetRequest) {
+    const requestData: AxiosRequestConfig = {
+      method: "get",
+      url: "/user/notifications",
+      params: data,
+    };
+
+    try {
+      const response = await ApiService.customRequest(requestData);
+
+      return response.data;
+    } catch (error) {
+      this.catchError(error, UserError);
+    }
+  },
+  readNotification: async function (id: number) {
+    const requestData: AxiosRequestConfig = {
+      method: "post",
+      url: `/user/notifications/${id}/read`,
+    };
+
+    try {
+      const response = await ApiService.customRequest(requestData);
+
+      return response.data;
+    } catch (error) {
+      this.catchError(error, UserError);
+    }
+  },
+  readAllNotifications: async function () {
+    const requestData: AxiosRequestConfig = {
+      method: "post",
+      url: "/user/notifications/read-all",
+    };
+
+    try {
+      const response = await ApiService.customRequest(requestData);
+
+      return response.data;
+    } catch (error) {
+      this.catchError(error, UserError);
+    }
+  },
   getBonus: async function () {
     const requestData: AxiosRequestConfig = {
       method: "get",

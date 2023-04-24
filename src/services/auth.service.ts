@@ -38,9 +38,9 @@ const AuthService = {
     try {
       const response = await ApiService.customRequest(requestData);
       const token = response.data.token;
-      TokenService.saveToken(token);
+      await TokenService.saveToken(token);
       // TokenService.saveRefreshToken(response.data.refresh_token);
-      ApiService.setHeader();
+      ApiService.setHeader(token);
 
       ApiService.mount401Interceptor();
 
@@ -92,9 +92,9 @@ const AuthService = {
     try {
       const response = await ApiService.customRequest(requestData);
 
-      TokenService.saveToken(response.data.access_token);
+      await TokenService.saveToken(response.data.access_token);
       TokenService.saveRefreshToken(response.data.refresh_token);
-      ApiService.setHeader();
+      ApiService.setHeader(response.data.access_token);
 
       return response.data.access_token;
     } catch (error: any) {
@@ -123,9 +123,9 @@ const AuthService = {
     try {
       const response = await ApiService.customRequest(signupData);
       const token = response.data.token;
-      TokenService.saveToken(token);
+      await TokenService.saveToken(token);
       // TokenService.saveRefreshToken(response.data.refresh_token);
-      ApiService.setHeader();
+      ApiService.setHeader(token);
 
       ApiService.mount401Interceptor();
 

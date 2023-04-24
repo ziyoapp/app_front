@@ -50,7 +50,7 @@ const EventsServices = {
   getAllByCategory: async function (data: eventsGetRequest) {
     const requestData: AxiosRequestConfig = {
       method: "get",
-      url: `/events/category/${data.type ?? "all"}`,
+      url: `/events/category/${data.type ?? "all"}?order=desc`,
       params: data,
     };
 

@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from "@ionic/vue-router";
 import { RouteRecordRaw } from "vue-router";
-import { TokenService } from "@/services/token.service";
 
 import notFoundPage from "@/views/404.vue";
 import LoginPage from "@/views/LoginPage.vue";
@@ -10,6 +9,8 @@ import WelcomePage from "@/views/WelcomePage.vue";
 import AuthPage from "@/views/AuthPage.vue";
 import tabsPage from "@/views/TabsPage.vue";
 import ScannerPage from "@/views/ScannerPage.vue";
+import { Preferences } from "@capacitor/preferences";
+import { TOKEN_KEY } from "@/shared/constants";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -184,20 +185,24 @@ router.beforeEach((to, from, next) => {
   const onlyWhenLoggedOut = to.matched.some(
     (record) => record.meta.onlyWhenLoggedOut
   );
-  const loggedIn = !!TokenService.getToken();
+  let loggedIn = false;
 
-  if (!isPublic && !loggedIn) {
-    return next({
-      path: "/auth",
-      query: { redirect: to.fullPath },
-    });
-  }
+  Preferences.get({ key: TOKEN_KEY }).then(({ value }) => {
+    loggedIn = !!value;
 
-  if (loggedIn && onlyWhenLoggedOut) {
-    return next("/");
-  }
+    if (!isPublic && !loggedIn) {
+      return next({
+        path: "/auth",
+        query: { redirect: to.fullPath },
+      });
+    }
 
-  next();
+    if (loggedIn && onlyWhenLoggedOut) {
+      return next("/");
+    }
+
+    next();
+  });
 });
 
 export default router;

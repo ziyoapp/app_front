@@ -17,13 +17,14 @@
         <div
           v-for="(event, index) in list"
           :key="index"
+          @click="$router.push(`/tabs/event/${event.id}`)"
           class="events-history__item"
         >
           <div class="events-history__item-text">
             {{ event.title }}
           </div>
           <div class="events-history__footer">
-            <span>отменить заявку</span>
+            <!--            <span>отменить заявку</span>-->
             <span>
               {{ moment(event.date_start).format("DD.MM.YYYY") }}
             </span>

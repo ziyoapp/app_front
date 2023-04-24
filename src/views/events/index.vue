@@ -200,6 +200,7 @@ export default defineComponent({
     const selectCategory = (category: { id: string }) => {
       if (localState.selectedCategoryId === category.id) return;
 
+      localState.filterData.page = 1;
       localState.selectedCategoryId = category.id;
       getEvents({ isInfiniteScroll: false, showLoader: true }).then(() => {
         // @ts-ignore

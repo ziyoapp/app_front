@@ -21,6 +21,7 @@
           v-if="selectedSegment === 'transactions'"
           :transactions="transactions"
         />
+        <notifications-list v-else :notifications="notifications" />
         <ion-infinite-scroll
           @ionInfinite="infiniteScrollHandler($event)"
           threshold="100px"
@@ -55,10 +56,12 @@ import { useStore } from "vuex";
 
 import TransactionsList from "@/components/notifications/TransactionsList.vue";
 import { useRoute } from "vue-router";
+import NotificationsList from "@/components/notifications/NotificationsList.vue";
 
 export default defineComponent({
   name: "NotificationsPage",
   components: {
+    NotificationsList,
     IonPage,
     IonContent,
     IonToolbar,
@@ -77,6 +80,10 @@ export default defineComponent({
         page: 1,
         per_page: 10,
       },
+      filterDataNotifications: {
+        page: 1,
+        per_page: 10,
+      },
       isDisabledLoadMoreNotify: false,
       selectedSegment: "transactions",
     });
@@ -85,19 +92,41 @@ export default defineComponent({
       return store.getters["userModule/getTransactionsPagination"];
     });
 
+    const paginationNotifications = computed(() => {
+      return store.getters["userModule/getNotifyPagination"];
+    });
+
     const transactions = computed(() => {
       return store.getters["userModule/getTransactions"];
     });
 
+    const notifications = computed(() => {
+      return store.getters["userModule/getNotifications"];
+    });
+
     const infiniteScrollHandler = async (ev: CustomEvent) => {
       // TODO сделать объект пагинации динамическим добавив уведомления
-      const pagination = paginationTransactions;
+
+      const pagination =
+        localState.selectedSegment === "transactions"
+          ? paginationTransactions
+          : paginationNotifications;
+
       const pageNumber = pagination.value.current_page + 1;
       if (pageNumber <= pagination.value.last_page) {
-        localState.filterDataTransactions.page =
-          pagination.value.current_page + 1;
-        localState.filterDataTransactions.per_page = pagination.value.per_page;
-        await getLists({ isInfiniteScroll: true }).then(() => {
+        if (localState.selectedSegment === "transactions") {
+          localState.filterDataTransactions.page =
+            pagination.value.current_page + 1;
+          localState.filterDataTransactions.per_page =
+            pagination.value.per_page;
+        } else {
+          localState.filterDataNotifications.page =
+            pagination.value.current_page + 1;
+          localState.filterDataNotifications.per_page =
+            pagination.value.per_page;
+        }
+
+        await getTransactions({ isInfiniteScroll: true }).then(() => {
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           ev.target.complete();
@@ -107,7 +136,7 @@ export default defineComponent({
       }
     };
 
-    const getLists = async ({
+    const getTransactions = async ({
       isInfiniteScroll = false,
       showLoader = true,
     }) => {
@@ -118,6 +147,28 @@ export default defineComponent({
       }
       await store
         .dispatch("userModule/fetchTransactions", {
+          ...localState.filterDataTransactions,
+          isInfiniteScroll,
+        })
+        .then(() => {
+          localState.isDisabledLoadMoreNotify = false;
+        })
+        .finally(() => {
+          if (loading && loading.dismiss) loading.dismiss();
+        });
+    };
+
+    const getNotifications = async ({
+      isInfiniteScroll = false,
+      showLoader = true,
+    }) => {
+      let loading: any;
+      if (!isInfiniteScroll && showLoader) {
+        loading = await loadingController.create({});
+        await loading.present();
+      }
+      await store
+        .dispatch("userModule/getNotifications", {
           ...localState.filterDataTransactions,
           isInfiniteScroll,
         })
@@ -141,12 +192,14 @@ export default defineComponent({
 
     onMounted(() => {
       setDefaultSegment();
-      getLists({ isInfiniteScroll: false, showLoader: true });
+      getTransactions({ isInfiniteScroll: false, showLoader: true });
+      getNotifications({ isInfiniteScroll: false, showLoader: true });
     });
 
     return {
       ...toRefs(localState),
       transactions,
+      notifications,
       infiniteScrollHandler,
       isPlatform,
     };

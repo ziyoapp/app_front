@@ -29,21 +29,24 @@ import "./theme/variables.css";
 // import "./assets/stlyes/global.scss";
 
 import ApiService from "@/services/api.service";
-import { TokenService } from "@/services/token.service";
+import { Preferences } from "@capacitor/preferences";
+import { TOKEN_KEY } from "@/shared/constants";
 
 const app = createApp(App).use(IonicVue).use(router).use(store);
 
 ApiService.init(process.env.VUE_APP_SERVER);
 
-if (TokenService.getToken()) {
-  ApiService.setHeader();
-  ApiService.mountRequestInterceptor();
-  ApiService.mount401Interceptor();
-}
+Preferences.get({ key: TOKEN_KEY }).then(async ({ value }) => {
+  if (value) {
+    ApiService.setHeader(value);
+    ApiService.mountRequestInterceptor();
+    ApiService.mount401Interceptor();
+  }
 
-app.component("go-back", GoBack);
-app.component("app-header", AppHeader);
+  app.component("go-back", GoBack);
+  app.component("app-header", AppHeader);
 
-router.isReady().then(() => {
-  app.mount("#app");
+  router.isReady().then(() => {
+    app.mount("#app");
+  });
 });

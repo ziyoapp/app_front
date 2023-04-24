@@ -25,6 +25,8 @@ export interface userState {
   bonus: number;
   transactions: Array<bonusHistory>;
   bonusPagination: pagination;
+  notificationsPagination: pagination;
+  notifications: Array<notification>;
 }
 
 export interface bonusHistory {
@@ -69,4 +71,15 @@ export interface resetPassword {
   password: string;
   password_confirmation: string;
   code: number;
+}
+
+export interface notification {
+  id: string;
+  type: string;
+  data: {
+    title: string;
+    content: string;
+  };
+  is_read: boolean;
+  date: string;
 }

@@ -4,21 +4,35 @@ import {
   PUSH_TOKEN_KEY,
 } from "@/shared/constants";
 
+import { Preferences } from "@capacitor/preferences";
+
 const TokenService = {
-  getToken() {
-    return localStorage.getItem(TOKEN_KEY);
+  async getToken() {
+    // @ts-ignore
+    const { value } = await Preferences.get({ key: TOKEN_KEY });
+    return value;
+    // return localStorage.getItem(TOKEN_KEY);
   },
 
-  saveToken(accessToken: string) {
-    localStorage.setItem(TOKEN_KEY, accessToken);
+  async saveToken(accessToken: string) {
+    await Preferences.set({
+      key: TOKEN_KEY,
+      value: accessToken,
+    });
+    // localStorage.setItem(TOKEN_KEY, accessToken);
   },
 
-  savePushToken(accessToken: string) {
+  async savePushToken(accessToken: string) {
+    await Preferences.set({
+      key: PUSH_TOKEN_KEY,
+      value: accessToken,
+    });
     localStorage.setItem(PUSH_TOKEN_KEY, accessToken);
   },
 
-  removeToken() {
-    localStorage.removeItem(TOKEN_KEY);
+  async removeToken() {
+    await Preferences.remove({ key: TOKEN_KEY });
+    // localStorage.removeItem(TOKEN_KEY);
   },
 
   getRefreshToken() {

@@ -10,18 +10,18 @@
 
 <script lang="ts">
 import { IonApp, IonRouterOutlet } from "@ionic/vue";
-import { computed, defineComponent, onMounted } from "vue";
-import { TokenService } from "@/services/token.service";
+import { defineComponent, onMounted, ref } from "vue";
 import { useStore } from "vuex";
 import { ScreenOrientation } from "@ionic-native/screen-orientation";
 import { useRoute, useRouter } from "vue-router";
+import { Preferences } from "@capacitor/preferences";
 import {
   ActionPerformed,
   PushNotificationSchema,
   PushNotifications,
   Token,
 } from "@capacitor/push-notifications";
-import { PUSH_TOKEN_KEY } from "@/shared/constants";
+import { PUSH_TOKEN_KEY, TOKEN_KEY } from "@/shared/constants";
 // import { PushNotifications } from "@capacitor/push-notifications";
 
 export default defineComponent({
@@ -35,13 +35,13 @@ export default defineComponent({
     const route = useRoute();
     const router = useRouter();
 
-    const loggedIn = computed(() => {
-      return !!TokenService.getToken();
-    });
+    const loggedIn = ref(false);
 
     ScreenOrientation.lock(ScreenOrientation.ORIENTATIONS.PORTRAIT);
 
     const initData = async () => {
+      const { value } = await Preferences.get({ key: TOKEN_KEY });
+      loggedIn.value = !!value;
       if (loggedIn.value) {
         store.dispatch("userModule/fetchUser");
         store.dispatch("userModule/fetchBonus");
@@ -77,9 +77,7 @@ export default defineComponent({
       PushNotifications.addListener(
         "pushNotificationReceived",
         (notification: PushNotificationSchema) => {
-          console.log("pushNotificationReceived");
-          console.log(JSON.stringify(notification));
-          console.log("-----pushNotificationReceived");
+          //
         }
       );
 
@@ -87,9 +85,6 @@ export default defineComponent({
       PushNotifications.addListener(
         "pushNotificationActionPerformed",
         (notification: ActionPerformed) => {
-          console.log("pushNotificationActionPerformed");
-          console.log(JSON.stringify(notification));
-          console.log("-----pushNotificationActionPerformed");
           if (
             notification?.notification?.data?.type === "event" &&
             notification.notification?.data?.id

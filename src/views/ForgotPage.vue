@@ -46,7 +46,12 @@
           placeholder="*****"
         >
         </ion-input>
-        <v-field v-else name="password" v-slot="{ field }" :rules="isRequired">
+        <v-field
+          v-else
+          name="password"
+          v-slot="{ field }"
+          :rules="[isRequired, passwordMinLength]"
+        >
           <ion-input v-bind="field" type="password"></ion-input>
         </v-field>
         <v-error-message name="password" class="error" />
@@ -122,7 +127,7 @@ import { computed, defineComponent, reactive, toRefs } from "vue";
 import { useRouter } from "vue-router";
 import { useUserCompositions } from "@/compositions/useUserCompositions";
 
-import { isRequired } from "@/utils/validators";
+import { isRequired, passwordMinLength } from "@/utils/validators";
 import * as V from "vee-validate";
 
 import { registerInterface } from "@/interfaces/auth.interface";
@@ -222,6 +227,7 @@ export default defineComponent({
       isCanLogIn,
       handleReset,
       isRequired,
+      passwordMinLength,
       phoneHandler: userComposition.phoneHandler,
     };
   },

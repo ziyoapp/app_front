@@ -2,6 +2,7 @@ import {
   bonusHistory,
   bonusHistoryGetRequest,
   changePassword,
+  notification,
   updateUser,
   user,
   userQuestion,
@@ -30,6 +31,16 @@ const state: userState = {
     to: 1,
     total: 1,
   },
+  notificationsPagination: {
+    current_page: 1,
+    from: 1,
+    last_page: 1,
+    path: "",
+    per_page: 10,
+    to: 1,
+    total: 1,
+  },
+  notifications: [],
 };
 
 const getters = {
@@ -51,8 +62,14 @@ const getters = {
   getTransactions: (state: userState) => {
     return state.transactions;
   },
+  getNotifications: (state: userState) => {
+    return state.notifications;
+  },
   getTransactionsPagination: (state: userState) => {
     return state.bonusPagination;
+  },
+  getNotifyPagination: (state: userState) => {
+    return state.notificationsPagination;
   },
 };
 
@@ -210,6 +227,27 @@ const actions = {
       return Promise.reject();
     }
   },
+  async getNotifications(context: any, dataSet: bonusHistoryGetRequest) {
+    try {
+      const { data, meta: pagination } = await UserServices.fetchNotifications(
+        dataSet
+      );
+      if (dataSet.isInfiniteScroll) {
+        context.commit("pushNotifications", data);
+      } else {
+        context.commit("setNotifications", data);
+      }
+      context.commit("setNotifyPagination", pagination);
+    } catch (e) {
+      if (e instanceof UserError) {
+        context.commit("dataError", {
+          errorMessage: e.errorMessage || e.message,
+          responseErrorCode: e.errorCode,
+        });
+      }
+      return Promise.reject();
+    }
+  },
 };
 
 const mutations = {
@@ -228,11 +266,20 @@ const mutations = {
   setPagination(state: userState, pagination: pagination) {
     state.bonusPagination = pagination;
   },
+  setNotifyPagination(state: userState, pagination: pagination) {
+    state.notificationsPagination = pagination;
+  },
   pushTransactions(state: userState, data: Array<bonusHistory>) {
     state.transactions.push(...data);
   },
   setTransactions(state: userState, data: Array<bonusHistory>) {
     state.transactions = data;
+  },
+  pushNotifications(state: userState, data: Array<notification>) {
+    state.notifications.push(...data);
+  },
+  setNotifications(state: userState, data: Array<notification>) {
+    state.notifications = data;
   },
 };
 
